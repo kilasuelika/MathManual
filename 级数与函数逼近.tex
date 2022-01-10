@@ -1,0 +1,82 @@
+\chapter{级数、有理函数与函数逼近}\label{series-function-approxmation}
+\section{子空间逼近}
+\subsection{逼近的定义}
+
+\subsection{正交子空间逼近}
+\subsubsection{一维正交子空间逼近}
+给定一个$[0,1]$上的线性正交函数空间$V_n=\{1,g_1(x),g_2(x),\cdots\}$，所谓正交是指：
+$$\int_{0}^{1} g_i(x)g_j(x)\dif x=\delta_{ij}$$
+假如有一个函数$f$，则它的最佳逼近（或称其为投影）为：
+$$f(x)=\sum a_i g_i(x),\quad a_i=\int_{0}^{1}f(x)g_i(x)\dif x$$
+
+这是因为
+$$\int_0^{1}f(x)g_i(x)\dif x=\int_{0}^{1}a_ig_i(x)g_i(x)\dif x =a_i$$
+\subsubsection{常见一维正交多项式空间}
+
+\subsection{泰勒公式}
+\subsubsection{一维}
+\paragraph*{标准公式}
+\begin{empheq}{align*}\label{1d-taylor}
+f(x)&=\sum_{k=0}^{\infty}\frac{f^{(k)}(x_0)}{k!}(x-x_0)^k\\
+&=f(x_0)+f'(x_0)(x-x_0)+\inv{2}f''(x_0)(x-x_0)^2+\cdots
+\end{empheq}
+\subsubsection{典型例子}
+为了方便阅读，以下所有结果中级数求和从$k=0$开始。
+
+\paragraph*{初等函数}
+\begin{empheq}{align}
+\ln(1+x)&=\sum_{k=0}^{\infty}\frac{(-1)^{k}x^{k+1}}{k+1}\approx x-\inv{2}x^2+\inv{3}x^3\\
+\ln\left(\frac{1+x}{1-x}\right)&=2\sum_{k=0}^{\infty}\frac{x^{2k+1}}{2k+1},|x|<1
+\end{empheq}
+\begin{empheq}{align}
+\arctan x&=\sum_{k=0}^{\infty}\frac{(-1)^kx^{2k+1}}{2k+1}\approx x-\inv{3}x^3,|x|<1
+\end{empheq}
+
+\subsubsection{高维}
+\paragraph*{$\Rns\rightarrow \mathbb{R}$}二阶逼近：
+\begin{empheq}{equation}\label{nd-taylor}
+f(\bx)\approx f(\bx_0)+\nabla f(\bx_0)(\bx-\bx_0)+\inv{2}(\bx-\bx_0)^T\nabla^2 f(\bx_0)(\bx-\bx_0)
+\end{empheq}
+\subsubsection{典型例子}
+
+\subsection{常用的逼近公式}
+\subsubsection{函数逼近}
+\begin{empheq}{align*}
+n!&=\sqrt{2\pi n}\left(\frac{2\pi}{e}\right)^n\left(1+O\left(\frac{1}{n}\right)\right) \mtag{Stirling公式}\\
+\ln x&\approx 1-x,\ x\rightarrow 1
+\end{empheq}
+
+\subsection{基本级数}
+\subsubsection{加法}
+\begin{empheq}{align*}
+e^x&=\sum_{k=0}^{\infty} \frac{x^k}{k!},\quad |R|=\infty\\
+\frac{1-x^{n+1}}{1-x}&=\sum_{k=0}^{n}x^k\\
+\inv{a+x}&=\sum_{k=0}^{\infty} \inv{a^{k+1}}x^k,\quad |R|=\inv{a},a>0\\
+&\approx 1-x+x^2-x^3+\cdots\\
+\sum_{n=0}^{\infty}\frac{(-1)^n}{n+1/2}&=\frac{\pi}{2}\\
+\sum_{n=1}^\infty \frac{(-1)^n}{n}&=\sum_{n=1}^{\infty}\frac{(-1)^n}{n}x^n\rvert_{x=1}=-\ln|1+x|\rvert_{x=1}=-\ln 2
+\end{empheq}
+\subsubsection{乘法}
+
+
+\section{有理函数}
+\subsection{Pade逼近}
+\subsubsection{定义}
+\begin{definition}[Pade逼近]
+给定一个连续函数$f$和两个整数$m,n$，则$f$的Pade逼近定义为：
+\begin{empheq}{equation}
+R(x)=\frac{\sum_{k=0}^{m}a_kx^k}{1+\sum_{k=1}^{n}b_kx^k}
+\end{empheq}
+注意下面的求和是从1开始的。相当于分母的0次项为1。系数满足要求：
+$$f^{(i)}(x)=R^{(i)}(x)$$
+
+
+\end{definition}
+
+\begin{property}
+\item Pade逼近是{\heiti 唯一}的。
+\item 将$R(x)$按级数展开后，前$m+n$项对应$f$直接展开时的项。
+\end{property}
+\subsubsection{常见函数的逼近}
+
+\subsection{连分数}

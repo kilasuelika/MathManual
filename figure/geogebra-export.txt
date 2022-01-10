@@ -1,0 +1,32 @@
+\documentclass[10pt]{article}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\pagestyle{empty}
+\begin{document}
+\definecolor{qqwuqq}{rgb}{0,0.39215686274509803,0}
+\definecolor{uuuuuu}{rgb}{0.26666666666666666,0.26666666666666666,0.26666666666666666}
+\definecolor{xdxdff}{rgb}{0.49019607843137253,0.49019607843137253,1}
+\definecolor{ududff}{rgb}{0.30196078431372547,0.30196078431372547,1}
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1cm,y=1cm]
+\clip(-8.102533766347898,-3.599763399593843) rectangle (2.3150892605789153,4.213453870601276);
+\draw [shift={(-3.42,0.34)},line width=2pt,color=qqwuqq,fill=qqwuqq,fill opacity=0.10000000149011612] (0,0) -- (69.28139862839336:0.4883260793871944) arc (69.28139862839336:105.47401268875832:0.4883260793871944) -- cycle;
+\draw [line width=2pt] (-3.42,0.34) circle (3.7184943189414725cm);
+\draw [->,line width=2pt] (-3.42,0.34) -- (-4.412099045388744,3.9237047149756563);
+\draw [->,line width=2pt] (-3.42,0.34) -- (-0.3045502737133101,2.3700672409997146);
+\draw [line width=2pt] (-4.412099045388744,3.9237047149756563)-- (-0.3045502737133101,2.3700672409997146);
+\draw [line width=2pt,domain=-8.102533766347898:2.3150892605789153] plot(\x,{(--14.576053540281805--4.107548771675434*\x)/1.5536374739759418});
+\draw (-3.561101228046991,2.3740923049095075) node[anchor=north west] {$\frac{\theta}{2}$};
+\begin{scriptsize}
+\draw [fill=ududff] (-3.42,0.34) circle (2.5pt);
+\draw[color=ududff] (-3.268105580414674,0.7300611709726178) node {$A$};
+\draw [fill=xdxdff] (-4.412099045388744,3.9237047149756563) circle (2.5pt);
+\draw[color=xdxdff] (-4.261035275168636,4.115788654723836) node {$B$};
+\draw [fill=xdxdff] (-0.3045502737133101,2.3700672409997146) circle (2.5pt);
+\draw[color=xdxdff] (-0.15909620831620291,2.7647531684192637) node {$C$};
+\draw [fill=uuuuuu] (-2.3583246595510268,3.1468859779876848) circle (2pt);
+\draw[color=uuuuuu] (-2.210065741742419,3.497242287500056) node {$D$};
+\end{scriptsize}
+\end{tikzpicture}
+\end{document}

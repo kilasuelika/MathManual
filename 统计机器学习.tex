@@ -1,0 +1,91 @@
+\chapter{统计机器学习}
+\section{降维}
+\subsection{PCA}
+
+\subsection{Kernel PCA}
+
+\section{SVM}
+\subsection{Optimal Margin分类}
+考虑损失函数
+\begin{empheq}{align}\label{optimal-margin-classification}
+\min_{\btheta,\theta_0}\quad J&=\inv{2}\|\btheta\|^2+C\sum_{i=1}^{N}\mathcal{L}_{\rho}(y_i,\bx_i^T\btheta+\theta_0)\\
+\mathcal{L}_{\rho}(y,\hat{y})&=\max\{0,\rho-y\hat{y}\}\\
+y_i&\in\{-1,1\}\text{（二分类）}
+\end{empheq}
+损失函数中的第一项相当于Tikhonov正则化\ref{Tikhonov-regularization}。$\mathcal{L}_{\rho}$为Hinge损失函数。图像如下：
+\pgfplotsset{
+	myplot/.style={
+		width=10cm, height=7.5cm,
+		xlabel=$\hat{y}$, ylabel=$\mathcal{L}_{\rho}$,
+		samples=50,
+		xlabel style={at={(0.5,-0.08)}, anchor=south},
+		ylabel style={rotate=-90, at={(0,0.5)}, anchor=east},
+		legend style={draw=none, fill=none},
+		xmin=-3, xmax=3,
+        cycle list name=exotic
+	}
+}
+\begin{center}
+	\begin{tikzpicture}[>=stealth,
+		every node/.style={rounded corners},
+		declare function={
+			hingelossp(\x)=(((1-\x)>0)*(1-\x));
+            hingelossn(\x)=(((1+\x)>0)*(1+\x));
+		}]
+		
+		\begin{axis}[myplot]
+			\addplot+[mark=none, smooth, thick, domain=-3:3] {hingelossp(x)};
+            \addplot+[mark=none, smooth, thick, domain=-3:3] {hingelossn(x)};
+            \legend{$y=1$,$y=-1$};
+		\end{axis}
+	\end{tikzpicture}
+\end{center}
+从图中可以看出，如果$y_i=1$为正样本，则$\hat{y}$越大越好；反之，越小越好。不过这样可能会趋于无穷大或者无穷小，因此需要对$\btheta$进行约束，所以正则化项是必须的。
+
+这个损失函数是不光滑的，利用松弛变量可以改变为一个约束优化问题：
+\begin{empheq}{align}\label{optimal-margin-classification-slack}
+\min_{\btheta,\theta_0,\bm{\xi}}\quad & J=\inv{2}\|\btheta\|^2+C\sum_{i=1}^{N}\xi_i\\
+\text{s.t.}\quad & y_i(\bx_i^T\btheta+\theta_0)\geq \rho-\xi_i\\
+&\xi_i\geq 0
+\end{empheq}
+
+注意看这个改写是怎么来的，取松弛变量$$\xi_i=\mathcal{L}_{\rho}(y_i,\bx_i^T\btheta+\theta_0)=\max\{0,\rho-y_i\hat{y}_i\}$$
+显然$\xi_i\geq 0$，且$\xi_i\geq \rho-y_i\hat{y}_i$，分别对应第二个、第一个约束条件。
+
+现在来说说这个Margin是什么意思。熟知给定一个超平面$\bx^T\btheta+\theta_0=0$，一个点$\bx_i$到平面的有符号距离是$\frac{\bx_i^T\btheta+\theta_0\bx_i}{\|\btheta\|}$，这是因为一个平面分空间为2部分，所以距离可以有符号，对应通常的上面、下面。如果给距离为正的点标识为正样本，取$y_i=1$，而负距离取$y_i=-1$，则$y_i(\bx_i^T\btheta+\theta_0\bx_i)$可以确保为非负值。
+
+如果是线性可分的情形，则可以保证$y_i\hat{y}_i\geq 0$，此时对应$\xi_i=0$。如果是线性不可分，则有些点正样本的点可能距离为负，此时$y_i\hat{y}_i<0$，对应$\rho-\xi_i<0$，即$\xi_i\geq \rho>0$。因此优化任务就是希望$\xi_i$尽可能为负值。
+
+所以这里的Margin就刻画了（但不是）点到超平面的距离。
+\subsection{Maximum Margin分类——SVM}
+\subsubsection{线性可分}
+\paragraph*{问题表述}
+对于上一节的问题\ref{optimal-margin-classification-slack}，如果问题线性可分，则$\xi_i=0$，如果取$\rho=1$，则现在的问题是
+\begin{empheq}{align}\label{svm-linear-seq-1}
+\min_{\btheta,\theta_0}\quad & \inv{2}\|\btheta\|^2\\
+\text{s.t.}\quad &y_i(\bx_i^T\btheta+\theta_0)\geq 1\\
+\implies&\diag(\by)X\btheta+\theta_0\by\geq \bm{1}\\
+\implies &\begin{bmatrix}
+\diag(\by)X &\bm{0}\\\bm{0}&\by
+\end{bmatrix}\begin{bmatrix}
+\btheta\\
+\theta_0\bm{1}_{N}
+\end{bmatrix}\geq \bm{1}_{N}
+\end{empheq}
+这是一个线性线束二次规划问题。
+\paragraph*{拉格朗日法}对于问题\ref{svm-linear-seq-1}，其拉格朗日函数及对应的KKT条件为
+\begin{empheq}{align}
+L(\btheta,\theta_0,\bm{\lambda})&=\inv{2}\|\btheta\|^2-\sum_{i=1}^{N} \lambda_i(y_i(\bx_i^T\btheta+\theta_0)-1)\\
+\pdv{L}{\btheta}&=\btheta-\sum_{i=1}^{N}\lambda_iy_i\bx_i=0\\
+\pdv{L}{\theta_0}&=\bm{\lambda}^T\by=0\\
+\lambda_i&(y_i(\bx_i^T\btheta+\theta_0)-1)=0\\
+\lambda_i&\geq 0
+\end{empheq}
+
+
+\subsubsection{线性不可分}
+\paragraph*{核函数的引入}
+
+\section{树方法}
+
+\subsection{核方法}

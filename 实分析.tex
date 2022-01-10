@@ -1,0 +1,44 @@
+\chapter{实分析}
+
+\section{实数集的完备性}
+
+\section{收敛与极限}
+\subsection{极限的定理}
+\subsubsection{洛必达法则}
+
+\subsubsection{Stoltz定理}
+\begin{theorem}[Stoltz定理]
+假设$\{x_n\}_{n=1}^\infty,\{y_n\}_n=1^\infty$是2个序列，满足
+\begin{enumerate}
+\item $\{y_n\}_{n=1}^\infty$单调增加，且发散。
+\item $\lim\limits_{n\rightarrow\infty}\frac{x_n-x_{n-1}}{y_n-y_{n-1}}=C$为一常数。
+\end{enumerate}
+那么
+$$\lim\limits_{n\rightarrow\infty}\frac{x_n}{y_n}=C$$
+
+实际上这个定理相当于洛必达法则。
+\end{theorem}
+\begin{lemma}[等差数列均值的极限]\label{Stoltz-l1}
+如果
+$$\lim_{n\rightarrow\infty} (a_{n+1}-a_n)=a$$
+那么有
+$$\lim_{n\rightarrow\infty}\frac{a_n}{n}=a$$
+
+要得到这个公式，在Stoltz定理中取$y_n=n$即可。
+\end{lemma}
+\subsection{极限计算的例子}
+\subsubsection{与指数函数相关}
+\begin{example}
+	\begin{empheq}{equation}
+		\lim_{x\rightarrow \infty}x\left(1-e^{-\frac{a}{x^2}}\right),a>0
+	\end{empheq}
+\end{example}
+\begin{solution}
+	右边$\rightarrow$0，左边$\rightarrow \infty$,乘积是不定的。但指数函数收敛快，所以右边趋近0快，有可能收敛。
+\begin{empheq}{align*}
+\text{原式}&\xRightarrow{u=1/x}\\
+\lim_{u\rightarrow 0}&=\frac{1-e^{-au^2}}{u}\\
+	&=\frac{e^{au^2}-1}{ue^{au^2}}\\
+	&=0
+\end{empheq}
+\end{solution}

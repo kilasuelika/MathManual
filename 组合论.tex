@@ -1,0 +1,95 @@
+\chapter{组合论}
+\section{基本原理}
+\subsection{排列数与组合数}
+\subsubsection{排列数}
+\begin{definition}
+从$n$种不物品中不放回取出$k$种物品，再将取出的物品进行排列，则最终可以得到不同的排列为排列数：
+$$A(n,k)=\frac{n!}{(n-k)!}$$
+\end{definition}
+
+\subsubsection{组合数}
+\begin{definition}
+从$n\geq 0$种不物品中不放回取出$k$种物品，则不同的取法数量为组合数：
+\begin{empheq}{align}
+P(n,k)&=\binom{n}{k}=\frac{A(n,k)}{k!}=\frac{n!}{(n-k)!k!}\\
+\binom{n}{0}=\binom{n}{n}=1,\quad n\geq 0
+\end{empheq}
+\end{definition}
+
+\subsection{组合论等式}
+\begin{empheq}{align*}
+\binom{n}{k}+\binom{n}{k+1}=\binom{n+1}{k+1}
+\end{empheq}
+
+\subsection{鸽巢原理}
+基本的表述是：将一个空间分成$n$类，那么从这个空间中取出$n+1$个元素，必然至少有两个元素处于同一类中.
+
+使用鸽巢原理最重要的就是如何分类.对于不同的问题分类标准不同，比如对于数空间：正负、有理无理、奇偶等等.
+
+\begin{example}
+在二维平面上的整数格点中取5个点，则必然存在另一个整数格点，恰好位于这5个点中某两个点连线构成的线段上.
+
+分类标准就是奇偶性，一个点的两个坐标奇偶性只有4种情况，就可以用鸽巢原理了.如（奇，奇），（奇，奇）的中点就是（偶，偶）.
+\end{example}
+
+\section{组合论例子}
+\subsection{样本问题}
+\begin{example}
+\textbf{(滑动窗口的采样重叠问题)}考虑滑动窗口，假设长度为$n$，滑动距离为1，那么每两个相邻的窗口，有$n-1$个重叠样本。假设从两个相邻的窗口中，每个窗口中取$m$个样本，问相同样本数量的分布。
+\end{example}
+\begin{solution}
+显然地，全空间为$\binom{n}{m}^2$. $n$个样本可分为$1+(n-1)$个样本。取$m$个样本，分为两种情况：取或者不取前1个样本。则取两组样本时，有4种情况，一个一个列出来然后计算。
+
+首先考虑最基本的情形：全不重叠。
+
+假设第一组取了前1个样本，则第二组假如也取前1个，那么剩下$m-1$个要从$n-1-(m-1)=n-m$个中取。
+\begin{empheq}{align*}
+&\frac{\underbrace{\binom{n-1}{m-1}}_{\text{1取}}\left(\underbrace{\binom{n-m}{m-1}}_{\text{2取}}+\underbrace{\binom{n-m}{m}}_{\text{2不取}}\right)+\underbrace{\binom{n-1}{m}}_{\text{1不取}}\left(\underbrace{\binom{n-1-m}{m-1}}_{\text{2取}}+\underbrace{\binom{n-1-m}{m}}_{\text{2不取}}\right)}{\binom{n}{m}^2}\\
+=&\frac{\underbrace{\binom{n-1}{m-1}}_{\text{1取}}\binom{n-m+1}{m}+\underbrace{\binom{n-1}{m}}_{\text{1不取}}\binom{n-m}{m}}{\binom{n}{m}^2}
+\end{empheq}
+
+再考虑有$k,k\leq m$个重叠的。
+
+$k=m$比较显然。第一组只能在$n-1$个中取$m$个：
+\begin{empheq}{align*}
+\frac{\binom{n-1}{m}}{\binom{n}{m}^2}=\frac{n-m}{n}\bigg/\binom{n}{m}
+\end{empheq}
+
+对于其它情形。此时首先第一组任取，然后第二组取的时候先从第一组里面取$k$个，然后从剩下的取$m-k$个。第一组要分情况，假如第一组取了前1个，那么第二组只能从$m-1$个取$k$个，而且剩下的$m-k$个也分取或者不取两种情形，假如取了前1个，那么要从$n-1-(m-1)$个中$m-k-1$个；假如不取，从$n-1-(m-1)$个取$m-k$个。
+\begin{empheq}{align*}
+&\frac{\underbrace{\binom{n-1}{m-1}}_{\text{1取}}\binom{m-1}{k}\left(\underbrace{\binom{n-m}{m-k-1}}_{\text{2取}}+\underbrace{\binom{n-m}{m-k}}_{\text{2不取}}\right)+\underbrace{\binom{n-1}{m}}_{\text{1不取}}\binom{m}{k}\left(\underbrace{\binom{n-1-m}{m-k-1}}_{\text{2取}}+\underbrace{\binom{n-1-m}{m-k}}_{\text{2不取}}\right)}{\binom{n}{m}^2}\\
+=&\frac{\underbrace{\binom{n-1}{m-1}}_{\text{1取}}\binom{m-1}{k}\binom{n-m+1}{m-k}+\underbrace{\binom{n-1}{m}}_{\text{1不取}}\binom{m}{k}\binom{n-m}{m-k}}{\binom{n}{m}^2}
+\end{empheq}
+
+以下给出一些算例：
+\begin{enumerate}
+\item 假设$n=1000,m=50$，则完全不重合的概率$P(0)\simeq 0.07$，前几个概率值如下：
+\begin{empheq}{align*}
+P(1)&\simeq 0.2\quad &P(2)&\simeq 0.2659\\
+P(3)&\simeq 0.2259\quad & P(4)&\simeq 0.1378\\
+P(5)&\simeq 0.0644 \quad & P(6) &\simeq 0.0239\\
+P(7)&\simeq 0.0072 \quad & P(8) &\simeq 0.001856
+\end{empheq}
+$$\sum_{k=1}^{7}\simeq 0.86$$
+
+可见，大概率只有少数几个样本会重合。
+\end{enumerate}
+\end{solution}
+
+\begin{example}
+\textbf{(随机采样的覆盖面)}$N$个样本，有放回取$n$个，问这些样本中不同样本个数$k,k\leq \min(N,n)$的分布。
+
+训练模型时，经常是随机采样，通过这个问题，主要是看看需要抽多少次，才能使所有样本都被抽到的概率大于一定值。
+\end{example}
+\begin{solution}
+全空间显然为$N^n$。
+\end{solution}
+\begin{example}\label{birthday_paradox}
+\begin{theorem}[生日悖论]{}
+	$N$为正整数，从中独立、随机选择$Q$个元素$x_1,\cdots,x_Q$，则
+	$$\frac{Q(Q-1)}{4n}\leq P(\exists (i,j),x_i=x_j)=\frac{n\times(n-1)\times(n-Q+1)}{}\leq \frac{Q^2}{2N}$$
+\end{theorem}
+
+在上面的下界中，取$Q=\sqrt{2N}$，那么下界就接近$\fh$了。取1年365天，那么只要取$\sqrt{2\times 364}\approx 27$个人，其中有两个人同月同日生的概率就大于$\fh$。
+\end{example}
+

@@ -1,0 +1,55 @@
+\section{代数结构一览}
+
+\newpage
+\thispagestyle{empty}
+\newgeometry{left=1.5cm,bottom=0.4cm,top=0.5cm,right=1.5cm}
+\begin{landscape}
+\begin{tikzpicture}[grow  = right,
+	sibling distance        = 6em,
+	level distance          = 10em,
+	edge from parent/.style = {draw, -latex},
+	every node/.style       = {font=\footnotesize},
+	sloped]
+ \node [root] {集合}
+child { node [env] {偏序集} 
+		child { node [env] {格}
+				edge from parent node [below] {交、并}
+		}
+		edge from parent node [above] {自反、传递} node[below]{反对称关系}
+}
+child { node [env] {半群}
+		child { node [env] {幺半群}
+				child { node [env] {群}
+						child { node [env] {李群}
+							edge from parent node [above] {解析流形} node [below] {$xy^{-1}$解析映射}
+						}
+						child { node [env] {交换群}
+								child { node [env] {环}
+										child { node (CR) [env] {除环}
+												edge from parent node [above] {乘法逆元}
+										}
+										child { node [env] {交换环}
+												child { node (F) [env] {域}
+														edge from parent node  [above] {乘法逆元}
+												}
+												child { node [env] {$R$模}
+														edge from parent node [above] {加法交换群$R$} node [below] {标量运算}	
+												}
+											edge from parent node [above] {乘法交换律}
+										}
+										edge from parent node [above] {乘法半群} node [below] {分配律}
+								}
+								edge from parent node [above] {(加法)交换律}
+						}
+						edge from parent node [above] {逆元}
+				}
+				edge from parent node [above] {单位元}
+		}
+		edge from parent node [above] {乘法封闭} node[below]{结合律} 
+};
+\draw[-latex] (CR) -- (F) node [pos=0.5,sloped,above] {乘法交换律};
+\end{tikzpicture}
+
+\end{landscape}
+\newpage
+\restoregeometry

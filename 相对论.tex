@@ -1,0 +1,37 @@
+\chapter{相对论}
+\section{原理}
+\subsection{洛伦兹变换}
+\begin{definition}[洛伦兹变换]
+假设两个坐标轴相互平等，坐标系$S'$相对另一个坐标系$S$沿$x$轴以匀速$v$运动。$(x',y',z',t'),(x,y,z,t)$分别为同一个事件在两个坐标系中的四维时空坐标，则坐标之间的变换为：
+\begin{empheq}{equation}
+x'=\gamma(x-vt),y'=y,z'=z,t'=\gamma(t-vx/c^2)
+\end{empheq}
+其中$\gamma=\inv{\sqrt{1-\beta^2}},\beta=v/c$。
+\end{definition}
+现在来验证它确实保持事件的间隔在两个坐标系中相同。假设第一个坐标系中发生的2个事件为$(x_1,y_1,z_1,t_1),(x_2,y_2,z_2,t_2)$，其事件间隔为
+$$\Delta  s=\sqrt{c^2(t_2-t_1)^2-((x_2-x_1)^2+(y_2-y_1)^2+(z_2-z_1)^2)}$$
+
+在第二个坐标系，对应的两个事件为$(x_1',y_1',z_1',t_1'),(x_2',y_2',z_2',t_2')$，希望验证$\Delta s'=\Delta s$。由于$x,y$坐标没有变，因此只需要验证
+\begin{empheq}{equation}
+c(t_2-t_1)^2-(x_2-x_1)^2=c(t_2'-t_1')^2-(x_2'-x_1')^2
+\end{empheq}
+
+对于上式
+\begin{empheq}{align*}
+\text{右边}&=c^2\gamma^2(t_2-t_1-v/c^2(x_2-x_1))^2-\gamma^2(x_2-x_1-v(t_2-t_1))^2\\
+&=(c^2+v^2)\gamma^2(t_2-t_1)^2-v^2\gamma^2(x_2-x_1)^2\\
+&=c(t_2-t_1)^2-(x_2-x_1)^2\\
+&=\text{左边}
+\end{empheq}
+验证完成。
+
+\subsection{时间膨胀与洛伦兹收缩}
+在$S$坐标系中的同一空间坐标（固定空间），测得时间间隔为$T=t_2-t_1$，则在另一个坐标系中测得时间间隔为。
+
+在某个坐标系中某个特定时间点（固定时间），测得物体在$x$方向的长度为$L=x_2-x_1$，则在另一个坐标系中，测得的长度为$L'=\gamma(x_2-x_1)=\gamma L$，即长度发生了收缩，这就是洛伦兹收缩。
+
+\section{相对论力学}
+
+\section{狭义相对论}
+
+\section{广义相对论}

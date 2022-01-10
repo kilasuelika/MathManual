@@ -1,0 +1,160 @@
+\subsection{泛函分析中的空间}
+\subsubsection{各种空间的图景}
+\begin{center}
+\includegraphics[width=14cm]{figure/Functional Space - Overview.png}
+\end{center}
+\subsubsection{拓扑空间}
+\begin{definition}[拓扑空间]\label{}
+拓扑空间是一个集合$X$及其子集族$\tau$，满足以下条件：
+
+\begin{enumerate}
+	\item 空集和$X$属于$\tau$.
+	\item $\tau$中任意多个集合的交和并均属于$\tau$.
+\end{enumerate}
+
+称子集族$\tau$为$X$的拓扑.$\tau$中的元素称为开集.开集的补集为闭集，集合可以是开的、闭的、非开非闭、既开又闭.
+
+集合$\{\emptyset,X\}$构成平凡拓扑.
+
+给定两个拓扑空间$X,Y$和一个映射$f\colon X\rightarrow Y$，如果$Y$中开集的原像是$X$中的开集，则称$f$连续.如果$X$中开集的像在$Y$中是开集，称$f$为开映射.
+
+$X$到$Y$的所有连续映射记为$\mathcal{C}(X;Y)$.
+映射$f\colon X\rightarrow Y$称为$X$到$Y$上的同胚，如果$f$是双射，且$f\in\mathcal{C}(X;Y),f^{-1}\in \mathcal{C}(X;Y)$.此时又称$X$与$Y$同胚.
+\end{definition}
+
+与子集族$\tau$相近的一个概念是滤子.
+
+\begin{definition}[滤子]\label{}
+设$X$为一集合，$\mathcal{F}$是$X$的非空子集族，如果：
+\begin{enumerate}
+\item $\mathcal{F}$中任意两个元素的交属于$\mathcal{F}$.
+\item 如果$A\in\mathcal{F},A\subset B\subset X$，那么$B\subset \mathcal{F}$.
+\end{enumerate}	
+
+\end{definition}
+第一个性质是指$\mathcal{F}$对交运算完备（但不像拓扑空间中一样涉及并运算），第二个性质类似于扩张.滤子的概念与$\sigma$代数十分相似.
+
+拓扑空间的例子有：距离空间.
+
+拓扑空间可以有连续性（指映射连续）、紧性、连通性.之前的定义中已经确定了连续性.
+
+\begin{definition}[拓扑空间的紧性]\label{}
+拓扑空间$X$是紧的，是指对$X$中任何一族开集$(O_i)_{i\in I}$，当$K\subset \bigcup_{i\in I}O_i$时，必存在$(O_i)_{i\in I}$的有限子族$(O_j)_{j\in J}$，使得$K\subset \bigcup_{j\in J}O_j$.
+	
+一种等价描述性：任何开覆盖均有有限子覆盖.
+
+这种性质又称为Heine-Borel-Lebesgue性质.
+
+在欧几里得空间中，这又等价于集合封闭且有界.
+\end{definition}
+
+开覆盖是指$\bigcup_{i\in I}O_i$，有限子覆盖是指$\bigcup_{j\in J}O_j$.
+
+乍看上去，紧性似乎对每个拓扑空间都应该成立.因为既然$K\subset \bigcup_{i\in I}O_i$，即$K$属于交集，那么这个交肯定是由子集族中一些集合相交得到的.
+
+问题核心就在这个“有限”上.比如取区间$(0,1]$，它不是紧的，因为它有开覆盖$\big\{(\frac{1}{n},1]\big\}_{n=1}^\infty$.但它的任意子覆盖必然不能覆盖区间$(0,1]$.但区间$[0,1]$就是紧的，前述的开覆盖并不能覆盖它.
+
+紧空间的一些好处有：
+\begin{enumerate}
+\item 紧空间上的连续函数必然有最大最小值.
+\end{enumerate}
+
+
+\begin{definition}[拓扑空间的连通性]\label{}
+拓扑空间$(X,\mathcal{O})$是连通的，是指$X$中既是开集又是闭集的子集只有$X$和$\emptyset$.
+
+等价于$X$不能被分为两个不相交开集的并.
+
+$X$的子集$A$称为连通的，是指$A$关于$X$在$A$上的诱导拓扑，它是一个连通的拓扑空间.
+
+设$x,y\in X$，从$x$到$y$中的道路是指连续映射$[0,1]\rightarrow X$，它满足$\gamma(0)=x,\gamma(y)=y$.如果任意两个不同的点存在道路，称$X$弧连通.
+\end{definition}
+
+连通性的等价定义更容易理解——不能分为不相交开集的并.比如两个不相交的圆取并形成的集合，就不是连通的.连通性可以诱导中值定理.
+
+\begin{definition}[Bolzano中值定理]\label{}
+$X$为连通拓扑空间，$f\colon X\rightarrow \mathbb{R}$为连续函数，$a,b\in X$且$f(a)<f(b)$，则对任意给定的$y\in]f(a),f(b)[$，存在$x\in X$，使得$f(x)=y$.
+\end{definition}
+
+通俗地说，中值定理是指连通拓扑空间上的连续函数可以取一切中间值.
+
+对于一个特定的集合可以构造很多拓扑，但很多是没有用的，如果引入更多的公理（或者说约束），就能定义更好性质的拓扑.常见的有分离公理、可数性公理.
+
+\begin{definition}{分离定理}{}
+$T_0$公理：任意不同的两点，存在某点的开邻域，不包含另外一点.
+
+$T_1$公理：任意不同的两点，每个点存在开邻域，不包含另外一点.
+
+$T_2$公理：任意不同的两点，每个点存在互不相交的开邻域.
+
+满足$T_2$公理的空间又称$T_2$空间、豪斯多夫空间.$T_2$空间中每个序列不会收敛到两点以上的点.度量空间都是$T_2$空间.
+\end{definition}
+
+从$T_0$到$T_2$是递进的，越来越严格.比如$T_1$公理中，邻域不包含另外一点，但可以相交.
+
+\subsubsection{距离空间}
+\paragraph*{距离空间}就是集合加上距离函数。
+\begin{definition}[距离空间]\label{}
+设$X$是一个集合，函数$d:X\times X\rightarrow \mathbb{R}$满足下列性质：$\forall x,y,z\in X$，
+\begin{empheq}{align*}
+d(x,x)&=0,\text{且如果}x\neq y,\text{则}d(x,y)>0\\
+d(x,y)&=d(y,x)\\
+d(x,z)&\leq d(x,y)+d(y,z)
+\end{empheq}
+$(X,d)$为距离空间。
+\end{definition}
+\paragraph*{完备距离空间}每个Cauchy序列均在$X$中收敛的距离空间，在$X$中收敛需要满足两个条件，一是收敛，二是收敛的点也在$X$中。
+\begin{definition}[Cauchy列]
+记$(X,d)$为距离空间，$x_n\in X,n\geq 0$，如果$n\rightarrow \infty$，集合$\bigcup_{m=n}^\infty{x_m}$的直径收敛于0。
+
+或者说$\forall \varepsilon>0,\exists n_0(\varepsilon)\geq 0$，使得当$m,n\geq n_0(\varepsilon)$时有$d(x_m,x_n)<\varepsilon$。
+\end{definition}
+\subsubsection{函数空间}
+\begin{definition}[压缩映射]\label{concen-map}
+设$(X,d)$为一距离空间，对映秀$f:X\rightarrow X$，如果存在常数$k$，使得$0<k<1$，且对任何$x,y\in X$，均有
+$$d(f(x),f(y))\leq k d(x,y)$$
+则称$f$为压缩映射.
+\end{definition}
+
+“压缩”指的是压缩距离.
+
+\subsubsection{向量空间}
+向量空间是集合配上加法与数乘。对于向量空间可以定义Hamel集，实质相当于最大独立集，和一般说的基相同。
+
+\begin{definition}[赋范向量空间]\label{def::norm-vec-space}
+设$X$为$\mathbb{K}$上的向量空间，$\mathbb{K}=\in\{\mathbb{R,C}\}$，设映射$\|\cdot\|:X\rightarrow\mathbb{R}$（范数）满足以下性质：
+\begin{description}
+\item[非负性] $\forall x\in X,\|x\|\geq 0$，且$\|x\|=0\implies x=0$。
+\item[线性] $\forall \alpha \in \mathbb{K},x\in X, \|\alpha x\|=|\alpha|\|x\|$。
+\item[三角不等式] $\forall x,y\in X,\|x+y\|\leq \|x\|+\|y\|$。
+\end{description}
+称$(X,\|\cdot\|)$为赋范向量空间。
+\end{definition}
+\paragraph*{赋范向量空间中的线性算子}对于算子也可以定义范数，但它与向量空间中的范数并不一样。
+\begin{theorem}[算子的范数]\label{op-norm}
+设$X,Y$是两个赋范向量空间，则
+\begin{enumerate}[label=(\alph*)]
+\item 由
+$$\|\cdot\|:A\in\mathcal{L}(X;Y)\rightarrow \|A\|\coloneqq \sup_{x\neq 0}\frac{\|Ax\|}{\|x\|}$$
+定义的映射是向量空间$\mathcal{L}$上的范数。且由定义有
+$$\|Ax\|\leq \|A\|\|x\|$$
+\item $A\in\mathcal{L}(X;Y)$可以等价定义为
+\begin{empheq}{align*}
+\|A\|&=\sum_{\|x\|\leq 1}\|Ax\|=\sum_{\|x\|<1}\|Ax\|=\sum_{\|x\|=1}\|Ax\|\\
+&=\inv{r}\sum_{\|x\|\leq r}\|Ax\|=\inv{r}\sum_{\|x\|= r}\|Ax\|\\
+&=\inf\{C>0\mid\forall x\in X,\|Ax\|\leq C\|x\|\}
+\end{empheq}
+\item 如果$X$是有限维空间，那么
+$$\exists x_0\neq 0\in X,\|A\|\|x_0\|=\|Ax_0\| $$
+\item 设$Z$为赋范向量空间，如果$A\in\mathcal{L}(X;Y),B\in\mathcal{L}(Y;Z)$，那么$BA\in\mathcal{L}(X;Z)$，且
+$$\|BA\|\leq \|A\|\|B\|$$
+那么，如果$A\in X$，则
+$$\forall n\geq 0, \|A^n\|\leq \|A\|^n$$
+\item 如果$A\in X$，则$A$的任意特征值$\lambda$满足$|\lambda|\leq \|A\|$。
+\end{enumerate}
+\end{theorem}
+\subsubsection{Banach空间}
+赋范向量空间$(X,\|\cdot\|)$是Banach空间，如果距离空间$(X,d)$完备，此处$d(x,y)=\|x-y\|$。相当于完备距离空间加上赋范向量空间。
+
+\subsubsection{Hilbert空间}
+

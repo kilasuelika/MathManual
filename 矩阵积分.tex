@@ -1,0 +1,16 @@
+\chapter{矩阵积分}
+
+\section{多变量高斯分布积分}
+\subsection{密度函数}
+$$f(\bx)=(2\pi)^{-\frac{n}{2}}|\Sigma|^{-\frac{1}{2}}e^{-\frac{1}{2}(\bx-\mu)^T\Sigma^{-1}(\bx-\mu)}$$
+\subsection{由联合分布诱导条件分布}
+假设两个高斯向量$\bx,\by$服从联合高斯分布。记
+\[
+\bmu=\begin{bmatrix}
+\bmu_{\bx}\\
+\bmu_{\by}
+\end{bmatrix},\Sigma=\begin{bmatrix}
+\Sigma_{\bx}&\Sigma_{\bx\by}\\
+\Sigma_{\by\bx}&\Sigma_{\by}
+\end{bmatrix}
+\]

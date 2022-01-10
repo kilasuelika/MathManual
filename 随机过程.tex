@@ -1,0 +1,97 @@
+\section{随机过程}
+\subsection{随机过程的基本概念}
+
+\subsubsection{什么是随机过程}
+\paragraph*{定义}
+随机过程就是一个随机变量族$\{X_t\}_{t\in\Omega}$，$\Omega$是下标集合，最常见的就是$\mathbb{N}$，即以时间为下标，但它也可以是实数集或者其它抽象集合。它由有穷维分布函数族完全确定，所谓有空维分布就是取一个有限子集$\{X_t\}_{t\in\omega}$的联合分布。随机过程从本质上来说就是无穷维的，但我们不可能直接定义一个无穷维的分布，所以只能用有限维分布来刻画。
+
+从以上可以看出，理解一个随机过程需要抓住三个要素：
+\begin{description}
+	\item[下标集$\Omega$] 下标集可以是任意一个无限集，并不必然是整数。
+	\item[随机变量的值域$E$] 值域就是每个随机变量的取值。
+	\item[有穷维分布] 它刻画了随机过程的概率性质。随机变量是无限维的，只能通过“切片”的方式来刻画，一个切片就是一个联合分布。但在定义一个随机变量时，我们不必给出任意子集的有穷维分布，可以只给出某些特定子集的分布，Dirichlet过程就是一个例子。
+	
+	对随机过程进行采样，就是对某个有穷维分布进行采样（我们不可能对无限个随机变量的联合分布采样），所以就要首先确定这个有穷维分布对应的下标集。
+\end{description}
+
+注意随机过程有多种类型，每种类型定义的出发点不同：
+\begin{enumerate}
+\item 增量过程，值域可以连续或者离散。增量可以是独立的，比如独立增量过程，也可以有相关性，比如Ito过程属于此类。适合描述动力系统。
+\item 直接给定同质有空维分布族。比如高斯过程就是任何子集的随机变量满足高斯分布。高斯过程的下标集是自然数。
+
+Dirichlet过程就是某些特定有空维分布为Dirichlet分布，此时它的下标集是集合的幂集。
+
+并非任何分布都能够作为有空维分布族。高斯过程是因为高斯分布的特性：子集也属于高斯分布。但服从多元t分布的子集不一定满足t分布，所以就没有t过程。
+\item 马尔科夫过程。取值离散，下一时刻的状态由之前的状态决定。
+\end{enumerate}
+从以上可以看出Ito过程只是随机过程的一个子类，不要混淆机器学习中的随机过程与Ito过程。
+
+\paragraph*{实现}定义并不能直接告诉我们应当如何得到随机过程的一个实现（或者说采样）。
+
+\paragraph*{应用}随机过程适合用来描述无穷维的东西：
+\begin{enumerate}
+\item 以时间或者自然数为下标的变量族，比如时间序列回归或者一般的回归。此时每个样本对应一个随机变量。
+\item 描述整数下标本身，每个下标可以对应其它的东西。比如聚类分布中聚类的数量，又比如无限个基函数。注意区别它与上一点，两种情况下，下标都有其对应的东西，但上一点中，我们希望刻画的是下标对应的东西，而这里，我们是希望刻画下标本身，通常是给下标确定一个概率。
+\item 划分。比如把一个区间划分为若干份，划分的数量可以趋于无穷。
+\end{enumerate}
+\subsubsection{Ito微积分}
+用于对以随机过程为变量的函数进行微分。
+
+\paragraph*{基本原理}
+\begin{empheq}{align*}
+\int_{0}^{t}\dif B_s&=\sum_{i=1}^{N}B_{s_{i}}-B_{s_{i-1}}=B_t\\
+\dif t\dif t&=\dif t\dif B_t=0\\
+\dif B_t\dif B_t&=\dif t\\
+\end{empheq}
+这里是从随机游走的极限情况考虑的。在$\Delta t$时间的内的增量$\Delta B_t$服从正态分布$N(0,\Delta^2 t)$。
+
+现在考虑积分
+\begin{empheq}{align*}
+\int_{0}^{t}B_s\dif B_s&=\sum B_{s_i}(B_{s_i}-B_{s_{i-1}})\\
+&=\sum\left(-\frac{1}{2}\left((B_{s_i}-B_{s_{i-1}})^2-B^2_{s_i}-B^2_{s_{i-1}}\right)-B^2_{s_{i-1}}\right)\\
+&=-\inv{2}\sum\left(\Delta^2 B_{s_{i-1}}\right)+\inv{2}\sum (B^2_{s_{i}}-B^2_{s_{i-1}})\\
+&=\inv{2}B_t^2-\inv{2}t
+\end{empheq}
+这里用到了$xy=-\inv{2}((x-y)^2-x^2-y^2)$。累积和
+$$[B]_t=\sum (B_{s_i}-B_{s_{i-1}})^2$$
+叫二次变差。
+\paragraph*{一维情形}取随机过程
+$$\dif X_t=\mu_t\dif t+\sigma_t\dif B_t$$
+那么
+$$(\dif X_t)^2=\mu_t^2(\dif t)^2+2\mu_t\sigma_t\dif t\dif B_t+\sigma_t^2(\dif B_t)^2=\sigma_t^2\dif t$$
+现在取一个函数$g(X_t)$，则由Taylor公式有：
+\begin{empheq}{align}
+\dif g(X_t)&=g'(X_t)\dif X_t+\inv{2}g''(X_t)\dif^2 X_t\\
+&=(g'(X_t)+\inv{2}\sigma_t^2g''(X_t))\dif t+\sigma_t\dif B_t
+\end{empheq}
+
+假如函数与$t$有关，则
+$$\dif f(t,X_t)=\left(f_1+\mu_tf_2+\frac{1}{2}\sigma_t^2f_{22}\right)\dif t+\sigma_t f_{22}\dif B_t$$
+证明与上面的相似，也用Taylor展开。
+\paragraph*{高维情形}此时
+$$\dif X_t=\bm{\mu}_t\dif t+G_t\dif X_t$$
+注意$G_t$是矩阵函数，而$X_t$是向量，则
+$$\dif f(t,X_t)=\left(\nabla_t f+\bm{\mu}_t\cdot \nabla_X f+\frac{1}{2}\trace\left(G^T(H_Xf) G\right)\right)\dif t+(\nabla_X f)^TG\dif B_t$$
+\subsection{Martingale}
+
+\subsection{典型随机过程}
+\subsubsection{Brawion运动}
+
+\subsubsection{Dirichlet过程}\label{dirichlet-process-def}
+\paragraph*{含义}
+这个随机过程比较抽象，因为它的下标集不是自然数，而是集合的幂集。首先我们有一个集合$\mathcal{B}$，通常取$\mathbb{R}^n$，或者$\mathbb{R}^n$的子集，在这个集合$\mathcal{B}$上我们定义一个原始的分布$P_0$。然后我们取$\mathcal{B}$的幂集$P(\mathcal{B})$，在这个幂集中，有一些子集$\{B_k\}_1^n$恰好可以构成一个$\mathcal{B}$的划分，即$B_k$互不重叠，且其并集为$\mathcal{B}$。假如在任意一个这样的划分上定义了一个Dirichlet分布$\Dirichlet(\alpha P_0(B_1),\cdots,\alpha P_0(B_n) )$，则称这个过程为Dirichlet过程，记为$\DP(\alpha P_0)$。
+
+需要强调的是这里我们给出的有空维分布不是任意子集的有穷维分布，但其它子集的分布也可以导出来，只是不一定能显式给出。比如一系列变量服从Dirichlet分布，则从中取若干随机变量，也可以定义一个分布，虽然不能直接写出分布的函数形式。
+
+从以上分析来看，这个随机过程的值域是$[0,1]$，相当于落入$B_k$的概率。有人认为Dirichlet过程是“分布的分布”，含义就在这里，从Dirichlet过程中进行一次采样，可以得到一个类似于直方图的概率分布。
+
+$\alpha$一般叫Concentration参数，它决定了方差。如果$\alpha\rightarrow \infty$，则采样的分布趋向于原始分布。
+
+\paragraph*{Stick-breaking construction}采样方法的一种。
+
+\paragraph*{Chinese restaurant process construction}一个餐馆中有无限张桌子，第1个人任意选择一张桌子坐下（记这张桌子为第一张），第2个人以$\frac{\alpha}{1+\alpha}$的概率坐在第1张桌子，以$\frac{1}{\alpha+1}$的概率坐在第2张桌子……以此类推，第$i$个人以$\frac{n_j}{\alpha+\sum n_j}$的概率坐在第$j$张桌子，$n_j$表示坐在第$j$张桌子的人数；以$\frac{\alpha}{\alpha+\sum n_j}$坐在一张新桌子。显然，随着人数越来越多，$\frac{\alpha}{\alpha+\sum n_j}\rightarrow 0$，即总的桌子数量趋于固定。
+
+\subsection{随机过程的性质}
+\subsubsection{Max Drawdown}
+最大回撤，在金融中多用于衡量风险。实质是相对以前的最高点，最大的下跌比例。Matlab中有一个\texttt{maxdrawdown}可以计算，不过手写也很快，就是两个循环。
+

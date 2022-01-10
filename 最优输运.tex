@@ -1,0 +1,41 @@
+\chapter{最优输运}
+最优输运要解决的问题是将一个分布变成另一个分布的问题，每个变换有一个损失函数，我们希望优化这个损失函数。可以类比发货——收货的问题。
+
+如上图所示，我们有$N$个发货地，$M$个收货地，已知的条件是每个发货地的存量$x_i$和每个收货地的需求$y_i$和每个发货地到收货地的运输价格$c_{ij}$，希望求解的是从$i$个发货地发到$j$个收货地的货物$w_{ij}$。事实上这是一个线性规划的问题，对应的是离散情形的Kantorovich问题：
+\begin{empheq}{align*}
+\min_{\pi_{ij}}\quad & \sum_{i}\sum_{j}c_{ij}\pi_{ij}\\
+\text{s.t.}\quad & \pi_{ij}>0\\
+& \sum_{j} \pi_{ij}=\alpha_i\\
+&\sum_{i}\pi_{ij}=\beta_j
+\end{empheq}
+\section{问题的表述}
+\subsection{Monge问题}
+Monge问题是从变换的角度来刻画输运。把原始空间中的值变成另外一个值，但是约束变换后的分布满足目标分布，相当于change of variable。
+\begin{definition}[Kantorovich最优输运问题]
+\begin{empheq}{align}
+\min\quad &\mathbb{M}(T)=\int_{X} c(x,T(x))\dif \mu(x)\\
+\text{s.t.}\quad & \nu=T_{\#}\mu
+\end{empheq}
+\end{definition}
+
+\subsection{Kantorovich问题}
+如同之前的发货——收货问题，Kantorovich问题是通过联合分布来刻画输运的：
+\begin{definition}[Kantorovich最优输运问题]
+\begin{empheq}{align}
+\min_{\pi}\quad &\mathbb{K}(\pi)=\int_{X\times Y} c(x,y)\dif \pi(x,y)\\
+\text{s.t.}\quad &\pi\in\prod(\mu,\nu),\mu\in\mathcal{P}(X),\nu\in\mathcal{P}(Y)
+\end{empheq}
+$\mu,\nu$是概率测度。
+\end{definition}
+
+\subsection{比较与联系}
+一个明显的区别是Monge问题中，每个值只能被变换为另一个固定的值，相当于多对一映射；而在Kantorovich问题中，每个值可以变换为多个值，相当于多对多映射。显然前者的约束更强，因此
+$$\inf \mathbb{K}(\pi)\leq \inf\mathbb{M}(T)$$
+
+\section{定解}
+\subsection{解的存在性}
+
+\subsection{最优性条件}
+
+\section{应用}
+

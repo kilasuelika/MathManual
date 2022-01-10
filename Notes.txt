@@ -1,0 +1,4 @@
+\multirow{3}{*}{}&\multirow{3}{*}{ $X\sim\text{}$}&\multirow{3}{*}{ $$}& $E(X)=$ & \multirow{3}{*}{$$}\\
+& & &$D(X)=$ & \\
+& & & mode$(X)=$& \\
+\midrule

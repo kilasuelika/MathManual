@@ -1,0 +1,530 @@
+\chapter{矩阵代数}
+
+\section{基本矩阵运算}
+%\subsection{公式}
+\subsection{矩阵乘法与基本算子}
+\paragraph*{核心原理}
+\begin{empheq}{align*}
+	\bm{x}^T\bm{y}&=\bm{y}^T\bm{x}=\text{trace}(\bm{x}\bm{y}^T)\\
+	\by^T\bx\bx^T\by&=(\bx^T\by)^2=(\by^T\bx)^2\\
+    \bx^TA\by&=\trace(\by\bx^TA)\\
+	\text{trace}(AB)&=\text{trace}(BA)\\
+	\trace(ABC)&=\trace(BCA)=\trace(CBA)\\
+	\det(A^{-1})&=\det(A)^{-1}\\
+	\det(e^A)&=e^{\trace(A)}\\
+	\det (I_m+AB^T)&=\det (I_n+A^TB)\\
+	\det(I+\bm{a}\bm{b}^T)&=1+\bm{a}^T\bm{b}\\
+	\det (I+A)&=1+\det A+\text{trace}(A)\\
+	\det(I+\varepsilon A)&\approx 1+\det(A)+\varepsilon\trace(A)+\inv{2}\varepsilon^2\trace(A)^2-\inv{2}\varepsilon^2\trace(A^2)\\	\det\left(A^{-1}+A^{-1}BA\right)&=\det\left(A^{-1}A^{-1}A++A^{-1}BA\right)=\det\left(A^{-1}+B\right)\\
+\det \begin{bmatrix}
+A&B\\C&D\\
+\end{bmatrix}&=\det (A)\det(D-CA^{-1}B)\\
+ &=\det (D)\det(A-BD^{-1}C)
+\end{empheq}
+以上假定$\diag$是列向量。
+
+矩阵运算如果在运算过程中产生了标量，那么不一定满足结合律，比如：
+$$\bx^T\bx\bx\neq \bx^T(\bx\bx)$$
+
+右边是没有定义的.但是假如没有生成标量，那么就是结合的.这是因为标量乘以矩阵，实际上是两个元素，无法进一步化简了；而多个矩阵乘起来，最终得到一个矩阵，只有一个元素.
+
+此外还要强调：
+\begin{empheq}{align*}
+ABA+ACA&=A(B+C)A\\
+ACB+DCE&\neq (A+D)C(B+E)
+\end{empheq}
+
+后面这个地方比较容易出错。
+
+矩阵运算中，要注意几点：
+
+\begin{enumerate}
+	\item 假如包含标量，可以放到前面或者后面、可以转置.标量非常重要的，要注意区分.
+	\item 注意一些基本的量，可能隐含一些潜在的关系，比如求值使两个向量相减为0，则向量是平行的，正交回归是一例.
+	\item 在式子中插入一个单位项$I=AA^{-1}=A^{-1}A$用于构造二次型，在多元高斯分布的计算中比较常用。
+	\item 掌握一些改写方程的技巧：
+	
+		\begin{empheq}{align*}
+			1+\bm{\theta}^T\bm{\theta}&=\begin{bmatrix}
+				\bm{\theta}^T&-1
+			\end{bmatrix} \begin{bmatrix}
+				\bm{\theta}\\-1
+			\end{bmatrix}\\
+			\by-X\bm{\theta}&=\begin{bmatrix}
+				X&y
+			\end{bmatrix} \begin{bmatrix}
+				\bm{\theta}\\-1
+			\end{bmatrix}
+		\end{empheq}
+\end{enumerate}
+
+\begin{note}
+\begin{enumerate}
+\item 证明矩阵恒等式$\det(e^A)=e^{\trace A}$。考虑函数$f(t)=\det(e^{tA})$，求导有$f'(t)=f(t)\trace A$，这里的求导参考矩阵微分\eqref{derivative-det}，解方程有$f(t)=Ce^{t\trace A}$，配合初始条件$f(0)=1$，就得到原式。
+\end{enumerate}
+
+\end{note}
+
+\subsection{矩阵逆}
+\paragraph*{原理}
+\begin{empheq}{align}
+(AB)^{-1}&=B^{-1}A^{-1}\\
+(A+BD^{-1}C)^{-1}&=A^{-1}-A^{-1}B(D+CA^{-1}B)^{-1}CA^{-1}\mtag{Woodbury}\label{Woodbury}\\
+\left(A+uv^T\right)^{-1}&=A^{-1}-\frac{A^{-1}uv^TA^{-1}}{1+v^TA^{-1}u}\mtag{Sherman-Morrison}\\
+(A+UV^T)^{-1}&=A^{-1}-A^{-1}U(I+V^TA^{-1}U)^{-1}V^TA^{-1}\mtag{Shermon-Morrison-Woodbury}\\
+(I+B)^{-1}&=(I+IBI)^{-1}\\
+	&=I-(B^{-1}+I)^{-1}\\
+	&=I-B(I+B)^{-1}\\
+(I+AB)^{-1}A&=A(I+BA)^{-1}\\
+(A^{-1}+B^TC^{-1}B)^{-1}B^TC^{-1}&=AB^T(BAB^T+C)^{-1}
+\end{empheq}
+
+\begin{empheq}[left=\empheqlbrace]{align*}
+\begin{bmatrix}
+	A&D\\
+	C&B
+\end{bmatrix}^{-1}&=
+\begin{bmatrix}
+	A^{-1}+E\Delta^{-1}F & -E\Delta^{-1}\\
+	-\Delta^{-1}F & \Delta^{-1}
+\end{bmatrix}\mtag{分块矩阵逆I}\\
+\Delta&\coloneqq B-CA^{-1}D\\
+E&\coloneqq A^{-1}D\\
+F&\coloneqq CA^{-1}
+\end{empheq}
+
+\begin{empheq}{align}
+\begin{bmatrix}
+	A&\bm{0}\\
+	C&B
+\end{bmatrix}^{-1}&=
+\begin{bmatrix}
+	A^{-1}&\bm{0}\\
+	-B^{-1}CA^{-1}&B^{-1}
+\end{bmatrix}\\
+\begin{bmatrix}
+	A&C\\
+	\bm{0}&B
+\end{bmatrix}^{-1}&=
+\begin{bmatrix}
+	A^{-1}&-A^{-1}CB^{-1}\\
+	\bm{0}&B^{-1}
+\end{bmatrix}
+\end{empheq}
+
+\begin{empheq}[left=\empheqlbrace]{align*}
+	\begin{bmatrix}
+		A&D\\
+		C&B
+	\end{bmatrix}^{-1}&=
+	\begin{bmatrix}
+		\Delta^{-1} & -\Delta^{-1}E\\
+		-F\Delta^{-1} & B^{-1}+F\Delta^{-1}E
+	\end{bmatrix}\mtag{分块矩阵逆II}\\
+	\Delta&\coloneqq A-DB^{-1}C\\
+	E&\coloneqq DB^{-1}\\
+	F&\coloneqq B^{-1}C
+\end{empheq}
+
+\paragraph*{Shermon-Morrison-Woodbury定理的证明}基本思路是构造矩阵方程组，再用消元法。
+
+取辅助矩阵
+$$H=\begin{bmatrix}
+A & U\\
+-V^T&I
+\end{bmatrix}$$
+显然有
+\begin{empheq}{align*}
+\begin{bmatrix}
+I&0\\
+V^TA^{-1}&I
+\end{bmatrix}H&=\begin{bmatrix}
+A & U\\
+0&I+V^TA^{-1}U
+\end{bmatrix}\\
+\begin{bmatrix}
+I&-U\\
+0&I
+\end{bmatrix}H&=\begin{bmatrix}
+A+UV^T & 0\\
+-V^T&I
+\end{bmatrix}
+\end{empheq}
+两式结合有：
+\begin{equation}\label{SMW-proof-core-eq}
+\begin{bmatrix}
+A+UV^T & 0\\
+-V^T&I
+\end{bmatrix}=\begin{bmatrix}
+I&-U\\
+0&I
+\end{bmatrix}\begin{bmatrix}
+I&0\\
+V^TA^{-1}&I
+\end{bmatrix}^{-1}\begin{bmatrix}
+A & U\\
+0&I+V^TA^{-1}U
+\end{bmatrix}
+\end{equation}
+
+然后根据矩阵逆有
+\begin{empheq}{align*}
+\begin{bmatrix}
+A+UV^T & 0\\
+-V^T&I
+\end{bmatrix}^{-1}=\begin{bmatrix}
+(A+UV^T)^{-1} & 0\\
+\star&I
+\end{bmatrix}&
+\end{empheq}
+左边再按\eqref{SMW-proof-core-eq}展开再比较系数即可，注意上式中的$\star$不必计算。
+
+\paragraph*{Moore-Penrose伪逆}用来给非方阵求逆。假如$A\in\mathbb{R}^{n\times d}$，则$A^+\in\mathbb{d\times n}$，即形状恰好互为转置。
+
+\begin{definition}[Moore-Penrose伪逆]\label{moore-penrose-pseudo-inv}
+对于任意矩阵$A$，定义Moore-Penrose伪逆为满足以下条件的唯一矩阵：
+\begin{enumerate}
+\item $AA^+A=A$
+\item $A^+AA^+=A$
+\item $(AA^+)^H=AA^+$，即$AA^+$为Hermitian。
+\item  $(A^+A)^H=A^+A$
+\end{enumerate}
+
+它满足的性质有：
+\begin{enumerate}
+\item 如果$A$为实矩阵，则$A^+$也是。
+\item 如果$A$可逆，则$A^+=A^{-1}$。
+\end{enumerate}
+\end{definition}
+\subsection{多项式}
+\subsubsection{几何级数}
+\begin{theorem}[矩阵几何级数的收敛]\label{matrix-geometric-series}
+$A$为方阵，则：
+\begin{enumerate}
+\item $\sum_{k=0}^{\infty}A^k$收敛的充要条件为$\rho(A)<1$。
+\item 当$\sum_{k=0}^{\infty}A^k$收敛时，有
+$$\sum_{k=0}^{\infty}A^k=(I-A)^{-1}$$
+\end{enumerate}
+而且存在范数$\|\cdot\|$，使得
+$$\left|(I-A)^{-1}-\sum_{k=0}^{m}A^k\right|\leq \frac{\|A\|^{m+1}}{1-\|A\|}$$
+\end{theorem}
+
+\subsection{例子}
+\begin{example}
+(\textbf{正交回归}) 正交回归最小化点到超平面的距离.假设数据已经中心化，则回归方程无常数项，形式为：
+
+$$\by=X\bm{\theta},\ X\in \mathcal{R}^{n\times k}$$
+
+正交回归目标函数如下：
+
+$$\min_{\bm{\theta}} \frac{(X\bm{\theta}-\by)^T(X\bm{\theta}-\by)}{1+\bm{\theta}^T\bm{\theta}}$$
+
+\begin{solution}
+	对目标函数求导得到
+	
+	$$X^T(X\bm{\theta}-\by)(1+\bm{\theta}^T\bm{\theta})-(X\theta-\by)^T(X\theta-\by)\bm{\theta}=0$$
+	
+	注意到$\bm{\theta}^T\bm{\theta}$和$(\by-X\bm{\theta})^T(\by-X\bm{\theta})$都是标量，所以原式实际上是两个向量相减，要求向量平行.改写如下：
+	
+	\begin{empheq}[left=\empheqlbrace]{align}
+		\begin{bmatrix}
+			X^TX& X^Ty
+		\end{bmatrix}\begin{bmatrix}
+		\bm{\theta}\\-1
+	\end{bmatrix}&=\lambda \bm{\theta} \label{eq5a1}\\
+	\begin{bmatrix}
+		\bm{\theta}^T&-1
+	\end{bmatrix}\begin{bmatrix}
+	X^TX& X^Ty\\
+	y^TX& y^Ty
+\end{bmatrix}\begin{bmatrix}
+\bm{\theta}\\-1
+\end{bmatrix}&=\lambda 	\begin{bmatrix}
+\bm{\theta}^T&-1
+\end{bmatrix}\begin{bmatrix}
+\bm{\theta}\\-1
+\end{bmatrix}\label{eq5a2}
+\end{empheq}
+
+第一个式子的形式基本上类似于特征向量.对于第二个式子，它的一个很直观的解是
+
+
+$$\begin{bmatrix}
+	X^TX& X^Ty\\
+	y^TX& y^Ty
+\end{bmatrix}\begin{bmatrix}
+	\bm{\theta}\\-1
+\end{bmatrix}=\Sigma \begin{bmatrix}
+\bm{\theta}\\-1
+\end{bmatrix}=\lambda \begin{bmatrix}
+\bm{\theta}\\-1
+\end{bmatrix}$$
+
+这就是特征值向量与特征值.同时，上式去掉矩阵的最后一行，就变成了\ref{eq5a1}，所以特征向量满足原方程的解.
+
+现在证明只有特征向量是原方程组的解.对\ref{eq5a2}改写得到
+
+$$\begin{bmatrix}
+	\bm{\theta}^T&-1
+\end{bmatrix}\left(\Sigma\begin{bmatrix}
+\bm{\theta}\\-1
+\end{bmatrix}-\lambda \begin{bmatrix}
+\bm{\theta}\\-1
+\end{bmatrix}\right)=\bm{0}$$
+
+
+$\bx=\begin{bmatrix}
+	\bm{\theta}^T&-1
+\end{bmatrix}$是$1\times(k+1)$向量，则$A\bx=0$的解集中最多包含$k+1$个独立基.而$\Sigma$的独立特征向量最多有$k+1$个，所以恰好对应起来.因此原方程组的解就是$\Sigma$的特征向量.
+
+现在还剩下一个问题：到底是哪一个特征向量.仅由导数无法得到更多的信息，现在只能从目标函数上看.注意到目标函数实际上是
+
+\begin{empheq}{equation}
+\cfrac{\begin{bmatrix}
+		\bm{\theta}^T&-1
+\end{bmatrix}\Sigma \begin{bmatrix}
+\bm{\theta}\\-1
+\end{bmatrix}}{\begin{bmatrix}
+\bm{\theta}^T&-1
+\end{bmatrix} \begin{bmatrix}
+\bm{\theta}\\-1
+\end{bmatrix}}=\lambda
+\end{empheq}
+
+所以应该选择特征值最大的特征向量.
+
+以上是针对没有常数项的方程，如果有常数项，则超平面应该是：
+
+\begin{empheq}{equation}
+\by=X\bm{\theta}+b
+\end{empheq}
+
+推导过程相似.
+
+\end{solution}
+
+
+\end{example}
+
+
+\section{特殊矩阵运算}
+\subsection{vec算子}
+把矩阵按列堆积成一个向量。
+\subsection{Hadamard积——Elementwise乘法}
+\begin{definition}[Hadamard积]
+Element-wise乘法也叫Hadamard product。
+\begin{empheq}{align}
+\bx\odot\by&=\by\odot\bx=\diag(\bx\by^T)=\diag(\bx)\by\\
+A(\bx\odot\by)&=A\diag(\bx)\by\neq(A\bx)\odot\by\\
+\sum_{i,j}(A\odot B)&=\trace(A^TB)=\trace(AB^T)\\
+\bx^T(\by\odot\bz)&=\trace(\by\bx^T\diag(\bz))=\bx^T\diag(\by)\bz
+\end{empheq}
+\end{definition}
+
+把矩阵$A$的每一列与一个向量$\bx$进行Element-wise乘法，相当于把行$i$乘上$\bx_i$，可以表示为
+$$\diag(\bx) A$$
+类似地，对列进行为：
+$$A\diag(\bx)$$
+记住左行右列，即左乘，是行变换。
+\subsection{Kronecker积}
+\subsubsection{定义}
+\begin{definition}[Kronecker积]
+对于任意两个矩阵$A_{m\times n},B_{p\times q}$有Kronecker积：
+\begin{equation}
+(A\otimes B){mp\times nq}=[A_{ij}B]
+\end{equation}
+也叫张量积。它满足以下性质：
+\begin{enumerate}
+\item 结合律：$A\otimes(B\otimes C)=(A\otimes B)\otimes C$。
+\item 分配律：$(A+C)\otimes(B+D)=A\otimes B+A\otimes D+C\otimes B+C\otimes D$。
+\item $(A\otimes B)(C\otimes D)=(AC)\otimes(BD)$。
+\item 对共轭转置分配：$(A\otimes B)^H=A^H\otimes B^H$。
+\item $\bx\in\mathbb{R}^m,\bx\in\mathbb{R}^n$，有$\bx\by^T=\bx^T\otimes \by=\by\otimes \bx^T$。
+\item $\mvec(AXB)=(B^T\otimes A)\mvec(X)$
+\end{enumerate}
+
+\end{definition}
+
+对于方阵$A\in\mathbb{R}^{m\times m},B\in\mathbb{R}^{n\times n}$的Kronecker积，还有一些特殊的性质：
+\begin{enumerate}
+\item 若$A,B$可逆，则$A\otimes B$可逆，且$(A\otimes B)^{-1}=A^{-1}\otimes B^{-1}$。对于Moore–Penrose伪逆\ref{moore-penrose-pseudo-inv}也是一样：$(A\otimes B)^+=A^+\otimes B^+$。
+\item $\det(A\otimes B)=\det(A)^n\det(B)^m$。注意不要看错指数，指数与阶数是反的。
+\item $\rank(A\otimes B)=\rank(A)\rank(B)$。
+\end{enumerate}
+
+根据Kronecker积的代数性质，有以下一些有趣的结论：
+\begin{enumerate}
+\item 如果$A,B$有奇异值分解$A=U_1\Lambda_1 V_1,B=U_2\Lambda_2V_2$，则$A\otimes B$有奇异值分解$(U_1\otimes U_2)(\Lambda_1\otimes \Lambda_2)(V_1\otimes V_2)$.据此可以用来导出一个定理：
+
+记$A_{m\times m},B_{n\times n}$的特征值分别为$\lambda_i,\mu_j$，则$I_n\otimes A-B^T\otimes I_m$的特征值为$\lambda_i-\mu_j$。
+\end{enumerate}
+
+\subsubsection{应用}
+Kronecker积的一大用处是用来改写线性矩阵方程组：
+\begin{enumerate}
+\item $AX-XB=C\implies (I_n\otimes A-B^T\otimes I_m)\mvec(X)=\mvec(C)$，对应$\mathcal{A}\bx=\bm{c}$。
+\end{enumerate}
+\subsection{矩阵的平方根$A^{1/2}$}
+\begin{definition}[矩阵的平方根]\label{matrix-square-root}
+两个方阵$A,B\in\mathbb{n\times n}$，如果$B$满足
+$$A=BB$$
+则称$B$为$A$的平方根。平方根不是唯一的，一般有无限多个。但恰有一个唯一的primary平方根，它的特征值的实部非负。
+
+如果$A$是半正定矩阵，则它只有一个唯一的半正定平方根（但平方根仍然有无限多个）。这是因为半正定矩阵的特征值非负，取对角化$A=Q\Lambda Q^{-1}$，则$A^{\inv{2}}=Q\Lambda^{\inv{2}}Q^{-1}$。
+
+如果$A$奇异，可能没有平方根。
+\end{definition}
+注意区别Cholesky分解$A=LL^T$，有时也用$A^{\inv{2}}=L$来表示，但这个不是标准的平方根。
+
+
+\subsection{矩阵指数}
+\begin{definition}[矩阵指数]
+初值问题
+$$\dot{\bx}=A\bx,\bx(0)=\bx_0$$
+有一个唯一解
+$$\bx=e^{At}\bx_0$$
+其中
+$$e^A=\sum_{k=0}^\infty\inv{k!}A^k$$
+\end{definition}
+
+矩阵指数具有以下性质：
+\begin{enumerate}
+\item $e^{\bm{0}}=I$。
+\item 如果$A=\diag(\lambda_1,\cdots,\lambda_n)$，则$e^A=\diag(e^{\lambda_1},\cdots,e^{\lambda_n})$
+\item 如果$XY=YX$（可交换），那么$e^Xe^Y=e^{X+Y}$。如果$X,Y$不交换，则有Lie product公式：
+$$e^{X+Y}=\lim_{k\rightarrow\infty}\left(e^{\inv{n}X}e^{\inv{n}Y}\right)^{n}$$
+
+也有 Baker–Campbell–Hausdorff公式
+$$e^{X}e^Y=e^{X+Y+\inv{2}[X,Y]+\inv{12}[X,[X,Y]]+\cdots}$$
+\item $e^A$一定可逆，且$(e^A)^{-1}=e^{-A}$
+\item $\forall X$可逆，有$e^{X^{-1}AX}=X^{-1}e^AX$
+\end{enumerate}
+
+\subsection{skew与sym算子}
+\begin{empheq}{align}
+\sym(A)&=\inv{2}(A+A^T)\\
+\skewop(A)&=\inv{2}(A-A^T)
+\end{empheq}
+\section{矩阵方程}
+\subsubsection{$B+AXA^T=0$}
+假设$B\in\mathbb{R}^{d\times d},A\in\mathbb{R}^{d\times k},d>k$，即$A$是一个竖矩阵。同时要求$A^TA$可逆。
+
+\begin{empheq}{align*}
+\text{原式}\implies& BA+AXA^TA=0\\
+\implies& BA(A^TA)^{-1}+AX=0\\
+\implies& A^TBA(A^TA)^{-1}+A^TAX=0\\
+\implies&X=-(A^TA)^{-1}A^TBA(A^TA)^{-1}
+\end{empheq}
+
+\subsubsection{Riccati方程}
+\paragraph*{$XCX=B$} 其中$C,B\in\mathbb{C}^{n\times n}$.这个方程在$CB$没有$R^{-}$（闭负实半轴）上的特征值时有解。其解有以下一些：
+\begin{empheq}{align*}
+X&=B(CB)^{-1/2}=(BC)^{-1/2}B\\
+X&=C^{-1}(CB)^{1/2}=(BC)^{1/2}C^{-1}\\
+X&=B^{1/2}(B^{1/2}CB^{1/2})^{-1/2}B^{1/2}
+\end{empheq}
+对$X,C,B\in\mathbb{R}^{n\times n}$随机生成，进行数值验证的时候发现解通常不是唯一的。这是因为平方根本身就不唯一。
+
+\paragraph*{非对称代数Riccati方程}形如：
+\begin{empheq}{align}\label{non-symemtric-riccati-eq}
+XCX-XD-AX+B&=0\mtag{非对称代数Riccati方程}\\
+YBY-YA-DY+C&=0\mtag{对偶方程}
+\end{empheq}
+其中$A\in\mathbb{R}^{m\times m},B\in\mathbb{R}^{m\times n},C\in\mathbb{R}^{n\times m},D\in\mathbb{R}^{n\times n}$，即$A,B$为方阵，而解$X\in\mathbb{R}^{m\times n}$。解可能不存在，或者有无穷多个解，实践中一般希望求解最小非负解：
+\begin{enumerate}
+\item $X\geq 0$
+\item 如果$\tilde{X}$是另一个解，则$\tilde{X}\geq X$。
+\end{enumerate}
+
+最小非负解的存在性条件由以下给出：
+\begin{definition}[非对称代数Riccati方程最小非负解的判定]
+对于方程\eqref{non-symemtric-riccati-eq}，如果
+
+\begin{equation}
+K=\begin{bmatrix}
+D & -C\\
+-B& A
+\end{bmatrix}
+\end{equation}
+是非奇异的$M$矩阵\ref{z-m-matrix}，则方程有一个最小非负解$S$，且$S$使得$D-CS$是非奇异的$M$矩阵。
+\end{definition}
+\section{矩阵不等式}
+\subsection{涉及基本运算的不等式}
+\subsubsection{$\det$}
+\begin{enumerate}
+\item 对任意方阵$A$，有
+$$\det(A)^2\leq \prod_j \underbrace{\sum_{i} b_{ij}^2}_{\text{列元素平方和t}}$$
+\item 如果$A,B$同形，则
+$$\det(A^TB)^2\leq \det(A^TA)\det(B^TB)$$
+\end{enumerate}
+\subsection{正定与半正定矩阵}
+\subsubsection{Lowner-Heinz不等式}
+\begin{definition}[Lowner-Heinz不等式]
+如果$A\succeq B\succeq 0,0\leq r\leq 1$，那么有
+$$A^r\succeq B^r$$
+\end{definition}
+上式在$r>1$时一般不成立。
+
+根据这个不等式可以导出其它一些不等式：
+\begin{enumerate}
+\item 如果$A\succeq B\succeq 0,r,p\geq 0,q\geq 1$且$(1+2r)q\geq p+2r$，则
+\begin{empheq}{align}
+(B^rA^pB^r)^{1/q}&\succeq B^{(p+2r)/q}\\
+A^{(p+2r)/q}&\succeq (A^rB^pA^r)^{1/q}
+\end{empheq}
+
+还可以导出其它一些不等式：
+\begin{enumerate}
+\item 如果$A\succeq B\succeq 0,r\geq 0,p\geq 1$，则有
+\begin{empheq}{align}
+(B^rA^pB^r)^{1/p}&\succeq B^{(p+2r)/p}\\
+A^{(p+2r)/p}&\succeq (A^rB^pA^r)^{1/p}
+\end{empheq}
+\item  如果$A\succeq B\succeq 0$，则
+\begin{empheq}{align}
+(BA^2B)^{1/2}&\succeq B^2\\
+A^2&\succeq (AB^2A)^{1/2}
+\end{empheq}
+\end{enumerate}
+\end{enumerate}
+
+\subsection{范数不等式}
+如果没有特别说明，所有范数都是unitarily invariant norm。
+\subsubsection{矩阵乘法}
+\begin{enumerate}
+\item 根据范数自身的性质：
+\begin{empheq}{equation}
+\|AB\|\leq \|A\|\|B\|
+\end{empheq}
+\item $\|A\bx\|_2\leq \|A\|_2\|\bx\|_2=\lambda_{\max}(A^TA)\|\bx\|_2\leq \|A\|_F\|\bx\|_2$
+\item 对于任意三个矩阵$A,B,X$和unitarily invariant norm，有
+\begin{empheq}{equation}
+\|AXB^T\|\leq \inv{2}\|A^TAX+XB^TB\|
+\end{empheq}
+\item 对于$A,B\succeq 0,1\leq 2r\leq 3, -2<t\leq 2$，有：
+$$(2+t)\|A^rXB^{2-r}+A^{2-r}XB^r\|\leq 2\|A^2X+tAXB+XB^2\|$$
+\item 对于同阶$A,B\succ 0,\inv{p}+\inv{q}=1$，有
+$$\forall r>0,\quad \||AXB|^r\|\leq \||A^pX|^r\|^{1/p}\||XB^q|^r\|^{1/q}$$
+\item 对于同阶$A,B\succeq 0$，有
+\begin{empheq}{align}
+\forall X,\quad \|A^{1/2}XB^{1/2}&\leq \inv{2}\|AX+XB\|\\
+4\|AB\|&\leq \|(A+B)^2\|
+\end{empheq}
+\item 假如范数$\|\cdot\|$满足$\|I\|=1$，且$A_{n\times n}$满足$\|A\|\leq 1$，则$I-A$可逆，且
+$$\|(I-A)^{-1}\|\leq \inv{1-\|A\|}$$
+这可以由定理\ref{matrix-geometric-series}导出。
+\end{enumerate}
+\subsubsection{Hadardmon乘法}
+\begin{enumerate}
+\item 如果$X\succeq 0$，则
+$$\forall Y,\|X\odot Y\|\leq \max_i X_{ii}\|Y\|$$
+\end{enumerate}
+
+\subsubsection{矩阵逆}
+
+\subsubsection{矩阵指数}
+\begin{enumerate}
+\item $$\|e^{X+Y}-e^X\|\leq \|Y\|e^{\|X\|}e^{\|Y\|}$$
+\item 记$\mu(A)=\lambda_{\max}(\inv{2}(A+A^T))$，则有
+$$\|e^{At}\|_2\leq e^{\mu(t)t}$$
+\end{enumerate}

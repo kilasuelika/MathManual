@@ -1,0 +1,35 @@
+{
+    "InternalPDFViewer": {
+        "Embedded": true,
+        "File": "数学与应用数学手册.pdf"
+    },
+    "Session": {
+        "Bookmarks": [
+            {
+                "bookmarkNumber": 1,
+                "fileName": "../../个人资料/考研面试V2/main 2e.tex",
+                "lineNumber": 61,
+                "text": "main 2e.tex\n$\\Xi$\\textbf{CPUS} & 在Xilinx Zynq FPGA上用SystemVerilog实现的一个RISC结构超标量处理器.部件：主存、组相连Cache、CU（包括PC、IR这些全在里面）、RS、ROB、ALU、FPU。不用流水线设计、不处理浮点异常，尚未经过系统性的验证。\\\\"
+            },
+            {
+                "bookmarkNumber": 1,
+                "fileName": "数学与应用数学手册.tex",
+                "lineNumber": 80,
+                "text": "数学与应用数学手册.tex\n"
+            }
+        ],
+        "CurrentFile": "数学与应用数学手册.tex",
+        "FileVersion": 1,
+        "Files": [
+            {
+                "Col": 21,
+                "EditorGroup": 0,
+                "FileName": "数学与应用数学手册.tex",
+                "FirstLine": 102,
+                "FoldedLines": "",
+                "Line": 117
+            }
+        ],
+        "MasterFile": "数学与应用数学手册.tex"
+    }
+}

@@ -1,0 +1,54 @@
+\chapter{计算几何}
+\section{几何数据结构}
+
+\subsection{四叉树}
+
+\section{几何操作}
+\subsection{基本操作}
+\subsubsection{旋转}
+\paragraph*{2D旋转矩阵}
+\begin{empheq}{align*}
+R_x(\theta)&=\begin{bmatrix}
+	\cos \theta &-\sin\theta\\
+	\sin\theta& \cos\theta
+\end{bmatrix}\\
+x'&=R_x(\theta)x=\begin{bmatrix}
+x_1\cos\theta-x_2\sin\theta\\
+x_1\sin\theta+x_2\cos\theta
+\end{bmatrix}
+\end{empheq}
+
+此处的$\theta$是与$x$轴形成的角度。
+\paragraph*{3D旋转矩阵}
+
+\begin{empheq}{align*}
+R_x(\theta)&=\begin{bmatrix}
+	 1& 0 &0\\
+	0 & \cos \theta &-\sin\theta\\
+	0& \sin\theta& \cos\theta
+\end{bmatrix}\\
+R_y(\theta)&=\begin{bmatrix}
+	\cos \theta& 0 &\sin\theta\\
+	0 & 1 &0\\
+	-\sin\theta& 0&\cos\theta
+\end{bmatrix}\\
+R_z(\theta)&=\begin{bmatrix}
+	\cos\theta& -\sin\theta &0\\
+	\sin\theta & \cos \theta &0\\
+	0& 0& 1
+\end{bmatrix}
+\end{empheq}
+
+\paragraph*{旋转对齐}考虑向量$\bm{a},\bm{b}$，希望旋转$\bm{a}$使之与$\bm{b}$对齐，即求旋转矩阵$R\bm{a}=\bm{b}$。
+
+公式是
+$$R=I+\bm{v}_{\times}+\frac{1-c}{s^2}\bm{v}_{\times}^2$$
+
+其中$\bm{v}=\bm{a}\times \bm{b}, s=\|\bm{v}\|,c=\bm{a}\cdot\bm{b}$，
+$$\bm{v}_{\times}=\begin{bmatrix}
+0 & -v_3 & v_2 \\
+v_3 &0 & -v_1\\
+ -v_2& v_1& 0
+\end{bmatrix}$$
+叫skew-symmetric cross-product matrix。
+\subsubsection{}

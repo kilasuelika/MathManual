@@ -1,0 +1,87 @@
+\chapter{密码学}
+\section{基本概念}
+\subsection{密码学研究的问题}
+\subsubsection{加密解密}
+希望某些内容只能被一部分人知道，向其它人隐藏相关信息。是最基本的问题。其它的问题需要基于这个问题。为解决这个问题，需要构建一个系统。
+
+对称密码体制是指双方共享密钥，整个系统由以下元素构成：
+
+\begin{description}
+\item[明文空间$P$] 所有可能的明文。
+\item[密文空间$P$] 明文加密后得到密文。
+\item[密钥$K$] 我们可以传送操作，比如传送加密和解密算法，但这样很困难，不同的机器运行的程序不一定相同。因此需要使用密钥的体制，密钥易于传送。
+\item[加密算法$e_K$和解密算法$d_K$] $e_K: P\rightarrow C,\ d_K: C\rightarrow P$，且满足$d_K(e_K(x))=x$，但是需要注意通常$e_K(d_K(x))\neq x$，所以这里是非交换代数。
+\end{description}
+
+有对称的就有非对称的，公钥密码体制就属于这一类，除了明文和密文空间以外，现在密钥有2个：
+\begin{description}
+\item[公钥$SK$] 公开的，所有人都知道。
+\item[私钥$PK$] 私有，只有自己知道。给定公钥生成算法和公钥$PK$，不可以得到$SK$。
+\item[加密算法$E_{PK}$和解密算法$D_{SK}$] 加密$C=E_{PK}(M)$，解密$M=D_{SK}(C)$。假设想向对方传递消息，只有对方可以知道，就需要用对方的公钥加密，对方用私钥解密。
+\end{description}
+\subsubsection{身份验证}
+
+\subsubsection{消息摘要}
+
+\subsubsection{判断密码体制的安全性}
+密码学中使用的都是有限域，通过穷举，一定是可以得到解的，只是穷举的效率一般很低。还可以通过随机搜索， 一个典型的例子就是“生日悖论”\ref{birthday_paradox}。
+
+
+
+\section{加密原理}
+\subsection{椭圆曲线}
+椭圆曲线是由方程确定的曲线，可以是连续的，或者离散的。
+\subsubsection{连续域}
+由方程
+$$y^2=x^3+ax+b,4a^2+27b^2\neq 0, a,b,x,y\in\mathbb{R}$$
+确定的曲线再加上一个无穷远点$O$构成的集合叫椭圆曲线。在曲线上取2不相等的点，连线与曲线自身一般会交于第三个点。
+
+在这个集合上可以定义加法$\oplus$：
+\begin{enumerate}
+\item $P\oplus O=O\oplus P=P$
+\item 对于$P=(x_1,y_1),Q=(x_2,y_2)$：
+\begin{enumerate}
+	\item 如果$x_1=x_2,y_1=-y_2$，即两点的连续平行于$y$轴，那么$P+Q=O$。直线与曲线只有1个交点。
+	\item 如果$P=Q$，则$P\oplus Q=2P=R'$，$R'$是过$P$的切线与曲线的第二个交点对$x$轴的对称点。即直线与曲线只有2个交点。
+	\item 如果$x_1\neq x_2$，那么定义$P\oplus Q=R'$，$R'$为$P,Q$的连线与曲线自身的第三个交点，再把这个交点对$x$轴对称，或者对$y$取反。这个定义与上一个是一致的，当两个点趋近时，连线就趋于切线。
+
+\end{enumerate}
+	
+详细的结果按以下公式给出。假设$y_1\neq 0,x_1\neq x_2$，那么
+\begin{empheq}[left=\empheqlbrace]{align*}
+	x_3&=-x_1-x_2+k^2\\
+	y_3&=-y_1+k(x_1-x_3)
+\end{empheq}
+其中$k$是斜率：
+\begin{empheq}[left={k=\empheqlbrace}]{align*}
+	\frac{y_2-y_1}{x_2-x_1}&\\
+	\frac{3x_1^2+a}{2y_1}&,\text{ if }P=Q
+\end{empheq}
+
+这个公式对于$P=Q,P\neq Q$都可以用。
+\end{enumerate}
+配上加法后，椭圆曲线构成了交换群，无穷远点是单位元。
+
+\subsubsection{离散域}
+观察到在连续域中进行计算，需要三种基本运算：加法、减法、乘法、乘法逆运算、取反。这些运算可以定义在$\mathbb{Z}_n$上。此时记椭圆曲线为$E_n(a,b)$，五种基本运算是对应的运算再$\mod n$。乘法逆运算是指$xy\equiv 1 (\mod 23)$。
+
+给出一个实际的例子。取$E_{23}(1,1),P=(3,10),Q=(9,7)$。
+\begin{enumerate}
+\item 计算$-P$。结果是$(3,-10) \mod 23=(3, 13)$。
+\item 计算$P+Q$。斜率是$-\fh=(-1)\times \fh=\left((-1 \mod 23) \times (2^{-1}) \right)\mod 23=11$。注意$2^{-1}=12$，因为$2\times 12 \mod 23=1$。由于$\left((a\mod n)\times b\right)\mod n=(a\times b)\mod n$，所以之前也可以用$(-1\times 12)\mod 23=11$。
+
+现在可以按之前的公式进行计算。$x_3=-x_1-x_2+k^2=(-3-9+11^2)\mod 23=17$，$y_3=(-10+11\times (3-17))\mod 23=20$。所以$P\oplus Q=(17,20)$。
+\item 计算$2P$。斜率$k=\frac{3\times 9+1}{2\times 10}=\frac{1}{4}=1\times 4^{-1}=6$。那么$x=-3-3+62=30\equiv 7(\mod 23)$，$y=-10+6\times(3-7)=12$，因此$2P=(7,12)$。
+\end{enumerate}
+
+\section{经典密码体制}
+\subsection{RSA}
+\subsubsection{执行过程}
+\begin{enumerate}
+\item 选择大素数$p,q$，通常需要512位，需要使用素数筛法来生成。
+\item 计算$n=pq, \varphi(n)=(p-1)(q-1)$。
+\item 选择整数$e$，满足$1\leq e\leq \varphi(n),\gcd(\varphi(n),e)=1$。
+\item 计算$d\equiv e^{-1}\pmod{n}$。
+\item 公开$n,e$，$e$是公钥；私有$p,q,d$，$d$是私钥。
+\end{enumerate}
+

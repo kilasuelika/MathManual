@@ -1,0 +1,166 @@
+\chapter{时间序列模型}
+\section{时间序列的特征}
+\subsection{自相关}
+
+\subsection{谱密度}
+
+\section{序列检验}
+\subsection{自相关}
+\subsubsection{Ljung Box Test}
+$$H_0:\text{ 模型没有自相关 }$$
+
+如果$p$值显著，拒绝零假设，表示模型存在自相关。
+
+\subsubsection{}
+
+\subsection{正态性}
+
+\section{自回归模型}
+\subsection{ARIMAX}
+\subsubsection{模型结构}
+基本模型如下：
+\begin{empheq}{equation}
+\Delta^d y_t=X_t\bm{\beta}\sum_{k=1}^p\phi_k \Delta^d y_{t-k}+\sum_{k=1}^q\gamma_k \varepsilon_{t-k}+\varepsilon_t
+\end{empheq}
+$\Delta^d$表示高阶差分，比如
+\begin{empheq}{align}
+\Delta^0 y_t&=y_t\\
+\Delta^1 y_t&=y_t-y_{t-1}\\
+\Delta^2 y_t&=(y_t-y_{t-1})-(y_{t-1}-y_{t-2})=y_t-2y_{t-1}+y_{t-2}=\Delta^1 y_t-\Delta^1 y_{t-1}
+\end{empheq}
+
+利用算子代数，可以将ARIMAX表示为
+\begin{empheq}{equation}
+\left(1-\sum_{i=1}^{p}\phi_iL_i\right)(1-L)^dy_t=X_t\bm{\beta}+\left(1-\sum_{i=1}^{p}\gamma_iL_i\right)\varepsilon_t
+\end{empheq}
+$(1-L)^d$中的$d$就是$d$次方，比如
+$$(1-L)^2=1-2L_1+L_2$$
+对应
+$$y_t-2y_{t-1}+y_{t-2}$$
+
+\subsubsection{一阶自回归}
+\paragraph*{模型结构}
+模型为
+$$y_t=ay_{t-1}+\varepsilon_t$$
+现在把它展开：
+\begin{empheq}{align*}
+	y_t&=a(ay_{t-2}+\varepsilon_{t-1})+\varepsilon_t\\
+	&=a^ty_0+\sum_{k=0}^{t-1} a^{k}\varepsilon_{t-k}
+\end{empheq}
+由于残差的期望是0，所以上式第二项期望为0，则长期来看$\E(y_t)=a^ty_0\rightarrow 0$。现再加上常数项$c$，则
+模型为
+$$y_t=ay_{t-1}+c+\varepsilon_t$$
+\begin{empheq}{align*}
+y_t&=a^ty_0+\sum_{k=0}^{t-1} a^{k}c+\sum_{k=0}^{t-1} a^{k}\varepsilon_{t-k}\\
+&=a^ty_0+c\frac{1-a^t}{1-a}+\sum_{k=0}^{t-1} a^{k}\varepsilon_{t-k}
+\end{empheq}
+注意由于$c,\varepsilon$的地位相同，所以不必重新推导，只需要替换一下即可。在上式中$y_t\rightarrow \frac{c}{1-a}$，即便在历史的每一项中都加上$c$，但由于远距离样本的影响会衰减，所以整体上序列还是会收敛的。
+
+\paragraph*{冲击响应}
+记$y_t^*=ay_{t-1}^*=a^ty_0$，这是无冲击下的模型。再定义
+\begin{empheq}{align*}
+\tilde{y}_t&=y_t-y_t^*\\
+&=ay_{t-1}+\varepsilon_t-ay_{t-1}^*\\
+&=a(y_{t-1}-y_{t-1}^*)+\varepsilon_t\\
+&=a\tilde{y}_{t-1}+\varepsilon_t
+\end{empheq}
+边界条件为$\tilde{y}_{0}=0$。
+
+假设在$k$时刻有一个冲击$\varepsilon_k$，其它时间没有冲击，则$\tilde{y}_k=\varepsilon_t$。那么$\tilde{y}_{k+1}=a\varepsilon_t$，当$|a|<1$时，最终$\tilde{y}_{n}\rightarrow 0$，即最终会回到原来的路径。
+
+一个有意思的现象是$1>a>0,\varepsilon_t>0$时，$\tilde{y}_{n}\geq 0$，且为单调递减序列。但假如$-1<a<0$，则$\tilde{y}_{k}>0,\tilde{y}_{k+1}<0,\tilde{y}_{k+2}>0,\cdots $这样就形成波动。
+
+
+\section{随机波动率模型}
+
+\subsection{ARCH族}
+\subsubsection{基本结构}
+ARCH模型主要用于描述残差的自相关性，均值可以使用其它的任意模型。基本结构如下：
+\begin{empheq}{align}
+y_t&=f_t+\varepsilon_{t}\mtag{均值方程}\\
+\varepsilon_t&=\sigma_tz_t\\
+\sigma_t^2&=g(\varepsilon_{t-1}^2,\cdots,\sigma_{t-1}^2,\cdots)\\
+z_t&\sim N(0,1)
+\end{empheq}
+$g$可以使用不同的模型，这里的正态分布假定也可以使用其它的分布，比如$t$分布。注意到在上面的模型中
+$$\varepsilon_t\sim N(0,\sigma_t^2)\equiv N(0,g_t^2)$$
+
+$f_t$同样可以由不同的模型来给出，有时直接取常数。
+
+可计算条件期望为
+\begin{empheq}{align*}
+\E_t(\varepsilon_{t})&=\E_t(\sigma_t^2)
+\end{empheq}
+
+实际建模时，可以独立建模均值方程，然后计算残差序列，对残差序列建立模型。也可以联合起来估计。
+\subsubsection{GARCH}
+\paragraph*{模型结构}取$f$为线性，GARCH($p,q$)模型如下：
+$$\sigma_t^2=\omega+\sum_{k=1}^{p}\beta_k\sigma_{t-k}^2+\sum_{k=1}^{q}\alpha_k\varepsilon_{t-k}^2$$
+
+\paragraph*{条件分布}
+\begin{empheq}{align*}
+\E_{t+1}&=\omega+\sum_{k=1}^{p}\beta_k\E_t(\sigma_{t-k}^2)+\sum_{k=1}^{q}\alpha_k\E_t(\varepsilon_{t-k}^2)\\
+&=\omega+\sum_{k=1}^{p}\beta_k\sigma_{t-k}^2+\sum_{k=1}^{q}\alpha_k\sigma_{t-k}^2
+\end{empheq}
+注意由于是取条件分布，所以在$t+1$时刻，$\sigma_+t$是已知的。类似地，计算$\E_t(\sigma_{t+2}^2)$时需要用到$\E_t(\sigma_{t+1}^2)$。以GARCH(1,1)为例：
+\begin{empheq}{align*}
+\E_t(\sigma_{t+1}^2)&=\omega+(\beta+\alpha)\sigma_t^2\\
+\E_t(\sigma_{t+2}^2)&=\E_t(\omega+\beta\sigma_{t+1}^2+\alpha\varepsilon_{t+1}^2)\\
+&=(1+(\beta+\alpha))\omega+(\beta+\alpha)^2\sigma_t^2\\
+\E_t(\sigma_{t+n}^2)&=\omega\frac{1-(\beta+\alpha)^n}{1-(\beta+\alpha)}+(\beta+\alpha)^n\sigma_t^2
+\end{empheq}
+易知稳定性条件为
+$$\beta+\alpha<1$$
+极限为
+$$\lim_{n\rightarrow \infty}\E_t(\sigma_{t+n}^2)=\frac{\omega}{1-(\beta+\alpha)}$$
+
+\paragraph*{MLE估计}根据残差的分布，可以计算似然函数为
+$$L(\btheta;\by)=L(\btheta;y_0)\prod N(y_t-f_t,\sigma_t^2)$$
+前一项为初始值，通常取无条件分布，有时也直接忽略掉这一项。实际计算时首先计算所有$\varepsilon_t$，然后再迭代计算$\sigma_t^2$。
+
+仍以GARCH(1,1)模型为例：
+\begin{enumerate}
+	\item 计算残差序列$\{\varepsilon_t\}_0^N$
+	\item 猜测一个$\sigma_0^2$，通常取残差的方差。然后根据递推关系计算$\{\sigma_t\}_1^N$。
+	\item 优化似然函数：
+	\begin{empheq}{align*}
+		\ln\mathcal{L}(\omega,\beta,\alpha)&=\sum_{t=1}^{N}\ln(N_{\text{PDF}}(\varepsilon_t;0,\sigma_t^2))\\
+		&=\sum_{t=1}^{N}\left(-\inv{2}\ln 2\pi-\frac{\varepsilon_t^2}{2\sigma_t^2}-\inv{2}\ln\sigma_t^2\right)
+	\end{empheq}
+\end{enumerate}
+
+如果使用自动微分工具，且联合均值方程，假设均值方程为常数，则现在参数为$(c,\omega,\beta,\alpha)$，要采用循环的方式， 但$\sigma_0^2$不易取得，可以先单独估计均值方程，计算一个$\sigma_0^2$，再循环：
+\begin{enumerate}
+	\item $L=0$
+	\item $t=1\cdots N$：
+	\begin{enumerate}
+		\item 计算$\varepsilon_t$，计算样本的似然函数$L_t$ 
+		\item $L+=L_t$
+	\end{enumerate}
+\end{enumerate}
+\subsubsection{NAGARCH}
+即Nonlinear Asymmetric GARCH(1,1)模型：
+$$\sigma_t^2=\omega+\alpha(\varepsilon_{t-1}-\theta\sigma_{t-1})^2+\beta\sigma_{t-1}^2$$
+$\theta$一般为正值，模型用来刻画杠杆效应，即负收益率（对应$\varepsilon_{t-1}$为负值）对波动的影响大于正收益率。
+
+为保证波动率为正，要求$\omega>0,\alpha,\beta\geq 0$。
+\subsubsection{IGARCH}
+Integrated GARCH，GARCH的系数限制版本：
+$$\sum_{k=1}^{p}\beta_k+\sum_{k=1}^{q}\alpha_k=1$$
+
+\subsubsection{EGARCH}
+指数GARCH：
+\begin{empheq}{align*}
+\ln\sigma_t^2&=\alpha_0+\sum_{k=1}^{p}\beta_k\ln\sigma_{t-k}^2+\sum_{k=1}^{q}\alpha_kg(z_{t-k})\\
+g(z_{t-k})&=\theta z_{t}+\gamma(|z_t|-\E(|z_t|))
+\end{empheq}
+$z_t$通常可以取标准正态分布，此时$\E(|z_t|)=\sqrt{\frac{2}{\pi}}$。
+
+\subsubsection{GARCH-in-Mean}
+在均值方程中添加一个$\sigma_t$项：
+$$y_t=f+\lambda\sigma_t+\varepsilon_t$$
+
+\subsubsection{TGARCH}
+对标准差建模：
+$$\sigma_t=K+\delta\sigma_{t-1}+\alpha_1\varepsilon_{t-1}^++\alpha_1^-\varepsilon_{t-1}^-$$
+其中$\varepsilon_{t-1}^+=\max(\varepsilon_t,0)$，$\varepsilon_{t-1}^-$类似，同样用来刻画正负收益率的非对称性。

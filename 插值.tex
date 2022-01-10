@@ -1,0 +1,111 @@
+\chapter{插值}
+从广泛的意义上说，回归也算是插值，但一般来说，插值特指的是在样本点上误差为0，同时要尽可能简单。
+
+\section{一维插值}
+\subsection{分段线性插值}
+就是最简单的插值，给定$n+1$个样本点：$(x_i,y_i)$，要求$\forall i<j:x_i<x_j$，即点有序。分段线性插值就是用$n$条线段依次连接每一点。假设目标点就$(x,y)$，$x$已知，且$x_k\leq x\leq x_{k+1}$。则有
+\begin{empheq}{align*}
+\lambda x_k+(1-\lambda) x_{k+1}&=x\\
+\lambda y_k+(1-\lambda) y_{k+1}&=y
+\end{empheq}
+由第1式可得：
+\begin{empheq}[box=\myalgo]{equation}
+\lambda=\frac{x_{k+1}-x}{x_{k+1}-x_k}
+\end{empheq}
+代入第2式有
+\begin{empheq}[box=\myalgo]{equation}
+y=y_{k+1}-\lambda (y_{k+1}-y_k)
+\end{empheq}
+
+那么怎么来得到$k$，可以用循环判断，也可以用二分搜索，还可以用向量化编程：
+
+\texttt{(x>=vx) \&\& (x<xv)}
+
+这样可以得到boolean下标，表示$x$是否属于对应区间，找到第一个为\texttt{True}的下标就可以了。
+
+\subsection{拉格朗日多项式}
+\subsubsection{方法}
+\paragraph*{基本算法}
+给定$n+1$个样本点，不要求有序，拉格朗日多项式法形如
+\begin{align}
+L_k(x)&\coloneqq \prod_{j\neq k}^{n}\frac{x-x_j}{x_k-x_j}\\
+&=\frac{(x-x_0)\cdots(x-x_{n})}{(x_k-x_0)\cdots\widehat{(x_k-x_k)}\cdots(x_k-x_n)}\\
+I_n(x)&=\sum_{k=0}^{n}y_kL_k(x)
+\end{align}
+$I_n(x)$就是目标的插值。$L_k$就是$n$次拉格朗日多项式，它满足：$L_k(x_k)=1,\forall j\neq k,L_k(x_j)=0$。还有一个重要的性质是：
+\begin{empheq}[box=\mymath]{equation}\label{interpolation-lagrange-all-1}
+\sum_{k=0}^{n} L_k(x)=\tilde{I}_n(x)=\sum_{k=0}^{n}\prod_{j\neq k} \frac{x-x_j}{x_k-x_j}=1
+\end{empheq}
+从插值的意义上说，这是显然的，相当于$\forall i, y_i=1$时的插值多项式$\tilde{I}_n(x)$，则必然所有插值均为1。实际上根据代数学基本定理\ref{basic-theorem-in-algebra}，给定零点，可以唯一确定一个最高次系数为1的多项式。此处$\tilde{I}_n(x)$恰为一个$n$次多项式，$\tilde{I}_n(x)-1$的零点有$n+1$个，为$x_k$。再取常多项式$p(x)=0$，$x_k$也是它的零点，于是根据唯一性有$\tilde{I}_n(x)-1=p(x)=0$。
+
+
+$I_n(x)$还可以表示为：
+\begin{align}
+I_n(x)=\left\{\sum_{k=0}^{n}y_k\inv{x-x_k}\underbrace{\prod_{j\neq k}^{n}\inv{x_k-x_j}}_{\lambda_k}\right\}\prod_{j=0}^{n}(x-x_j)
+\end{align}
+如果记$\mu_k\coloneqq \frac{\lambda_k}{x-x_k}$为插值权重，则有
+\begin{equation*}
+I_n(x)=\left\{\sum_{k=0}^{n}\mu_iy_i\right\}\prod_{j=0}^{n}(x-x_j)
+\end{equation*}
+根据\cref{interpolation-lagrange-all-1}，有
+$$\prod_{j=0}^{n}(x-x_j)=\inv{\sum_{k=0}^n\mu_k}$$
+于是有
+$$I_n(x)=\frac{\sum_{k=0}^{n}\mu_ky_k}{\sum_{k=0}^n\mu_k}$$
+这也叫重心公式。
+
+最终得到向量化的插值算法：
+\begin{empheq}[box=\myalgo]{align}
+\lambda_k&=\prod_{j\neq k}^{n}\inv{x_k-x_j}\\
+\bmu&=\frac{\blambda}{x-\bx}\\
+\alpha&=\sum_{k=0}^{n}\mu_k\\
+I_n(x)&=\frac{\bmu\cdot\by}{\alpha}
+\end{empheq}
+这个算法的复杂度为$O(n^2)$。
+
+假设增加一个样本点$(x_{n+1},y_{n+1})$，则首先更新$\lambda$：
+\begin{empheq}[box=\myalgo]{align}
+\lambda_{k\leq n}&=\frac{\lambda_{k}}{x_k-x_{n+1}}\\
+\lambda_{n+1}&=\prod_{j=0}^{n}\inv{x_{n+1}-x_j}
+\end{empheq}
+再按之前的式子更新$\bmu,\alpha,I_{n+1}(x)$，复杂度为$O(n)$。
+
+\paragraph*{直观的构造}我们希望寻找一组多项式构成的基$f_k(x)$，以满足：
+$$I_n(x)=\sum_{k=0}^{n}f_k(x)y_k$$
+希望$f_k(x)$满足$f_k(x_k)=1,\forall k\neq j:f_k(x_j)=0$即在其它点处为0，在本点处为1。在其它点处为0，很容易构造，那就是
+$$g_k(x)=(x-x_0)\cdots \widehat{x-x_k}\cdots(x-x_n)$$
+要在本点处为1，就要标准化一下：
+$$f_k(x)=\frac{g_k(x)}{g_k(x_k)}$$
+同样可以得到之前的结果。
+
+但仅凭这样并不能得到\cref{interpolation-lagrange-all-1}，因为这里只考虑了节点上成立，\cref{interpolation-lagrange-all-1}是对任意$x$均成立的。
+
+\paragraph*{线性代数的构造}我们希望求一个$n$次多项式（有$n+1$个未决系数）来拟合$n+1$个点，等价于解方程组：
+\begin{empheq}{equation}
+\by=A\bm{a}\implies \bm{a}=A^{-1}\by
+\end{empheq}
+式中$A$为范德蒙德矩阵：
+\begin{empheq}{equation}
+A=\begin{bmatrix}
+1 & x_0 & x_0^2 &\cdots & x_0^n\\
+1 & x_0 & x_1^2 &\cdots & x_1^n\\
+1 & \cdots & & & \\
+1 & x_n & x_n^2 &\cdots & x_n^n
+\end{bmatrix}
+\end{empheq}
+则目标插值为
+\begin{empheq}[box=\myalgo]{equation}
+I_n(x)=\begin{bmatrix}
+1 & x & x^2 &\cdots & x^n
+\end{bmatrix}A^{-1}\by
+\end{empheq}
+可以证明这种方法与之前的拉格朗日插值多项式给出的结果相同，不过之前的算法要略微快一些。
+
+
+\paragraph*{实例}
+
+
+\subsubsection{理解}
+
+\subsection{样条插值}
+\subsubsection{一般理论}
+

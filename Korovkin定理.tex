@@ -1,0 +1,42 @@
+\subsection{Korovkin定理}
+\subsubsection{基本定理}
+\begin{theorem}[Korovkin定理]{}
+设$(K,d)$为紧距离空间，函数$\varphi\in\mathcal{C}[0,\infty]$满足$\forall t>0,\phi(t)>0$。对$\forall x\in K$，定义$\psi_x\in\mathcal{C}(K)$：
+$$\psi_x(y)=\varphi(d(x,y)),y\in K$$
+
+（不妨称为伪距离函数）。设线性算子$A_n:\mathcal{C}(K)\rightarrow \mathcal{C}(K)$的序列满足以下三个性质：
+\begin{enumerate}
+\item 保非负性。$A_n$保持非负，即假如$f\in\mathcal{C}(K)$，并且$\forall x\in K, f(x)\geq 0$，则
+$$\forall x\in K, A_nf(x)\geq 0$$
+\item 逼近常数1函数。对定义为$\forall x\in K,f_0(x)=1$的函数$f_0\in\mathcal{C}(K)$，有
+$$\lim_{n\infty} \|f_0-A_nf_0\|=0$$
+\item 局部逼近零函数。
+$$\lim_{n\rightarrow \infty}\|f-A_nf\|=0$$
+\end{enumerate}
+
+那么$\forall f\in\mathcal{C}(K)$，有
+$$\lim_{n\rightarrow \infty}\left(\sup_{x\in K}(A_n\phi_x)(x)\right)=0$$
+\end{theorem}
+
+本定理是证明了如果算子能够逼近某些特殊函数，则它能逼近空间中的任意函数。
+
+按照极限的标准证法，需要证明的目标是：
+$$\forall f\in\mathcal{C}(K),\varepsilon>0,\exists n_0=n_0(f,\varepsilon)\geq 0,\forall n\geq n_0,\sup_{x\in K}|(A_nf)(x)-f(x)|\leq \varepsilon$$
+
+现在运用三角不等式：
+\begin{empheq}{align*}
+\forall x\in K,n\geq 0,|A_nf(x)-f(x)|&=|A_nf(x)-f(x)A_nf_0(x)+f(x)A_nf(0)(x)-f(x)f_0(x)|\\
+&\leq |A_nf(x)-f(x)A_nf_0(x)|+|f(x)(A_nf_0-f_0)(x)|
+\end{empheq}
+注意到上界的第二项对应的就是性质2。现在主要是需要对第一项进行估计，显然它至少需要用到性质3与函数$\psi_x$。
+
+但在第一项中，假设$A_n$可以准确地逼近$f_0$，那么第一项就相当于
+$$|A_nf(x)-f(x)f_0(x)|=|A_nf(x)-f(x)|$$
+就是需要证明的目标，似乎问题并没有变得更简单。这意味着上界的第二项并不是实质性的。
+
+对于上界的第一项，假如我们可以对$f-f(x)f_0$进行估计（强调它的参数不必是$x$，于是函数为$f(y)-f(x)f_0(y)$），则利用保非负性，就可以对$A_nf(y)-f(x)A_nf_0(y)$进行估计，再取$y=x$，即得到目标。注意保非负性的实质是，$f_1\leq f_2\implies f_2-f_1\geq 0\implies A_n(f_2-f_1)\geq 0\implies A_nf_1\leq A_nf_2$（这里其实类似于单调性，因此也叫单调算子）。现在的问题就是对$f-f(x)f_0$进行估计，或者是对$f(y)-f(x)$进行估计，必然用到$\psi_x$，因为它就相当于一个二元函数。证明时先把它与伪距离函数联系起来，再取$y=x$。
+
+下面的证明就是按照这个思路来的。
+\begin{proof}
+
+\end{proof}

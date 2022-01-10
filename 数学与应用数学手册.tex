@@ -1,0 +1,370 @@
+\documentclass[nofontspec, cn,11pt,dvipsnames,green,cite=numbers,bibstyle=gb7714-2015,T4]{elegantbook}
+\usepackage{siunitx}
+\DeclareSIUnit{\angstrom}{\textup{\AA}}
+%\sisetup{load-configurations = abbreviations}
+\usepackage{derivative}
+\usepackage{tikz}
+%Commutative graph.
+\usetikzlibrary{cd}
+%\usepackage{mathabx}
+\usepackage{fancybox}
+\usepackage{empheq}
+%阴影盒子
+\newtcbox{\myalgo}[1][]{%
+    nobeforeafter, math upper, tcbox raise base,
+    enhanced, colframe=blue!50,
+    colback=gray!10, boxrule=1pt,
+    #1}
+\newtcbox{\mymath}[1][]{%
+    nobeforeafter, math upper, tcbox raise base,
+    enhanced, colframe=red!50,
+    colback=gray!10, boxrule=1pt,
+    #1}
+\DeclareMathOperator{\arccot}{arccot}
+\DeclareMathOperator{\colspace}{colspace}
+\DeclareMathOperator{\ReLU}{ReLU}
+\DeclareMathOperator{\HardTanh}{HardTanh}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\softmax}{softmax}
+\DeclareMathOperator{\mvec}{vec}
+%\DeclareMathOperator{\trace}{trace}
+\usepackage{mathtools}
+%\usepackage{unicode-math}
+%Page break for align.
+\allowdisplaybreaks
+
+%Differential operator.
+%symbfit from unicode-math
+%\newcommand{\bm}{\symbfit{x}}
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+\newcommand{\mtag}[1]{\tag{\heiti{#1}}}
+\newcommand{\bn}{\bm{n}}
+\newcommand{\bx}{\bm{x}}
+\newcommand{\by}{\bm{y}}
+\newcommand{\bz}{\bm{z}}
+\newcommand{\btheta}{\bm{\theta}}
+\newcommand{\bbeta}{\bm{\beta}}
+\newcommand{\balpha}{\bm{\alpha}}
+\newcommand{\bmeta}{\bm{\eta}}
+\newcommand{\blambda}{\bm{\lambda}}
+\newcommand{\bmu}{\bm{\mu}}
+\newcommand{\bxi}{\bm{\xi}}
+\newcommand{\bvarepsilon}{\bm{\varepsilon}}
+\newcommand{\bA}{\bm{A}}
+\newcommand{\bB}{\bm{B}}
+\newcommand{\bE}{\bm{E}}
+\newcommand{\bJ}{\bm{J}}
+\newcommand{\bH}{\bm{H}}
+\newcommand{\bU}{\bm{U}}
+\newcommand{\hpi}{\frac{\pi}{2}}
+
+\DeclareMathOperator{\prlim}{plim}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\spec}{spec}
+\DeclareMathOperator{\nullspace}{nullspace}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\GL}{GL}
+%\DeclareMathOperator{\SL}{nullspace}
+\newcommand{\plim}[1]{\underset{#1}{\prlim}\ }
+\newcommand{\sdet}[1]{\left| #1 \right|}
+\newcommand{\sbra}[1]{\left(#1\right) }
+\newcommand{\sbbra}[1]{\left\{#1\right\} }
+\newcommand{\ssbra}[1]{\left[#1\right] }
+\newcommand{\inv}[1]{\frac{1}{#1}}
+%Fraction half 
+\newcommand{\fh}{\frac{1}{2}}
+%Page break for align.
+\allowdisplaybreaks
+
+%Highlight V2
+\usepackage{tcolorbox}
+\newtcbox{\entoure}[1][red]{on line,
+arc=3pt,colback=#1!10!white,colframe=#1!50!black,
+before upper={\rule[-3pt]{0pt}{10pt}},boxrule=1pt,
+boxsep=0pt,left=2pt,right=2pt,top=1pt,bottom=.5pt}
+\usepackage{tikz-3dplot}
+
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{positioning}
+
+\usepackage{pgfplots}
+\usepackage{graphicx}
+\pgfplotsset{every axis/.append style={thick}}
+
+\title{数学与应用数学手册}
+\subtitle{Elegant\LaTeX{} 经典之作}
+
+\author{Zhou Yao}
+\date{\today}
+\version{0.5}
+
+\extrainfo{Victory won\rq t come to us unless we go to it. --- M. Moore}
+
+\logo{logo.png}
+\cover{cover.jpg}
+
+
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{lscape}
+
+
+%表格定义.
+\usepackage{longtable}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+\newcolumntype{X}[1]{>{\PreserveBackslash\centering}m{#1}}
+\newcolumntype{Z}[1]{>{\PreserveBackslash\raggedleft}m{#1}}
+\newcolumntype{Y}[1]{>{\PreserveBackslash\raggedright}m{#1}}
+
+\setlength\heavyrulewidth{0.25ex}
+
+%树图
+\tikzset{
+	treenode/.style = {shape=rectangle, rounded corners,
+		draw, align=center,
+		top color=white,
+		bottom color=blue!20},
+	root/.style     = {treenode, font=\Large\heiti,
+		bottom color=red!30},
+	env/.style      = {treenode, font=\heiti},
+	dummy/.style    = {circle,draw}
+}
+
+\setCJKmainfont[BoldFont   = AdobeHeitiStd-Regular.otf,ItalicFont = AdobeKaitiStd-Regular.otf]{SourceHanSerifSC-Regular.otf}
+
+%Mathoperator
+\DeclareMathOperator{\vcurl}{\mathbf{curl}}
+%\DeclareMathOperator{\vcurl}{\bm{\curl}}
+\DeclareMathOperator{\vdiv}{div}
+
+\DeclareMathOperator{\trace}{trace}
+\DeclareMathOperator{\sint}{int}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\Dom}{Dom}
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\Prob}{P}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\MGF}{MGF}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\CF}{CF}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\argmin}{argmin}
+\DeclareMathOperator{\argmax}{argmax}
+\DeclareMathOperator{\Li}{Li}
+\DeclareMathOperator{\li}{li}
+\DeclareMathOperator{\Ei}{Ei}
+\DeclareMathOperator{\Si}{Si}
+\DeclareMathOperator{\isi}{si}
+\DeclareMathOperator{\ci}{ci}
+\DeclareMathOperator{\obj}{obj}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\sn}{sn}
+\DeclareMathOperator{\cn}{cn}
+\DeclareMathOperator{\dn}{dn}
+\DeclareMathOperator{\am}{am}
+\DeclareMathOperator{\doop}{do}
+\DeclareMathOperator{\Risk}{Risk}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\sym}{sym}
+\DeclareMathOperator{\skewop}{skew}
+\DeclareMathOperator{\sgn}{sgn}
+
+\newcommand*\Dif[1]{\mathop{}\!\mathrm{d^#1}}
+\newcommand*\Rns{\mathbb{R}^n}
+\newcommand*\Normal{\mathcal{N}}
+
+\DeclareMathOperator{\Dirichlet}{Dirichlet}
+\DeclareMathOperator{\Exp}{Exp}
+\DeclareMathOperator{\DP}{DP}
+\DeclareMathOperator{\KL}{KL}
+
+\usepackage{caption}
+\usepackage{ulem}
+
+%\DeclareDerivative{\odv}{\symup{d}} 
+%\DeclareDerivative{\mdv}{\symup{D}}
+\usepackage{cleveref}
+%\usepackage{tikz-cd}
+%\usepackage{biblatex}
+\addbibresource{reference.bib}
+
+\hypersetup{pageanchor=true,
+     psdextra,
+      colorlinks=true}
+     %level=0 for expand to chapter.
+ \usepackage[open=false]{bookmark}
+
+\setcounter{MaxMatrixCols}{20}
+\setcounter{tocdepth}{4}
+
+\usepackage{blkarray}
+\usepackage{nicematrix}
+\usepackage{esint} %integral
+
+\definecolor{orang}{RGB}{255,155,0}
+
+%警告
+\newtcolorbox[auto counter,number within=section]{caja}[1][]{
+  enhanced jigsaw,colback=white,colframe=orang,coltitle=orang,
+  fonttitle=\bfseries\sffamily,
+  sharp corners,
+  detach title,
+  leftrule=22mm,
+  % What you need %%%%%%%%%%%%
+  underlay unbroken and first={\node[below,text=black,anchor=east]
+  at ([xshift=-22.5pt]interior.base west) {\Huge  \textbf{!}};},
+  %%%%%%%%%%%%%%%%%%%%%%%%
+  breakable,pad at break=1mm,
+  #1,
+  code={\ifdefempty{\tcbtitletext}{}{\tcbset{before upper={\tcbtitle\par\medskip}}}},
+}
+
+\usepackage{minted}
+\definecolor{maHead}{RGB}{255, 121, 63}
+\newenvironment{cma}{\VerbatimEnvironment
+	\begin{minted}[frame=single,breaklines, framerule=1.5pt,tabsize=4, showtabs=false, rulecolor=maHead]{mathematica}}
+	{\end{minted}}
+	
+\newenvironment{cml}{\VerbatimEnvironment
+  \begin{minted}[frame=single,breaklines, framerule=1.5pt,tabsize=4, showtabs=false, rulecolor=maHead]{matlab}}
+{\end{minted}}
+
+
+\setlist[description]{leftmargin=1cm,labelindent=2em}
+\begin{document}
+
+\maketitle
+%\tableofcontents
+
+% \thispagestyle{empty}
+
+\mainmatter
+
+\chapter*{前言}
+\addcontentsline{toc}{chapter}{前言}  
+本书系统性地整理了我的知识体系。写作的一个难点时如何平衡原理与细节，原理是相通的，但细节是千变万化的。因此，本文主要采用这种编写思路：容纳最核心的原理，辅助以一定的细节、高级推广、应用来加深对于核心原理的细节；同时包含一些常见的计算结果、定理作为备查（这是作为工具书的要求）。
+
+有些内容是共通的，可以放在不同的地方。以下特别指出：
+\begin{enumerate}
+\item 涉及迭代算法分析的内容统一放在《微分方程与动力系统》章节，分为离散与连续时间，连续时间就是微分方程。
+\item 微分方程的数值算法放在《数值与广义计算》部分，在分析学中也有偏微分方程的计算，但这里主要是代数计算。量子计算等涉及广义计算的内容也放在这里。
+\item 解非线性方程组的内容放在《凸优化》章节。
+\item 微分形式、外微分等内容放在《微积分》章节。
+\item 空间坐标系的内容放在《微分几何》章节。
+\item 场论的内容分散在各个章节，比如张量分析、电磁场、相对论，不单独成章。
+\end{enumerate}
+
+从我个人的经验来看，对于实践来说，以下几部分内容是最基础的：
+\begin{enumerate}
+\item 整个线性代数部分\ref{linear-algebra-part}。
+\item 分析学的《微积分》\ref{diff-int}、《级数与函数逼近》\ref{series-function-approxmation}、《泛函分析》\ref{functional-analysis}、《微分方程与动力系统》\ref{ode-dynamic-system}。
+\item 概率论与统计学的《基本理论》\ref{prob-stat-base}、《估计理论》\ref{prob-stat-est}。
+\item 数值与广义计算的《凸优化》\ref{convex-optimization}、《微分方程的数值算法》\ref{ode-numeric}。
+\end{enumerate}
+说它们是最基础，是因为这些内容之中包含了理解、求解其它具体问题的大多数技巧，对这些技巧进行组合，可以开发出新的方法。
+
+有一些结果是我自己的研究结果，对于其正确性，请自行甄别。
+\part{集合论、形式系统与离散数学}
+\input{集合论}
+\input{一阶谓词逻辑}
+\input{形式化系统}
+\input{数论}
+\input{组合论}
+\input{密码学}
+%\input{计算理论}
+
+\part{几何学}
+\input{平面几何}
+\input{空间几何}
+\input{计算几何}
+\input{射影几何}
+\input{光学}
+\input{计算机图形学}
+
+\part{一般代数}
+\input{多项式}
+\input{不等式}
+\input{代数方程}
+\input{代数结构}
+\input{代数几何}
+\input{范畴结构}
+\input{同伦}
+\input{同调}
+
+\part{线性代数}\label{linear-algebra-part}
+\input{矩阵定理}
+\input{矩阵代数}
+\input{矩阵微分}
+\input{矩阵积分}
+\input{张量代数}
+
+\part{分析学}
+\input{复分析}
+\input{实分析}
+\input{微积分}
+\input{特殊函数}
+\input{级数与函数逼近}
+\input{泛函分析}
+\input{微分几何}
+\input{拓扑与流形}
+\input{模形式}
+\input{变分法}
+\input{微分方程与动力系统}
+\input{函数方程}
+
+\part{概率论与统计学}
+\input{基本理论}
+\input{估计方法}
+\input{最优输运}
+\input{计量经济模型}
+\input{时间序列模型}
+\input{状态空间模型}
+\input{图模型}
+\input{神经网络与深度学习}
+\input{统计机器学习}
+%\input{非参模型}
+\input{强化学习}
+
+\part{数值与广义计算}
+\input{插值}
+\input{线性规划}
+\input{凸优化}
+\input{整数与混合整数规划}
+\input{全局优化}
+\input{多目标优化}
+\input{微分方程的数值算法}
+\input{动态优化}
+\input{控制论}
+\input{计算理论}
+
+\part{证明的方法}
+\input{证明问题的常见思路}
+\input{函数估计理论}
+
+\part{数学物理}
+\input{物理学图景}
+\input{经典力学}
+\input{相对论}
+\input{电动力学}
+\input{量子物理}
+\input{固体物理}
+\input{流体力学}
+
+\part{化学生物}
+\input{物理化学}
+\input{分子生物学}
+\input{计算神经科学}
+
+\part{经济金融}
+\input{投资学}
+\input{金融衍生品}
+\input{微观经济学}
+\input{宏观经济学}
+\input{公司金融}
+
+\addcontentsline{toc}{chapter}{参考文献}  
+\printbibliography
+\end{document}

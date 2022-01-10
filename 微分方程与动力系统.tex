@@ -1,0 +1,498 @@
+\chapter{微分方程与动力系统}\label{ode-dynamic-system}
+\section{常微分方程}
+\subsection{常微分方程的求解}
+\subsubsection{一览表}
+\begin{longtable}{cl}
+\toprule
+\bf{方程形式}& \hfill\bf{解}\\
+\midrule
+$y'(x)+p(x)y=q(x)$& $y=e^{-\int p(x)\dif x}\left(\int q(x)e^{-\int p(x)\dif x}+C\right)$\\
+\midrule
+\multirow{5}{*}{$ay''+by'+cy=0$}&首先求解特征方程：$ar^2+br+c=0$，得到两个解$r_1,r_2$：\\
+&\circled{1} $r_1,r_2$为两个不等实根，则$y=C_1e^{r_1x}+C_2e^{r_2x}$\\
+&\circled{2} $r_1=r_2=r$，为重根，则$y=C_1e^{rx}+C_2xe^{rx}$\\
+&\circled{3} $r_1，r_2$为两个纯虚根$\pm i\omega$，则$y=C_1\cos(\omega x)+C_2\sin(\omega x)$\\
+&\circled{4} $r_1,r_2$为两个复根$r\pm i\omega $，则$y=e^{rx}(C_1\cos(\omega x)+C_2\sin(\omega x))$\\
+\bottomrule
+\end{longtable}
+
+\subsection{Lyapunov稳定性理论}\label{ode-lyapunov}
+Lyapunov理论主要用来考查常微分方程
+\begin{equation}\label{lyapunov-ode}
+\dot{\bx}=\bm{f}(t,\bx),\bx(t_ 0)=\bx_0
+\end{equation}
+的稳定性。
+
+首先要定义什么是稳定性。
+
+\subsubsection{Lyapunov稳定性}
+\begin{theorem}[Lyapunov稳定性]
+\begin{description}
+\item[平衡点] $\bx^*$称为平衡点，如果$\forall t\geq 0, f(\bx^*,t)=0$。
+\item[稳定] 一个平衡点$\bx_e$称为稳定的，如果$\forall t_0\geq 0,\epsilon>0$，存在标量$\delta(t_0,\epsilon)$满足
+$$\|\bx_0-\bx_e\|<\delta \implies \forall t>t_0,\|\bx_t-\bx_e\|<\epsilon$$
+含义是说如果初始点接近平衡点，则轨迹始终停留在距离平衡点的一个小区域内。
+\item[一致稳定] 在稳定的定义中，如果$\delta$可以与$t_0$无关，则称为一致稳定。
+\item[渐近稳定] $\bx_e$稳定且为吸引子。\textbf{吸引子}定义为：$\forall t_0\geq 0$，存在$\delta(t_0)$满足
+$$\|\bx_0-\bx_e\|<\delta \implies \lim_{t\rightarrow \infty}\|\bx_t-\bx_e\|=0$$
+吸引子的含义是说如果初始点距离平衡点够近，则最终轨迹收敛于平衡点。
+\item[一致渐近稳定] $\bx_e$一致稳定且轨迹一致收敛于$\bx_e$。后者定义为存在$\delta>0$和一个函数$\mathbb{R}_+\times \mathbb{R}^n\rightarrow \mathbb{R}_+$，$\gamma$满足$\forall \bx_0\in B_{\delta},\lim_{\tau\rightarrow \infty}\gamma(\tau,\bx_0)=0$。然后有
+$$\|\bx_0-\bx_e\|<\delta \implies \|\bx_t-\bx_e\|\leq \gamma(t-t_0,\bx_0)$$
+这里与一致稳定加上渐近稳定非常像，只是在渐近的定义上有所不同，渐近稳定中考虑的是极限，而一致渐近稳定考虑的是距离的上界，$\gamma$刻画了收敛速率。
+\item[全局渐近稳定] $\bx_e$稳定且$\forall \bx_0\in\Rns,\lim_{t\rightarrow\infty} \bx_t=\bx_e$.含义为对于\emph{任意}初始值，轨迹最终趋于$\bx_e$。
+\item[指数稳定] $\bx_e$稳定，且存在$m,\alpha>0$，满足
+$$\forall \bx_0\in B_h,t\geq t_0\geq 0,\|\bx_t-\bx_e\|\leq me^{-\alpha(t-t_0)}\|\bx_0\|$$
+$B_h$是$\bx_e$的邻域，$\alpha$称为收敛速率。含义是轨迹与均衡点的距离按指数衰减。
+
+大致可以看出，指数稳定是渐近稳定的特例。
+\end{description}
+\end{theorem}
+以上的定义中上，核心点主要有三个：稳定、吸引子、指数稳定。稳定与吸引子容易混淆。前者指的是轨迹始终停留在一个小区域内，而后者说的是极限情况。吸引不一定稳定，因为在中途，轨迹可能脱离这个小区域，也就是说无论初始距离取得多么近，在收敛之前，它会脱离小区域。
+
+稳定也不一定吸引，可能在平衡点附近一直波动，但就是不收敛。
+\subsubsection{能量函数}
+\begin{definition}[能量函数与正定函数]
+一个连续、严格\emph{单调递增}函数，且满足$\alpha(0)=0$的函数$\alpha:\mathbb{R}^+\rightarrow \mathbb{R}^+$称为{\heiti K族函数}（隐含$\alpha(\cdot)>0$。如果它还满足当$p\rightarrow \infty$时，有$\alpha(p)\rightarrow \infty$，则称之为{\heiti KR函数}。
+
+一个连续函数$v(\bx,t): \mathbb{R}^n\times \mathbb{R}_+\rightarrow \mathbb{R}_+$称为{\heiti 局部正定函数}（l.p.d.f），如果它满足，对于一些$h>0$和一些$K$函数$\alpha$，有：
+$$v(0,t)=0,\text{且} \forall \bx\in B_h,t>0, v(\bx,t)\geq \alpha(|\bx|)$$
+
+一个l.p.d.f局部地像一个能量函数。而一个{\heiti 正定函数}全局地像{\heiti 能量函数}。
+
+具体地说，一个连续函数$v(\bx,t): \mathbb{R}^n\times \mathbb{R}_+\rightarrow \mathbb{R}_+$称为 正定函数（p.d.f），如果它满足，对于一些KR函数$\alpha$，有
+$$v(0,t)=0,\text{且}\forall \bx\in\mathbb{R}^n,t\geq 0, \text{有}v(\bx,t)\geq \alpha(|\bx|)$$
+
+同时还有{\heiti 减函数}。一个连续函数$v(\bx,t): \mathbb{R}^n\times \mathbb{R}_+\rightarrow \mathbb{R}_+$称为减函数（decrescent函数）。如果存在一些K函数$\beta$，满足
+$$\forall \bx\in B_h,t\geq 0,v(\bx,t)\leq\beta(|\bx|)$$
+\end{definition}
+局部正定函数相当于在局部，函数的下界为一个单调递增函数（准确地说是K函数），或大于一个$K$函数。而正定函数是全局性的，含义为函数全局地大于一个KR函数。减函数是说函数小于一个K函数。
+
+局部正定函数与正定函数的区别在于下界的性质和$\bx$的范围。
+
+\begin{example}
+以下给出一些能量函数的例子：
+\begin{enumerate}
+\item $|\bx|^2$：减p.d.f.
+\item $\bx^TP\bx$，$P$正定矩阵：减p.d.f.。$\lambda_{\min} |\bx|^2\leq  \bx^TP\bx\leq \lambda_{\max}|\bx|^2$。
+\item $(t+1)|\bx|^2$：p.d.f.$(t+1)|\bx|^2\geq |\bx|^2$。
+\item $e^{-t}|\bx|^2$：减函数。上界可以取$e^{-t_0}|\bx|^2$.
+\item $\sin^2(|\bx|^2)$：减l.p.d.f.
+\item $e^t\bx^TP\bx$，$P$不正定：以上全不是。
+\item $v(\bx,t)$与$t$无关，则它为减函数。
+\end{enumerate}
+\end{example}
+
+
+\subsubsection{基本Lyapunov定理}
+\begin{theorem}[基本Lyapunov定理]
+对于任意能量函数，以下给出了判断ODE\eqref{lyapunov-ode}稳定性的条件：
+\begin{longtable}{|c|c|c|}
+\hline
+$v$ & $-\dot{v}$ & \textbf{结论}\\
+\hline
+l.p.d.f. & 局部$\geq 0$ &稳定\\
+减l.p.d.f. & 局部$\geq 0$ & 一致稳定\\
+减l.p.d.f. & l.p.d.f. & 一致渐近稳定\\
+减p.d.f. & p.d.f. &全局一致渐近稳定\\
+\hline 
+\end{longtable}
+
+其中
+$$\dot{v}=\sum_{i=1}^n\pdv{v}{x_i}f_i+\pdv{v}{t}$$
+
+需要强调，以上给出的是一个充分而非必要条件，如果一个Lyapunov函数下，以上条件不满足，只能说在这个函数下不能给出稳定性；但在其它函数下仍然可能稳定。
+\end{theorem}
+
+\subsubsection{不稳定性}
+\paragraph*{自治系统}以下几个定理涉及$f$与时间无关的ODE：
+\begin{equation}
+\dot{x}=f(\bx),\bx(t_0)=\bx_0
+\end{equation}
+
+\begin{theorem}[Lyapunov不稳定性定理]
+记$\bx_e$为一平衡点。如果存在一个函数$V:\mathbb{R}^n\rightarrow \mathbb{R}$，满足：
+\begin{enumerate}
+\item $\forall \bx\in\{\bx:V(\bx)\leq 0\}, \dot{V(\bx)}\leq 0$.注意这里$\bx$是$t$的函数。
+\item $V(x_0)< V(\bx_e)$
+\end{enumerate}
+则轨迹$\bx(t)$不会收敛于$\bx_e$。
+\end{theorem}
+
+以上定理其实比较简单，因为初始的能量小于$V(\bx_e)$，而$\dot{V}$又是小于等于0的，所以随着时间的发展，能量会起来越小，且小于$V(\bx_e)$，自然不会收敛于$\bx_e$。
+
+\begin{theorem}[Lyapunov发散定理]
+记$\bx_e$为一平衡点。如果存在一个函数$V:\mathbb{R}^n\rightarrow \mathbb{R}$，满足：
+\begin{enumerate}
+\item $\forall \bx\in\{\bx:V(\bx)< 0\}, \dot{V(\bx)}< 0$
+\item $V(x_0)< 0$
+\end{enumerate}
+则轨迹$\bx(t)$无界。
+\end{theorem}
+
+这个定理也比较简单。首先必然有$V(\bx(t))<V(\bx_0)$，这与$\dot{V(\bx)}<0$和初始值 $V(x_0)< 0$有关。现在假设轨迹有界，即$\|\bx(t)\|\leq R$，那么集合$\{\bx:V(\bx)\leq V(\bx_0),\|\bx\|\leq R\}$为紧致集合，则有正数$\beta$满足$-\dot{V}\leq -\beta$，于是$V(\bx(t))\leq V(\bx_0)-\beta t$，那么$V(\bx(t))\rightarrow \infty$，因此无界。
+
+
+\subsubsection{分析案例}
+\paragraph*{塌缩函数}此处是指形如$\bm{f}(\bx,t)=\bm{g}(s(\bx),t)$，即向量$\bx$最终可以归结为一个标量进入模型。
+
+\begin{example}
+什么
+\end{example}
+
+\paragraph*{非塌缩函数}
+
+\begin{example}
+\begin{empheq}[left=\empheqlbrace]{align*}
+\dot{x_1}&=x_2\\
+\dot{x_2}&=-x_2-(2+\sin t)x_1
+\end{empheq}
+显然$\bm{0}$为平衡点。取能量函数
+$$v(\bx,t)=x_1^2+\frac{x_2^2}{2+\sin t}$$
+由于
+$$x_1^2+x_2^2=|\bx|^2\geq v(\bx,t)\geq x_1^2+x_2^2/3\geq 1/3|\bx|^2$$
+因此它是减p.d.f.。
+
+再考虑$-\dot{v}$：
+$$-\dot{v}=\frac{x_2^2(4+2\sin t+\cos t)}{(2+\sin t)^2}\geq 0$$
+因此是一致稳定的。但不是一致渐近稳定，因为$-\dot{v}$只与$\bx_2$有关，找不到一个函数K函数$\alpha(|\bx|)$，使得$-\dot{v}$的下界为它。
+\end{example}
+
+\begin{example}
+{\heiti 极限环系统}
+
+\begin{empheq}[left=\empheqlbrace]{align*}
+\dot{x_1}&=-x_2+x_1(x_1^2+x_2^2-1)\\
+\dot{x_2}&=x_1+x_2(x_1^2+x_2^2-1)
+\end{empheq}
+显然$\bm{0}$为平衡点。取能量函数
+$$v(\bx,t)=x_1^2+x_2^2$$
+它是减p.d.f.。
+
+再考虑$-\dot{v}$：
+$$-\dot{v}=-2(x_1^2+x_2^2)(x_1^2+x_2^2-1)=-2|\bx|^2(|\bx|^2-1)$$
+在$|\bx|<1$的范围内，$-\dot{v}$相对于$|\bx|$单调递增；在较大的范围内，$-\dot{v}<0$，因此只是l.p.d.f.。所以$\bm{0}$是一致渐近稳定的，但不是全局一致渐近稳定。
+\end{example}
+\subsection{其它稳定性理论}
+\subsubsection{线性方程与线性近似的稳定性}
+\begin{theorem}[线性ODE方程的稳定性]
+一个线性方程
+$$\dot{\bx}=A\bx$$
+则它的稳定性与$A$的特征值密切相关：
+\begin{enumerate}
+\item $\bx=0$渐近稳定$\iff \forall \lambda_i(A),\Re(\lambda_i)<0$，即特征值实部全为负。
+\item $\bx=0$稳定$\iff \Re(\lambda_i)\leq 0$，且实部为负的特征根对应的Jordan块为一阶。
+\item $\bx=0$不稳定$\iff \exists \lambda_i, \Re(\lambda_i)>0$
+\end{enumerate}
+\end{theorem}
+
+线性方程的稳定性与线性近似的稳定性密切相关：
+
+\begin{theorem}[线性近似的稳定性]
+如果$\bm{f}$是非线性的，则在平衡点附近进行线性化：
+$$\dot{\bx}=A(t)\bx+\bm{N}(t,\bx)$$
+
+$\bm{N}$满足
+\begin{enumerate}
+\item $N(t_0, \bx_e)=0$
+\item $\forall t\geq t_0,\lim_{|\bx|\rightarrow|\bx_e|}\frac{|N(t,\bx)|}{|\bx|}=0$
+\end{enumerate}
+
+如果$A(t)=A$为一常矩阵，则原来的非线性方程的稳定性与线性化后的方程的稳定性相关：
+\begin{enumerate}
+\item $\bx=0$渐近稳定$\iff \forall \lambda_i(A),\Re(\lambda_i)<0$，即特征值实部全为负。
+\item $\bx=0$不稳定$\iff \exists \lambda_i, \Re(\lambda_i)>0$
+\end{enumerate}
+
+需要注意，线性近似法相比纯线性方程的稳定性的区别在于：线性挖只适用于\emph{渐近稳定}与\emph{不稳定}的情形，不能判别稳定。
+
+如果$A(t)$不为常矩阵，则没有以上结论。
+\end{theorem}
+
+
+
+
+\subsection{不稳定性理论}
+\subsubsection{爆破}
+
+\subsubsection{刚性}
+
+\subsubsection{极限环}
+
+\section{偏微分方程}
+
+\subsection{概论}
+\subsubsection{PDE的分类理论}
+偏微分方程就是指含有多个自变量的导数的方程。
+
+\paragraph*{一阶PDE}只含有一阶导数的PDE，形如
+$$\sum a_i(\bx)\pdv{u(\bx)}{x_i}=F(u)$$
+的称为一阶线性PDE。如果$a_i$与$u$有关，形如：
+$$\sum a_i(\bx,u(\bx))\pdv{u(\bx)}{x_i}=F(u)$$
+的称为一阶拟线性PDE。不是线性、拟线性的叫一阶非线性PDE。
+
+\paragraph*{二阶PDE}最高含有二阶导数的PDE为线性PDE。$n$个自变量（时间$t$也算其中的一个）的二阶线性PDE的一般形式为：
+\begin{empheq}{equation}
+\sum_{i=1}^n\sum_{i=1}^na_{ij}\pdv[order=2]{u}{x,y}+\sum_{i=1}^nb_i\pdv{u}{x_i}+cu(\bx)=f
+\end{empheq}
+系数$a_{ij}$构成系数矩阵$A=[a_{ij}]$。依据系数矩阵在某点$\bx$处的特征值分布：
+\begin{description}
+\item[椭圆型] $A$的特征值同号。
+\item[双曲型] $A$的特征值有$n-1$个同号，与剩下的一个异号。
+\item[抛物型] 特征值有一个为0，其它同号。
+\end{description}
+称PDE在该点处为对应的型。如果PDE在整个区域内都为此型，即称为对应的PDE型；如果在某些部分为一型，另一些部分为其它型，称为混合型PDE。
+\paragraph*{例子}以下给出一些PDE的例子与其对应的分类：
+\begin{longtable}{ccc}
+\toprule
+名称 & 形式 & 说明\\
+\midrule
+拉普拉斯方程& $\Delta u=f$ & 二阶椭圆。\\
+波动方程& $\pdv[order=2]{u}{t}-c^2\pdv[order=2]{u}{x}=0$ &二阶双曲。系数矩阵的特征值为$1,-c^2$。\\
+热传导& $\pdv{u}{t}=k\pdv[order=2]{u}{x}$& 二阶抛物。\\
+\bottomrule
+\end{longtable}
+
+\subsection{计算方法}
+
+
+\subsection{分析方法}
+
+
+\section{离散时间动力系统}
+\subsection{表示论}
+\subsubsection{常系数线性系统与矩阵乘法}
+给定一个线性系统
+$$y_{n+2}=2y_{n+1}+y_{n}$$
+可以表示为矩阵乘法
+\[
+\begin{bmatrix}
+y_{n+3}\\
+y_{n+2}
+\end{bmatrix}=\begin{bmatrix}
+5 & 2\\
+2 & 1
+\end{bmatrix}\begin{bmatrix}
+y_{n+1}\\
+y_{n}
+\end{bmatrix}\]
+
+比如给定初始值$[y_0,y_1]=[1,1]$，那么直接迭代计算$y_4=17,y_5=41$，也可以用两次矩阵计算
+\[\begin{bmatrix}
+	y_{5}\\
+	y_{4}
+\end{bmatrix}=\begin{bmatrix}
+	5 & 2\\
+	2 & 1
+\end{bmatrix}^2\begin{bmatrix}
+	y_{1}\\
+	y_{0}
+\end{bmatrix}=\begin{bmatrix}
+41\\17
+\end{bmatrix}\]
+利用矩阵乘法，一次可以计算2个值。显然原本的迭代增长速度是指数的，所以矩阵连乘可以表达指数增长。而且可以利用特征值分解来计算矩阵乘法。
+
+那么一个显然的问题是，矩阵连乘能不能表示多项式增长？当然是可以的。
+
+考虑矩阵
+\[M=\begin{bmatrix}
+	1 & 2\\
+	0 & 1
+\end{bmatrix}\]
+可以算出
+\[M^n=\begin{bmatrix}
+	1 & 2n\\
+	0 & 1
+\end{bmatrix}\]
+这是多项式增长的。而且注意到，其实$M$的特征值是2个1。
+
+其实对于矩阵
+\[
+M=\begin{bmatrix}
+1& a_{12} & a_{13}\\
+0& 1 & a_{23}\\
+0&0&1
+\end{bmatrix},M^n=\begin{bmatrix}
+1& na_{12} & \frac{n(n+1)}{2}a_{13}a_{23}+na_{13}\\
+0& 1 & na_{23}\\
+0&0&1
+\end{bmatrix}
+\]
+
+可以看出是多项式增长的。一个简单的想法就是，对于三角阵，如果对角线上都是1，那就是多项式增长，这也部分说明了为什么对角线元素比较重要。
+
+\subsubsection{使用矩阵或纯加法计算多项式}
+一个多项式可以写成 $a_nx_1^n=a_n(x_0+\dif x)^n=a_n\sum_{k=0}^{n }\alpha_k x^k\dif^{n-k}x$的形式，其中$\alpha_k$是多项式系数。比如，
+
+$$
+\begin{bmatrix}
+	a_4x_1^4\\
+	a_4x_1^3\dif x\\
+	a_4x_1^2\Dif2 x\\
+	a_4x_1\Dif3 x\\
+	\Dif4 x
+\end{bmatrix}=\begin{bmatrix}
+	\binom{4}{4} & \binom{4}{3} & \binom{4}{2} & \binom{4}{1} &\binom{4}{0}\\
+	0& \binom{3}{3} & \binom{3}{2} &\binom{3}{1} &\binom{3}{0} \\
+	0& 0& \binom{2}{2} & \binom{2}{1} & \binom{2}{0}\\
+	0& 0&0& \binom{1}{1}&\binom{1}{0}\\
+	0& 0& 0& 0& 1
+\end{bmatrix}\begin{bmatrix}
+	a_4x_0^4\\
+	a_4x_0^3\dif x\\
+	a_4x_0^2\Dif2 x\\
+	a_4x_0\Dif3 x\\
+	\Dif4 x
+\end{bmatrix}=\begin{bmatrix}
+	1 & 4 & 6 & 4 &1\\
+	0& 1 & 3 &3 &1 \\
+	0& 0& 1 & 2 & 1\\
+	0& 0&0& 1&1\\
+	0& 0& 0& 0& 1
+\end{bmatrix}\begin{bmatrix}
+	a_4x_0^4\\
+	a_4x_0^3\dif x\\
+	a_4x_0^2\Dif2 x\\
+	a_4x_0\Dif3 x\\
+	\Dif4 x
+\end{bmatrix}
+$$
+
+通过矩阵连乘，我们可以计算 $x_i^n,i\geq 1$。不过这里还有标量乘法。假如只用加法，\circled{1} 希望矩阵的元素属于 $\{-1,0,1\}$，或者  \circled{2} 直接用加法代替乘法，需要 $2^4+2^3+2^2+2^1+2^0-\frac{(1+5)5}{2}$ 次加法来代替矩阵乘法。后者显然是不合适的。
+
+现在来考虑一个更抽象的问题，计算：
+$$\bm{y}_{n+1}=L\bm{y}_n \text{ ，且 } L \text{是上三角阵且} L_{ii}=1$$
+
+考虑方法\circled{1}, 也就是通过基变换的方式。希望找到矩阵 $M,A$使得
+$$A\by_{n+1}=MA\by_{n} \text{ 且 }M_{ij}\in\{-1,0,1\}$$
+这样一来 $A\by_{n+1}=AL\by_n=MA\by_n$。一个简单的条件是$AL=MA$。注意上面这个变换的含义，$A$是变换矩阵，我们同时对$\by_{n+1},\by_n$进行变换，使得$A\by_{n+1}$恰好可以通过$A\by_n$进行行的加减法得到。
+
+显然这个问题是不定的，因为参数过多。我们可以随便选择$M$ 然后求解$AL=MA$ 得到$A$ ，具体来说是求解$Px=0$ ，其中$x$ 是将 $A$中元素堆叠形成的向量。
+
+在我们的问题中，需要计算 $a_4x^4$ ，它是$\by_n$的第一行。那么$A$的第一行应该是$[1,\bm{0}]$ ，也就是说我们寻找 的变换不改变 $\by_n$的第一行。并且 $M$ 必须是上三角阵，因为每一行为线性组合的系数，而高次项的线性组合不可能得到低次项。于是$\forall i<j, M_{ij}=0$。即使加上这些约束，问题还是不定的。 
+
+现在我们考虑用尽可能少的加法，那么至少需要的加法次数是1。于是 $M$的形式应该像：
+\[M=\begin{bmatrix}
+	1 & 1 &  &  &  \\
+	& 1& 1& &\\
+	& & 1& 1& \\
+	& & & 1& 1\\
+	& & & & 1
+\end{bmatrix}\]
+
+由于$A$的第一行固定为$[1,\bm{0}]$，我们可以按顺序求解出 $A$的每一行。比如对于第二行可以构造方程：
+$$\begin{aligned}
+	\underbrace{\begin{bmatrix}
+			1 & 0 & 0 & 0& 0\\
+			0 & x_2 & x_3 & x_4 &x_5\\
+	\end{bmatrix}}_{A}\underbrace{\begin{bmatrix}
+			1 & 4 & 6 & 4 &1\\
+			0& 1 & 3 &3 &1 \\
+			0& 0& 1 & 2 & 1\\
+			0& 0&0& 1&1\\
+			0& 0& 0& 0& 1
+	\end{bmatrix}}_{L}&=\underbrace{\begin{bmatrix}
+			1 & 4 & 6 & 4 &1\\
+			0& x_2& 3x_2+x_3&3x_2+2x_3+x_4&x_2+x_3+x_4+x_5
+	\end{bmatrix}}_{P}\\
+	=\underbrace{\begin{bmatrix}
+			1 & 1 &  &  &  \\
+			& 1& 1& &\\
+			& & 1& 1& \\
+			& & & 1& 1\\
+			& & & & 1
+	\end{bmatrix}}_{M}\underbrace{\begin{bmatrix}
+			1 & 0 & 0 & 0& 0\\
+			0& x_2 & x_3 & x_4 &x_5\\
+	\end{bmatrix}}_{A}&=\underbrace{\begin{bmatrix}
+			1 & x_2 & x_3 & x_4 &x_5\\
+			& & \cdots & & 
+	\end{bmatrix}}_{Q}
+\end{aligned}
+$$
+
+对比$P$与$Q$，有$[1, x_2,x_3,x_4,x_5]=[1,4, 6,4,1]$。它恰好是$L$的第一行。那么$P$的第二行已经固定了。现在可以用$Q$的第2行求解$A$的第3行$\cdots$最终解出$A$的全部行。 用数学的语言来表示这个迭代过程：
+\[\begin{aligned}
+	P_{i,}&=A_{i,}L\\
+	Q_{i,}&=A_{i,}+A_{i+1,}\\
+	P_{i,}&=Q_{i,}
+\\
+	s.t.&\ A_{0,},L\text{ 已知}
+\end{aligned}\]
+其中 $A_{i,}$ 表示$A$的第$i$行。最终，
+$$A_{i+1,}=P_{i,}-A_{i,}=A_{i,}L-A_{i,}=A_{i,}(L-I)$$ 
+
+这样就求出了 $A$的每一行。最后就可以用 $\by_{n+1}'=A\by_{n+1}=M(A\by_{n})$再加上初始值就可以只用加法计算多项式了。
+
+最后还有一个问题，计算$L$。对于二项式系数有：
+$$\binom{n}{k}=\binom{n-1}{k-1}+\binom{n-1}{k},\binom{n}{0}=\binom{n}{1}=\binom{n}{n}=1$$
+这样可以按行计算出$L$。
+\subsection{逼近理论}
+给定一个系统，计算系统的极限，或者对它的值进行估计。
+
+\subsubsection{级数展开法}
+首先通过级数展开取主项，然后设法构造简单的迭代式如等差数列，再求和。有时展开后的项与要求的目标不一定相符，可能需要进行一些变换。级数展开的实质是求导，所以一般也可以用洛必达法则或者Stolz定理。
+
+一些思路：
+\begin{enumerate}
+\item 迭代式里面没有$n$，但要求的极限有$n$，那么设想构造等差数列，求和就出现$n$了。
+\end{enumerate}
+
+\begin{example}
+已知$x_{n+1}=\sin(x_n),x_n<3$，试计算
+$$\lim_{n\rightarrow \infty} \sqrt{n}x_n$$
+\end{example}
+\begin{solution}
+迭代的表达式里面没有$n$，但要求的极限里面有，因此必须首先将$n$与迭代过程联系起来。一种思路就是级数展开：
+$$\sin x\approx x-\frac{1}{6}x^3+O(x^5)$$
+那么有
+\begin{empheq}{align*}
+\frac{1}{x_{n+1}^2}&=\frac{1}{\sbra{x_n-\frac{1}{6}x_n^3+O(x_n^5)}^2}\\
+&=\inv{x_n^2}\inv{\sbra{1-\frac{x_n^2}{6}+O(x_n^4)}^2}\\
+&=\inv{x_n^2}+\inv{3}+O(x_n^2)
+\end{empheq}
+令$y_n=\inv{x_n^2}$，那么
+\begin{empheq}{align*}
+y_{n+1}&=y_n+\inv{3}+O\sbra{\inv{y_n}}\\
+\frac{y_n+1}{n}&=\frac{n}{3}+O\sbra{\sum_{k=1}^n\inv{y_k}}
+\end{empheq}
+然后很容易得到原来的结果是$\sqrt{3}$。
+
+本例还可以用Stolz定理的引理\ref{lem:Stoltz-l1}求解。
+
+\begin{empheq}{align*}
+\lim_{n\rightarrow \infty}\sbra{\inv{x_{n+1}^2}-\inv{x_n^2}}&=\lim_{n\rightarrow \infty}\sbra{\inv{\sin^2 x_n}-\inv{x_n^2}}\\
+&=\lim_{x\rightarrow 0}\sbra{\inv{\sin^2x}-\inv{x^2}}\\
+&=\inv{3}
+\end{empheq}
+立即可得原来的结果。
+\end{solution}
+
+\begin{example}
+给定系统$x_1=\frac{1}{2},x_{n+1}=x_n-\frac{x_n^2}{16}$，证明
+$$\frac{1}{n+1}\leq x_n\leq\frac{16}{n}$$
+\end{example}
+\begin{solution}
+首先原命题相当于
+$$n+1\geq \frac{1}{x_n}\geq \frac{n}{16}$$
+这与上面的问题相似，对于原系统，取$\frac{1}{x_{n+1}}=\frac{1}{x_n-\frac{x_n^2}{16}}$，可以很容易得到$\inv{x_{n+1}}\approx \inv{x_n}+\frac{1}{16}$，即得到不等式的右边。
+
+完整的证明可以按以下入手，首先证明$x_n$是单调递减的，再证明$1\geq \inv{x_{n+1}}- \inv{x_n}\geq \inv{16}$，等差数列相加就是原命题。
+\end{solution}
+
+\section{随机动力系统}
+
+\subsection{稳定性}
+\subsubsection{Stochastic Stablity Lemma}
+\begin{lemma}[Stochastic Stablity Lemma]
+给定常数$v_1,v_2,\mu>0, 0<\alpha<1$，如果存在一个随机过程$V(\xi_k)$满足以下条件：
+$$v_1\|\xi_n\|^2\leq V(\xi_n)\leq v_2\|\xi_n\|^2$$
+$$\E(V(\xi_n)|\xi_{n-1})-V(\xi_{n-1})\leq \mu-\alpha V(\xi_{n-1})$$
+那么有
+\begin{empheq}{equation}\label{Stochastic-Stablity-Lemma-result}
+\E(\|\xi_n\|^2)\leq \frac{v_2}{v_1}\E(\|\xi_0\|^2)(1-\alpha)^n+\frac{\mu}{v}\sum_{i=0}^{n-1}(1-\alpha)^i
+\end{empheq}
+\end{lemma}
+这个引理给出了二阶矩的上界，或者说通过$V$的界来控制变量的界，相当于从结果来反推原因的性质。
+\section{混沌理论}
+\subsection{基本概念}
+

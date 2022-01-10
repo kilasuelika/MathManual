@@ -1,0 +1,164 @@
+\subsection{Baire定理及其推论}
+Baire定理是线性泛函分析的基本定理之一.以下逐步引入这个定理及其应用.
+\subsubsection{Baire定理}
+\paragraph*{基本Baire定理}
+\begin{theorem}[Cantor交集定理]\label{cantor-intersection}
+假设$X$为完备距离空间，设$(A_n)^{\infty}_{n=0}$是满足以下性质的非空闭子集序列：
+
+\begin{enumerate}[label=(\alph*)]
+	\item $A_0\supset A_1\supset\cdots$.
+	\item 当$n\rightarrow \infty$时，$\diam A_n\rightarrow 0$.
+\end{enumerate}
+
+则存在唯一的$x\in X$，使得
+$$\bigcap_{n=0}^\infty A_n=\{x\}$$
+\end{theorem}
+
+这个定理从形式上类似于闭区间套定理、压缩映射，利用一个逐渐缩小的集合来确定单个元素.它又类似于集合收敛.如同闭区间套定理可以刻画实数集的完备性，Cantor交集定理也可以刻画距离空间的完备性.
+
+此外性质(b)的假设是实质性的，考虑集合列$A_n=[n, \infty)$，它满足性质(a)，但不满足性质(b).
+
+证明过程也依赖于Cauchy序列，分存在性与唯一性两个部分.
+
+\begin{proof}
+（存在性）对每个$n$，取$x_n\in A_n$，那么对于任意$m>n$，由于$A_m\subset A_n$，有
+$$d(x_m,x_n)\leq \diam A_n$$
+
+因此$\{x_n\}_0^\infty$构成Cauchy序列，设$x=\lim_{n\rightarrow \infty}x_n$.
+
+同时$x_m\in A_n$，由于$A_n$是闭集，所以$x\in A_n$，那么$x\in \cap_{n=0}^\infty A_n$.
+
+（唯一性）假设存在另一点$y\neq x,\ y\in \cap_{n=0}^\infty A_n$，则由于集合是逐渐缩小的，那么存在$n_0>0$，使得$\diam A_{n_0}< d(x,y)$.
+
+但是$x,\ y$均属于交集，那么$x,\ y\in A_{n_0}$，因此$d(x,y)<\diam A_{n_0}$，与前述矛盾，所以$\cap_{n=0}^\infty A_n=\{x\}$，即集合中只包含一个元素.
+\end{proof}
+
+\begin{theorem}[Baire定理]\label{baire:proof}
+假设$X$为完备距离空间，则下面两个定理等价：
+
+\begin{enumerate}[label=(\alph*)]
+\item 设$(F_n)^{\infty}_{n=0}$是$X$中的闭子集序列，且对所有$n\geq 0$，$\sint F_n=\emptyset$，则
+$$\sint \left(\bigcup_{n=0}^\infty F_n\right)=\emptyset$$
+
+\item 设$(O_n)^{\infty}_{n=0}$是$X$中的开子集序列，且对所有$n\geq 0$，$\overline{O_n}=X$，则
+$$\overline{\left(\bigcap_{n=0}^\infty O_n\right)}=X$$
+\end{enumerate}
+
+\end{theorem}
+
+
+直觉上说，这个定理是在讲：一组可列的闭子集，每个子集的内部是空的，则它们的交内部也是空的.可以类比：可列无限个有理数，它们合起来也不能表示一个区间，所以测度是0.
+
+证明过程分两步；首先构造等价表述，将原问题的集合为空（就是不存在性）转换为一个集合非空的问题.既然集合是非空的，那么第二步找到这样一个元素.就证明了原问题.要点是第二步依据Cantor交集定理构造一个子集列，它们的半径趋于0.
+
+\begin{proof}
+（通过刻画集合内部为空来构造原问题的等价表述）原问题等价于证明
+$$\forall \text{ 非空开子集 }O\in X,O\cap \left(X-\bigcup_{n=0}^\infty F_n\right)\neq \emptyset$$
+
+根据集合的分配率，问题又可以转换为
+$$\forall \text{ 非空开子集 }O\in X,O\cap \bigcap_{n=0}^\infty\left(X- F_n\right)\neq \emptyset$$
+
+上式中的交集就类似于Cantor交集定理.现在只要能构造出一列子集就可以了.
+
+（存在性）利用$F_n$是内部为空的闭子集序列，令$O_0=O$，$O$是任意一个开子集$O\subset X$.则$O_0\cap(X-F_0)\neq \emptyset$.那么
+$$\exists \text{ 非空开子集 } O_1\subset X,\overline{O}_1\subset O_0\cap(X-F_0),\diam \overline{O}_1\le 1$$
+
+比如取$O_0\cap(X-F_0)$中一个开球.由于$O_1$是开集，同样地存在
+$$\exists \text{ 非空开子集 } O_2\subset X,\overline{O}_2\subset O_1\cap(X-F_1),\diam \overline{O}_2\le 1$$
+
+类似地可以构造子集列
+$$\exists \text{ 非空开子集 } O_{n+1}\subset X,\overline{O_n}\subset O_n\cap(X-F_n),\diam \overline{O}_{n+1}\le \frac{1}{n+1},n\geq 0$$
+
+显然闭子集列$\overline{O}_n$满足Cantor交集定理，那么存在$x\in X,{x}=\cap \overline{O}_n\subset \cap (X-F_n)$.
+
+又$x\in \overline{O}_1\subset O_0=O$，因此$x\in O$.所以
+$$x\in O\cap \bigcap_{n=0}^\infty (X-F_n)$$
+
+这就证明了转换后的问题——集合非空.
+
+\end{proof}
+
+证明过程中$\diam \overline{O}_n<\frac{1}{n+1}$这个约束其实是强行添加的.
+
+从整个过程中也可以看出，最核心的就是刻画内部空与非空.
+\paragraph*{基本Baire定理的等价表述}
+\begin{theorem}[Baire定理的等价形式]\label{baire-eq}
+设$X$是距离空间，令$F_n(n\geq 0)$是$X$的闭子集使得$X=\cup_{n=0}^\infty F_n$（实质是说集合是可列个子集的并），那么有以下结论：
+\begin{enumerate}[label=(\alph*)]
+\item\label{baire-eq-a1} 如果$\forall n\geq 0,\sint F_n=\emptyset$，那么$X$是不完备的。
+\item 如果$X$是完备的，那么$\exists n_0\geq 0,\sint F_{n_0}\neq\emptyset$。即内部非空。
+\end{enumerate}
+\end{theorem}
+本定理的一个简单推论就是二维平面不能表示成可列条直线的并集，因为直线的内部是空的。
+
+另外由\ref{baire-eq-a1}可以得到以下结论：
+\begin{theorem}[]
+无穷维Banach空间不可能具有可列无穷Hamel基。
+
+特别地，由单变量或者多变量组成的多项式空间，不可能装备范数，成为Banach空间（所有$n$次多项式是可列、无穷的，而且构成Hamel基）。
+\end{theorem}
+证明的主要思路是证明集族
+$$F_n=\Span \{e_j\}_{j=0}^n$$
+有
+$$\int F_n=\emptyset$$
+用反证法。
+
+那么如何理解多项式空间中的不完备性呢？
+
+其一是可以构造收敛点不在多项式空间中的Cauchy列。级数展开就是一个例子。比如对于$e^x$，它的级数展开在任意一点都是收敛的，但显然$e^x$不属于多项式空间。
+
+\subsubsection{Baire定理的推论}
+以下定理中Banach-Steinhaus定理、Banach开映射定理、Banach闭图像定理是线性泛函分析的三大基石。
+\paragraph*{Banach-Steinhaus定理}这个定理是说，由值域的有界可以导出线性算子范数的有界；或者由point-wise有界导出normed有界。也叫一致有界原理。
+\begin{theorem}[Banach-Steinhaus定理]\label{Banach-steinhaus}
+设$X$是Banach空间，$Y$为赋范向量空间，而$(A_i)_{i\in I}$为映射$A_i\in \mathcal{L}(X;Y)$构成的算子族，满足
+$$\forall x\in X,\sup_{x\in \mathcal{I}}\|A_ix\|_Y<\infty$$
+而
+$$\sup_{i\in \mathcal{I}}\|A_i\|_{\mathcal{L}(X;Y)}<\infty$$
+\end{theorem}
+证明分为两个部分，首先构造一个集族，利用Baire定理证明存在一个闭子集，然后对$x$重新进行表示，利用三解不等式来得到算子范数有界。
+\begin{proof}
+\circled{1}首先证明存在闭子集。取集合
+$$F_n=\{x\in X\mid \sup_{i\in\mathcal{I}}\|A_ix\|\leq n\}$$
+这里的$i$是遍历所有算子。对于任意$x\in X$，由假设$\sup_{x\in \mathcal{I}}\|A_ix\|_Y<\infty$可知，存在整数$n(x)\geq 0$，有$\sup_{x\in \mathcal{I}}\|A_ix\|_Y<n(x)$，那么$x\in F_{n(x)}$。所以
+$$X=\bigcup_{n=0}^\infty F_n$$
+原因是$x$是任取的，任意取它都在$F_{n(x)}$中，而遍历$n(x)$相当于$n$，所以$X$可以由$F_n$取并得到。
+
+$F_n$的另一个等价表述是
+$$F_n=\bigcap_{i\in\mathcal{I}}\{x\in X\mid \|A_ix\|\leq n\}$$
+这里是取交集，因为原始定义中是上界小于$n$，就是所有算子都必须满足小于$n$，就是取交。
+
+由这个定义可知$F_n$是$X$中闭子集的交集，于是它也是闭集。
+
+根据$X$的完备性，可以使用Baire定理，因此
+$$\exists n_0\geq 0,\sint F_{n_0}\neq \emptyset$$
+因此$\exists (x_0\in F_{n_0},r>0),\overline{B(x_0;r)}\subset F_{n_0}$。由$F_{n_0}$的定义，有
+$$\forall z\in\overline{B(x_0;r)},i\in\mathcal{I}, \|A_iz\|\leq n_0$$
+
+\circled{2}重新表示$x$，取$z=\left(x_0+r\frac{x}{\|x\|}\right)\subset \overline{B(x_0;r)}$，那么
+$$x=\frac{\|x\|}{r}(z-x_0)$$
+于是
+\begin{empheq}{align*}
+\|A_ix\|&\leq \frac{\|x\|}{r}(\|A_iz\|+\|A_ix_0\|)\\
+&\leq \inv{r}(n_0+\|A_ix_0\|)\|x\|\\
+&\leq \inv{r}\left(n_0+\sup{i\in\mathcal{I}}\|A_ix_0\|\right)\|x\|,\forall i\in \mathcal{I},x\in X
+\end{empheq}
+由假设$\sup{i\in\mathcal{I}}\|A_ix_0\|<\infty$，于是
+$$\sup_{i\in\mathcal{I}} \|A_i\|=\sup_{x\in X}\frac{\|A_ix\|}{\|x\|}\leq \inv{r}\left(n_0+\sup{i\in\mathcal{I}}\|A_ix_0\|\right)<\infty$$
+\end{proof}
+在上面的证明中，第\circled{1}步是不可以省略的，假如只有第\circled{2}步，那么$z$可能压根不属于$X$（比如取一组离散的点），那么也就没法使用三角不等式了。
+
+另一个初等证明由\cite{Alan_D_Sokal_2011}给出，不依赖于Baire定理，它使用了反证法，首先假设$\sup_{i\in \mathcal{I}}\|A_i\|=\infty$，然后导出$\exists x,A_ix\rightarrow\infty$。
+
+\paragraph*{Banach开映射定理}一个Banach空间到另一个Banach空间中的连续线性线性算子是开映射。
+\begin{theorem}[Banach开映射定理]
+设$X, Y$是Banach空间，$A\in\mathcal{L}(X;Y)$是满射。
+
+那么$X$的任意开子集在映射$A$下的直接像$A(U)$是$Y$的开子集。
+\end{theorem}
+所谓开集就是每个点都有一个开领域，具体地说就是给定任意开集$U\in X$，对于$\forall y\in A(U)$，希望找一个开球，证明主要从这个目标入手。
+
+\paragraph*{Banach开映射定理的推论}双射的逆也是连续线性算子。
+\begin{theorem}[Banach开映射定理]
+设$X, Y$是Banach空间，$A\in\mathcal{L}(X;Y)$是满双射。则$A^{-1}\in\mathcal{L}(X;Y)$。
+\end{theorem}

@@ -1,0 +1,219 @@
+\chapter{投资学}
+\section{交易系统中的计算}
+\subsection{收益率}
+\subsubsection{百分比收益率}
+设初始资产总量为$W_0$，初始权重向量$\bm{w}$（此处注意权重的含义是资产价值占总价值的比例，不是资产的份数），初始价格向量$\bm{p}$，价格变动后向量为$\bm{p}'$，投资组合价值为$W_1=\sum \frac{W_0 w_i}{p_i}p_i'$，整个投资组合的收益率是
+$$R=\frac{W_1-W_0}{W_0}=\frac{\sum \frac{W_0 w_i}{p_i}p_i'-\sum W_0w_i}{W_0}=\sum w_i\frac{p_i'}{p_i}-\sum w_i=\sum w_ir_i=\bm{r}\cdot\bm{w}$$
+
+即投资组合在两个时期间的收益率等于每种资产收益率的线性组合。
+
+如果考虑多个时期，用$n$标志时期。那么
+\begin{empheq}{align*}
+W_n&=\sum_i \frac{W_0 w_i}{p_{0i}}p_{ni}\\
+&=\sum_iW_0w_i\prod_{k=1}^n(1+r_{ki })
+\end{empheq}
+
+类似地有
+\begin{empheq}{align}
+R_{0: n}&=\bm{r}_{0: n}\cdot \bm{w}\\
+&=\frac{\bm{p}_n-\bm{p}_0}{\bm{p}_0}\cdot\bm{w}\\
+&=\sbra{\frac{\bm{p}_0\prod_{k=1}^n \frac{\bm{p}_k}{\bm{p}_{k-1}}-\bm{p}_0}{\bm{p}_0}}\cdot\bm{w}\\
+&=\sbra{\frac{\bm{p}_0\prod_{k=1}^n (1+\bm{r}_{k-1:k})-\bm{p}_0}{\bm{p}_0}}\cdot\bm{w}\\
+&=\sbra{\prod_{k=1}^n (1+\bm{r}_{k-1:k})-1}\cdot \bm{w} \label{r0n_first}
+\end{empheq}
+
+如果直接从收益序列的角度考虑，有
+\begin{empheq}{align}
+W_n&=\sum_i \frac{W_{n-1} w_i}{p_{n-1,i}}p_{ni}\\
+&=\sum_i W_{n-1}w_i(1+r_{ni})\\
+&=W_{n-1}\bm{r}_n\cdot \bm{w} \label{seq-val-correct}\\
+&=W_{n-1}(1+R_{n-1: n})\\
+R_{n-1: n}&=\bm{r}_{n-1: n}\cdot \bm{\lambda}_n \label{seq-ret-correct}\\
+R_{0: n}&=\frac{W_n-W_0}{W_0} \label{seq-tot-ret-correct}\\
+&=\frac{W_n-W_{n-1}+W_{n-1}-W_0}{W_0}\\
+&=\frac{W_n-W_{n-1}}{W_{n-1}}\frac{W_{n-1}}{W_0}+R_{0:n-1}\\
+&=R_{n-1: n}(1+R_{0: n-1})+R_{0:n-1} \label{seq-tot-ret-correct-exp}
+\end{empheq}
+注意上式的第一项是新创造的收益，而第二项是旧的收益。此外强调权重向量本身并非定值，由于资产的价格变动，则资产的权重是自然改变的，因此上式中$\bm{\lambda}$就表示自然权重。下表给出一个“买入——持有”（买入后就不再调整）策略的例子：
+\begin{longtable}{c cc cc cc cc cc}
+\toprule
+时间 & \multicolumn{2}{c}{资产价格} & \multicolumn{2}{c}{初始权重$\bm{w}$ } & \multicolumn{2}{c}{资产份数} & \multicolumn{2}{c}{自然权重$\bm{\lambda}$} &$W_n$ & $R_{0: n}$\\
+\midrule
+0 & 5& 6  & $\inv{2}$ &$\inv{2}$ &$\inv{10}$& $\inv{12}$&   $\inv{2}$ &$\inv{2}$ & 1 & \\
+1 & 7 & 9 & & & & & $\frac{14}{29}$ & $\frac{15}{29}$& $\frac{29}{20}$&$\frac{9}{20}$ \\
+2& 10&13 &   & & & & $\frac{12}{25}$ & $\frac{13}{25}$& $\frac{25}{12}$ & $\frac{13}{12}$\\
+\bottomrule
+\end{longtable}
+$R_{1:2}=\frac{25/12-29/20}{29/20}=38/87=\frac{14}{29}\frac{10-7}{7}+\frac{15}{29}\frac{13-9}{9}=\bm{r}_{1:2}\cdot \bm{\lambda}\neq \bm{r}_{1:2}\cdot \bm{w}$，所以不要把自然权重与初始的权重混为一谈。
+
+以上我们从两种角度计算了整体收益率$R_{0: n}$，现在证明这两种方式是一样的。
+
+从式\eqref{r0n_first}有
+\begin{empheq}{align*}
+R_{0: n}&=\sbra{(1+r_{n-1: n})\odot\prod_{k=1}^{n-1}(1+r_{k-1: k})-1}\cdot\bm{w}\\
+&=\sbra{(1+r_{n-1: n})\odot\sbra{\prod_{k=1}^{n-1}(1+r_{k-1: k})-1}+r_{n-1: n}}\cdot\bm{w}\\
+&=\sbra{(1+r_{n-1: n})\odot r_{0: n-1}+r_{n-1: n}}\cdot \bm{w}\\
+&=
+\end{empheq}
+
+
+注意以上的向量间乘法、除法是element-wise。
+
+\begin{enumerate}
+\item 如果只有收益率数据，不调整资产，那么应该从\eqref{r0n_first}计算收益率。
+\end{enumerate}
+
+以上假定初始选择了一个权重后，就不再调整资产。如果资产进行调整，那么应该从收益率序列的角度考虑，则
+$$R_{n-1: n}=\bm{r}_{n-1: n}\cdot \bm{w}_{n-1}$$
+
+$\bm{w}_{n-1}$是调整后的权重。仍以上面的表为例，假设强行在确认收益后，调整为等权重，则有：
+\begin{longtable}{c cc cc cc cc cc}
+	\toprule
+	时间 & \multicolumn{2}{c}{资产价格} & \multicolumn{2}{c}{调整权重$\bm{w}$ } & \multicolumn{2}{c}{资产份数} & \multicolumn{2}{c}{自然权重$\bm{\lambda}$} &$W_n$ & $R_{0: n}$\\
+	\midrule
+	0 & 5& 6  & $\inv{2}$ &$\inv{2}$ &$\inv{10}$& $\inv{12}$&   $\inv{2}$ &$\inv{2}$ & 1 & \\
+	1 & 7 & 9 &$\inv{2}$ &$\inv{2}$ &$\frac{29}{280}$ &$\frac{29}{360}$ &  &  & $\frac{29}{20}$&$\frac{9}{20}$ \\
+	2& 10&13 &  $\inv{2}$ &$\inv{2}$ &$\frac{5249}{50400}$  &$\frac{5249}{504}$ &  & & $\frac{5249}{2520}$ & $\frac{2729}{2520}$\\
+	\bottomrule
+\end{longtable}
+此时$R_{1:2}=\frac{1}{2}\sbra{\frac{10-7}{7}+\frac{13-9}{9}}=\frac{55}{126}$
+
+实践中，等权重可以调整持有周期，最优的交易周期下，似乎等权重一般比买入持有更好。
+
+\paragraph*{交易费用}以上的分析没有考虑交易费用。交易费用包括手续费、印花税等等。如果手续费是按比例的，那么一种直接的理解是，收益率是资产收益率减去手续费的比例，这种直觉是否恰当呢？
+
+首先考虑单个资产，假如初始时持有现金110元，资产价格100元，买和卖的手续费比例0.001，那么可以购买的资产份数$x$由下式决定
+$$100x\times(1+0.001)=110$$
+则$x\approx 1.0989$。现在资产价格上升到$150$，则现在的资产价值约为$164.8352$，但假如卖出，实际只能得到$164.8352\times(1-0.001)\approx 164.6703$。
+
+现在来对比，资产收益率是0.5，而到手的现金收益率约$\frac{164.6703-110}{110}=0.497003< 0.5-0.001\times 2=0.498$。
+
+如果只考虑卖出方向的手续费，那么到手的现金收益率是
+$$\frac{\frac{110}{100}\times 150\times(1-0.001)-110}{110}=0.4985<0.5-0.001=0.499$$
+
+两种情况下，到手的收益率均小于资产的收益率减去手续费比例。对于只考虑卖出方向的手续费，正解相当于
+$$\frac{1.1\times 150\times(1-0.001)-1.1\times 100}{1.1\times 100}=\frac{150-100}{100}-\frac{150}{100}\times 0.001$$
+等式右边的第一项是资产收益率，第二项是手续费，所以秘密在于，手续费是按资产变动后的价格征收的，所以需要乘上一个大于1的常数。
+
+鉴于计算比较复杂，因此推荐在计算时使用价格数据按\eqref{seq-val-correct,seq-ret-correct, seq-tot-ret-correct, seq-tot-ret-correct-exp}进行计算，不要简单地直接连乘。
+
+\paragraph*{从价格出发计算}假设当前有1元资产，如果不考虑按整数笔进行交易。那么给定权重$\bm{w}$，每种资产可以购买的份数$n_i$满足方程：
+$$n_i\times p_i \times(1+c)=w_i$$
+解出$n_i=\frac{w_i}{p_i(1+c)}$。
+
+假如下一期的资产价格为$p_i'$，则当前持有$n_i$份资产$p_i'$。现在换成现金，每种资产可以得到现金：
+$$\gamma_i=n_ip_i'\times(1-c)$$
+
+则总财富为$$W'=\sum_i \gamma_i=\sum_i w_i\frac{1-c}{1+c}\frac{p_i'}{p_i}$$
+
+收益率是$$R=W'-1=\sum_i w_i\sbra{\frac{1-c}{1+c}\frac{p_i'}{p_i}-1}$$
+
+\paragraph*{从收益率出发计算}可以按上面的结果计算。现金
+$$\gamma_i=w_i\frac{1-c}{1+c}\frac{p_i'}{p_i}=w_i\frac{1-c}{1+c}(1+r_i)$$
+
+但当$c$非常小时，$$\frac{1-c}{1+c}\approx1- 2c-O(c^2)$$
+
+所以可以算出收益率
+$$R\approx \sum_i w_i\sbra{r_i-2c-2cr_i}$$
+
+\paragraph*{做空}
+
+\subsubsection{对数收益率}
+对数收益率的好处是可以将乘法换成加法来计算。
+
+以上面仅对卖出方向征收手续费的例子，计算对数收益率为
+$$\ln \frac{150(1-0.001)}{100}\approx\ln\frac{150}{100}-\ln(1-0.001)\approx \ln\frac{150}{100}-0.001$$
+第一个约等于的误差在$10^{-15}$量级左右，而第二个约等号的全局误差在$10^{-7}$左右，可见精度是非常高的。因此用资产收益率减去手续费比例的直接在对数收益率下有效。
+
+但实际计算时，还是应该用百分比收益率，只是在分析、统计的时候，可以使用对数收益率。
+
+\subsubsection{收益率序列的统计特征}
+\paragraph*{二阶矩与累积收益率}
+给定一个收益率序列$\bm{r},\E(\bm{r})=\mu,\Var(\bm{r})=\sigma^2$，则累积收益率：
+\begin{empheq}{align*}
+\prod_{k=1}^{n}(1+r_k)-1&=e^{\sum_{k=1}^{n}\ln(1+r_k)}-1\\
+&\approx e^{\sum_{k=1}^{n}\left(r_k-\frac{r_k^2}{2}\right)}-1\\
+&=e^{n\mu-\frac{n}{2}(\sigma^2+\mu^2)}-1\\
+&=e^{n\left((1-\inv{2}\mu)\mu-\inv{2}\sigma^2\right)}-1
+\end{empheq}
+
+
+\subsection{以持仓量为基准的模型}
+基本原则：卖出时结算收益时应该按照调整后的价格（或者调整后收益率），且调整后的价格应该是以期间起点为准进行后复权（不如直接用调整后收益率）；但是买入时应该按照真实价格。计算组合价值也应该用真实价格。
+
+初始时持仓量为$\bm{w}_0=\bm{0}$此后每个时刻的持仓量为$\bm{w}_t$，是已知的。记真实价格为$P_t$，调整后价格为$P_t'$。记现金为$C_t$。假设调仓时在同一天卖出，再买入。每一时刻的价值为买入之后的。$\alpha$为手续费率。
+
+则首先卖出得到现金$(1-\alpha)P_t\cdot\bm{w}_{t-1}$，现在有现金$C_{t-1}+(1-\alpha)P_t'\cdot\bm{w}_{t-1}$。再买入组合$\bm{w}_t$，需要现金$P_t\cdot \bm{w}_t(1+\alpha)$。于是现在剩下现金$C_t=C_{t-1}+(1-\alpha)P_t'\cdot\bm{w}_{t-1}-P_t\cdot \bm{w}_t(1+\alpha)$，而组合价值是$P_t\cdot \bm{w}_t$。
+
+总价值=组合价值+现金。
+
+
+\subsection{增量调仓模型}
+\subsubsection{}
+\subsection{回测系统}
+
+\section{风险度量}
+\subsection{基于收益风险比的度量}
+\subsubsection{原始夏普率}
+\begin{definition}[Sharpe Ratio]
+给定一个收益率序列$\bm{r}$，定义夏普比率为
+$$S_p(\bm{r})=\frac{\E(\bm{r})}{\sqrt{\Var(\bm{r})}}=\frac{\sign(\E(c\bm{r}))}{\sqrt{\frac{\E(\bm{r}^2)}{\E^2(\bm{r})}-1}}$$
+其含义是明显的，用标准差表示风险，夏普比率就是取得单位收益需要的风险。这个思路可以用来定义更多的风险度量，分母可以取不同的计量方式。
+\end{definition}
+
+\begin{property}
+夏普率有以下性质：
+\begin{description}
+\item[尺度不变性] 对序列进行整体缩放，夏普率不变：
+$$S_p(c\bm{r})=\frac{\E(c\bm{r})}{\sqrt{\Var(c\bm{r})}}=S_p(\bm{r})$$
+\item[可以无界] 如果有无风险资产，则它的标准差为0，夏普率可以趋于无穷大。
+\end{description}
+\end{property}
+在后面会看到，夏普率对应风险-收益图中点的斜率。
+
+\paragraph*{收益率序列扰动下的夏普率}给定一个收益率序列$\bm{r}=\{r_1,\cdots,r_k,\cdots, r_n\}$，现在对$r_k$进行扰动，得到新序列$\bm{r}'=\{r_1,\cdots,r_k,\cdots, r_n\}$。记$\E(\bm{r})=\mu, \Var(\bm{r})=\sigma^2$现在来计算它的夏普率：
+\begin{empheq}{align*}
+S_p(\bm{r})'&=\frac{\mu+\frac{d}{n}}{\sqrt{\inv{n}(\sum_{i\neq k}\left(r_i-\mu-\frac{d}{n}\right)^2+\left(r_k+d-\mu-\frac{d}{n}\right)^2)}}\\
+&=\frac{\mu+d/n}{\sqrt{\sigma^2+\left(\inv{n^2}+\frac{(n-1)^2}{n^2}\right)d^2+2(r_k-\mu)d}}
+\end{empheq}
+这种方法计算起来较为复杂，可以按如下计算，注意到$\E(\bm{r}^2)=\bar{\sigma}^2=\sigma^2+\mu^2$,
+\begin{empheq}{align*}
+S_p&=\inv{\sqrt{\frac{\inv{n}\left(\sum_{i\neq k}r_i^2+(r_k+d)^2\right)}{\left(\mu+\frac{d}{n}\right)^2}-1}}=\inv{\sqrt{\frac{\bar{\sigma}^2+\frac{2r_kd}{n}+\frac{d^2}{n}}{\left(\mu+\frac{d}{n}\right)^2}-1}}
+\end{empheq}
+现在仅仅考虑分母中的前一项，考查它相对于原来值的变化：
+$$\frac{\bar{\sigma}^2+\frac{2r_kd}{n}+\frac{d^2}{n}}{\left(\mu+\frac{d}{n}\right)^2}-\frac{\bar{\sigma}^2}{\mu^2}=\frac{\frac{2d\mu}{n}(\mu r_k-\bar{\sigma}^2)+\frac{d^2}{n}\left(\mu^2-\frac{\bar{\sigma}^2}{n}\right)}{\left(\mu+\frac{d}{n}\right)^2\mu^2}$$
+但这个也不太容易分析。只能大概估算，实际的收益率序列，$r_i$大约是2位小数，平方一下为4位小数，如果取$n$为100，则$\sigma^2/n$为6位小数，这样一来，$\mu^2-\bar{\sigma}^2/n>0$。现在就看$\mu r_k-\bar{\sigma}^2$，假如$r_k>\mu$，则它有一定概率大于0，而假如$r_k<\mu$，则它必然小于0。 如果它小于0，取$d>0$，则差大于0。
+\subsubsection{修正夏普率}
+原始Sharpe比率中上行与下行的贡献是相同的，但实际上我们希望涨的越多越好，而下跌越小越好。基于这个原理可以定义一个修正的Sharpe比率：
+\begin{definition}[修正Sharpe Ratio]
+给定多种资产的收益率矩阵$Y$及权重矩阵$W$，$Y,W\in\mathbb{n\times d}$，$d$为资产个数，定义一个修正Sharpe比率为：
+\begin{empheq}{align}
+S_p'(Y,W)&=\frac{\E(\bm{r})+V^+}{V^-}\\
+V^+&=\sqrt{\inv{N}\trace(W(Y^T_+Y_+)W)}\\
+V^-&=\sqrt{\inv{N}\trace(W(Y^T_-Y_-)W)}\\
+\end{empheq}
+$\bm{r}=YW^T\bm{1}$为整个资产组合的收益率序列。式中$Y_+,Y_-$分别为只保留正数、只保留负收益率（其它归零）的收益率矩阵。这个定义来自于Sortino。
+
+上行与下行风险可以用不同的方式衡量，比如也有人这么定义：
+\begin{empheq}{align}
+V^+&=\Var(\bm{r}_+)\\
+V^-&=\Var(\bm{r}_-)
+\end{empheq}
+式中$\bm{r}_+,\bm{r}_-$是只保留资产组合收益率序列中的正值、负值（其它归0）。
+
+强调在以上的定义中可能出现这种情况：收益率序列全为正值，则$V^-=0$，但它是分母，一除出现无穷大。可以给分母加上一个小数，比如$10^{-10}$。
+\end{definition}
+\subsection{基于分位数的度量}
+
+\subsection{风险前沿}
+
+\section{投资组合管理}
+\subsection{优化目标}
+
+\section{投资标的}
+\subsection{股票}
+
+\subsection{基金}
+
+\subsection{债券}
+

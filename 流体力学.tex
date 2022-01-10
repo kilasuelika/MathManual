@@ -1,0 +1,74 @@
+\chapter{流体力学}
+\section{物理量}
+\subsection{压强}
+压强有很多种：
+\begin{description}
+\item[静态压强Static Pressure] 忽略速度效应。
+\item[Gauage Pressure] 以某个参考点为零点的压强，通常是标准大气压。
+\item[动态压强Dynamic Pressure] 
+\item[总压强Total Pressure] 
+\item[绝对压强Absolute Pressure] 以0Pa为零点的压强。仿真时推荐用这个。
+\end{description}
+\section{原理}
+
+\section{流体力学基本方程}
+\subsection{Navier-Stokes方程}
+\subsubsection{方程形式}
+NS方程的一般形式
+\begin{empheq}{align}
+\pdv{\rho}{t}+\vdiv (\rho \bm{U})&=0 \mtag{质量守恒、连续性方程}\label{ns-1}\\
+\pdv{\rho \bm{U}}{t}+\vdiv (\rho \bm{U}\bm{U})&=-\nabla p+\vdiv\bm{\tau}+\bm{F} \mtag{动量方程} \label{ns-2}
+\end{empheq}
+其中$\rho$为标量密度场，$\bm{U}$为向量速度场，$p$为标量压力场，$\bm{\tau}$为矩阵剪切应力场，$\bm{F}$为向量外力场。因此第一个方程为标量方程，而第二个方程为向量方程，对应$n$个方程（$n$为维度）。
+
+式\eqref{ns-2}的左边在有的地方也写成：
+\begin{empheq}{equation}
+\rho\left(\pdv{\bm{U}}{t}+\bm{U}\cdot \nabla \bm{U}\right)
+\end{empheq}
+
+这是因为依据\ref{sec-vector-analysis}，式\eqref{ns-2}的左边
+\begin{empheq}{align}
+\pdv{\rho \bm{U}}{t}+\vdiv (\rho \bm{U}\bm{U})&=\bm{U}\pdv{\rho}{t}+\rho\pdv{\bm{U}}{\bm{U}}+\bU\nabla\cdot(\rho\bU)+\rho\bU\cdot\nabla \bU\\
+&=\bU\underbrace{\left(\pdv{\rho}{t}+\vdiv (\rho \bm{U})\right)}_{\text{连续性方程}}+\rho\left(\pdv{\bm{U}}{t}+\bm{U}\cdot \nabla \bm{U}\right)\\
+&=\rho\left(\pdv{\bm{U}}{t}+\bm{U}\cdot \nabla \bm{U}\right)
+\end{empheq}
+
+\subsubsection{剪切应力场}
+
+\paragraph*{牛顿流体}如果流动过程中流体层间所产生的剪应力与法向速度梯度成正比，就称为牛顿流体，有
+$$\bm{\tau}=2\mu\bm{S}=\mu(\nabla \bU+\nabla \bU^T)$$
+$\mu$为粘度。代入式\eqref{ns-2}有
+\begin{empheq}{equation}
+\pdv{\rho \bm{U}}{t}+\vdiv (\rho \bm{U}\bm{U})=-\nabla p+\vdiv(\mu (\nabla \bU+\nabla \bU^T))+\bm{F}
+\end{empheq}
+
+如果$\bm{\tau}$是常量，则
+$$\nabla \cdot \bm{\tau}=\mu(\Delta \bm{U}+\nabla\cdot(\nabla \bm{U}))$$
+\paragraph*{不可压缩流}对于不可压缩流，不可压缩时密度为常量$\rho_0$，则
+$$\vdiv \bU=0$$
+于是牛顿流体中：
+$$\nabla \cdot \bm{\tau}=\mu\Delta \bU$$
+\paragraph*{可压缩流体}剪切应力场在牛顿流体上还要加上一个量：
+$$\bm{\tau}=\mu (\nabla \bU+\nabla \bU^T)-\frac{2}{3}\mu(\vdiv \bU)I$$
+
+\paragraph*{理想流体}粘度的引入会使得求解变得困难，有些问题中粘度显示不出来，比如均匀流动的情形，此时假定粘度为0，称为理想流体。此时$\bm{\tau}=\bm{0}$。
+\subsubsection{特殊情形}
+不考虑外力。
+\paragraph*{稳态}密度不随时间变化，消去时间项：
+\begin{empheq}{align}
+\vdiv (\rho \bm{U})&=0 \label{stable-ns-1}\\
+\vdiv (\rho \bm{U}\bm{U})&=-\nabla p+\vdiv\bm{\tau} \label{stable-ns-2}
+\end{empheq}
+第一个方程表示$\rho\bU$为无源场。
+
+\paragraph*{不可压缩流体、稳态}
+\begin{empheq}{align}
+\vdiv \bm{U}&=0 \\
+-\mu\Delta \bU+\nabla p&=-\rho_0 \bU\cdot\nabla\bU
+\end{empheq}
+第二个方程的右边为惯性力，在低Re数的情况下，右边的项较小，因此还可以忽略右边，此时有
+\begin{empheq}{align}
+\vdiv \bm{U}&=0 \\
+-\mu\Delta \bU+\nabla p&=0
+\end{empheq}
+\subsubsection{边界条件}

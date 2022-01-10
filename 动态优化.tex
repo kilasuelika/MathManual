@@ -1,0 +1,95 @@
+\chapter{组合与动态优化}
+
+\section{确定型动态优化}
+\subsection{等式约束、无限期、贴现}
+\subsubsection{问题形式}
+考虑一个一般的动态决策问题：
+\begin{empheq}{align}\label{dynamic-decision-problem}
+\max_{\{\bx_t\}_0^\infty}&\quad\sum_{t=0}^{\infty}\beta^t\varphi(\bx_t,\by_t)\\
+\text{s.t.}&\quad \bx_t\in\Gamma(\by_t),\by_{t+1}=F(\bx_t,\by_t)\\
+&\quad\bx_t\in\mathbb{R}^n,\by_t\in\mathbb{R}^k,\by_0\text{已知}
+\end{empheq}
+$\beta$为贴现率，$\bx$为控制变量（决策），$\by$为状态变量。约束条件的含义是说，本期的决策与本期的状态$y_t$有关，下一期的状态与本期的状态与决策有关。
+
+这个问题出现在高级宏观经济学、强化学习、控制论中。
+\subsubsection{拉格朗日函数法}
+\paragraph*{一阶条件}
+问题\ref{dynamic-decision-problem}的拉格朗日函数为：
+\begin{empheq}{equation}
+\mathcal{L}(\bx_t,\by_{t+1})=\sum_{t=0}^{\infty}\beta^t\varphi(\bx_t,\by_t)+\sum_{t=0}^{\infty}\blambda_t^T(\by_{t+1}-F(\bx_t,\by_t))
+\end{empheq}
+可以给出一阶条件为：
+\begin{empheq}{align}
+\pdv{\mathcal{L}}{\bx_t}&=\beta^t\pdv{\varphi}{\bx_t}-\left(\pdv{F(\bx_t,\by_t)}{\bx_t}\right)^T\bm{\lambda}_t=\bm{0}\\
+\pdv{\mathcal{L}}{\by_{t+1}}&=\blambda_t+\beta^{t+1}\pdv{\varphi(\bx_t,\by_t)}{\by_{t+1}}-\left(\pdv{F(\bx_{t+1},\by_{t+1})}{\by_{t+1}}\right)^T\bm{\lambda}_{t+1}=0\\
+&\by_{t+1}-F(\bx_t,\by_t)=0
+\end{empheq}
+
+\paragraph*{消费者效用优化}考虑如下的消费者效用优化。式中$c_t$为消费，$k_t$为资本。
+\begin{empheq}{align}
+\max_{c_t}\quad &\sum_{t=0}^{\infty} \beta^tu(c_t)\\
+\text{s.t.}\quad & k_{t+1}=f(k_t)-c_t
+\end{empheq}
+
+代入上面的一阶条件有：
+\begin{empheq}{align}
+\beta^tu'(c_t)+\lambda_t&=0\\
+\lambda_t-f'(k_{t+1})\lambda_{t+1}&=0
+\end{empheq}
+根据第一式有：$\lambda_{t+1}=-\beta^{t+1}u'(c_{t+1})$，代入第二式有：
+\begin{empheq}{equation}
+-\beta^t u'(c_t)+f'(k_{t+1})\beta^{t+1}u'(c_{t+1})\implies \beta u'(c_{t+1})f'(k_{t+1})=u'(c_t)
+\end{empheq}
+再代入$c_t=f(k_t)-k_{t+1}$，即有：
+$$\beta u'(f(k_{t+1})-k_{t+2})f'(k_{t+1})=u'(f(k_t)-k_{t+1})$$
+这就是\emph{资本积累方程}，它是二阶一个差分方程。
+
+\subsubsection{动态规划法}
+\paragraph*{贝尔曼准则}
+贝尔曼准则是说，无论初始状态$\by_0$与初始决策$\bx_0$如何，余下的决策必然相对状态$\by_1$构成最优决策。记
+$$V(\by_k)=\max_{\{\bx_t\}_k^\infty}\ \sum_{t=k}^{\infty}\beta^t\varphi(\bx_t,\by_t)$$
+表示在$k$期状态为$\by_k$的情况下进行最优决策得到的收益 。
+
+则依据贝尔曼准则，原问题等价于贝尔曼方程：
+\begin{empheq}{align}\label{dynamic-decision-bellman-equation}
+V(\by_0)=\max_{\bx_0}&\  \varphi(\by_0,\bx_0)+\beta V(\by_1)\\
+\text{s.t.}&\ \by_{1}=F(\by_0,\bx_0)
+\end{empheq}
+
+这里有一个小问题，是先无条件承认贝尔曼准则，从而得到贝尔曼方程；还是先得到贝尔曼方程，再总结为贝尔曼准则呢？应该是后者。可以这样考虑，假设我们已经做了决策$\bx_0$，那么剩下的决策必然达到局部最优，即对应贝尔曼方程。
+
+\paragraph*{Bellman方程的一阶最优条件}
+假如问题是连续的，则问题\cref{dynamic-decision-bellman-equation}在$t$时期对应拉格朗日函数为：
+$$\mathcal{L}(\bx_t,\by_{t+1})=\varphi(\bx_t,\by_t)+\beta V(\by_{t+1})+\lambda_t^T(\by_{t+1}-F(\bx_t,\by_t))$$
+
+一阶最优条件为：
+\begin{empheq}{align}\label{dymaic-decision-bellman-eq-FOC}
+\pdv{\mathcal{L}}{\bx_t}&=\pdv{\varphi(\bx_t,\by_t)}{\bx_t}+\left(\pdv{F(\bx_t,\by_t)}{\bx_t}\right)^T\bm{\lambda}_t=\bm{0}\\
+\pdv{\mathcal{L}}{\by_{t+1}}&=\beta\pdv{V(\by_{t+1})}{\by_{t+1}}+\bm{\lambda}_t=0
+\end{empheq}
+注意我们不能只考虑$\bx_t$，因为$\bx_t$会影响后面的决策。
+
+
+\paragraph*{包络引理}
+\begin{empheq}{equation}
+\odv{V(\by_t)}{\by_t}=\pdv{\mathcal{L}}{\by_t}=\pdv{\varphi(\bx_t,\by_t)}{\by_t}+\left(\pdv{F(\bx_t,\by_t)}{\by_t}\right)^T\bm{\lambda}_t
+\end{empheq}
+注意$\by_t$本身不是$\mathcal{L}$的直接参数。根据全微分展开$\mathcal{L}$，再取最优解时对决策变量的导数为0，可以得到这个等式。
+
+\subsection{一般约束、有限期、一般}
+\subsubsection{问题形式}
+考虑一个一般化的有限期动态优化问题：
+\begin{empheq}{align}\label{dynamic-decision-problem-gcons-finite-g}
+\max_{\{\bx_t\}_0^T}&\quad\sum_{t=0}^{T}\varphi(\bx_t,\by_t)\\
+\text{s.t.}&\quad \bx_t\in\Gamma(\by_t),\by_{t+1}=F(\bx_t,\by_t)\\
+&\quad G(\by_t,\bx_t)\geq 0\\
+&\quad\bx_t\in\mathbb{R}^n,\by_t\in\mathbb{R}^k
+\end{empheq}
+上面的不等式约束通常用来表示某些值不能非负，比如净资产不为负。
+\subsubsection{NLP法}
+\paragraph*{最大值原理}有限期问题的最大好处是可以直接当成静态优化，即一般的NLP问题来做，待求解变量变量为$\bx_0,\bx_1,\cdots,\bx_T$，每个时间点可以构造相应的约束条件。这样便于使用数值优化。
+
+其最优性条件参考凸优化章节中的中的内容\ref{nlp-cons-opt-FOC}。
+
+\section{不确定型动态优化}
+

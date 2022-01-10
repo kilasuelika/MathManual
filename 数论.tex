@@ -1,0 +1,43 @@
+\chapter{数论}
+\section{基本概念}
+\subsection{素数}
+
+\subsection{模运算}
+有人认为加、减、乘、除、模是五种最基本的运算，用它们可以表示其它的运算，同时，只有定义了这5种运算，才是完备的。模运算通常用在离散数学中，所以一般的科学技术用的并不多。它可以用来表示周期性。
+\subsubsection{同余关系}
+同余关系是指
+$$a\equiv b \pmod n$$
+利用模$n$同余关系可以将整数划分为$n$等价类，这些等价类构成模$n$的完全剩余系，记为
+$$\mathbb{Z}_n=\{0,1,\cdots,n-1\}$$
+
+从完全剩余系中去掉与$n$不互素($\gcd(n,k)=1$)的那些数(显然0不是不互素的，$\gcd(n,0)\neq 1$)，剩下的叫简化剩余系，比如
+$$Z_9^\star=\{1,2,4,5,7,8\}$$
+注意$3,6$与9是不互素的。
+\subsubsection{模运算的性质}
+\paragraph*{四则运算}以同余关系定义的运算法则有以下一些。
+
+如果$a\equiv b\pmod n$，那么有
+\begin{empheq}{align*}
+a+k\equiv b+k&\pmod n\\
+a^k\equiv b^k&\pmod n
+\end{empheq}
+
+以同余关系定义，有点类似于对方程两边进行操作，从一个预定义的关系出发。也可以以直接代数运算来定义，此时是从一边进行推导到另一边。
+
+\begin{empheq}{align*}
+(a\bmod n+b\bmod n)\bmod n&=(a+b)\bmod n\\
+(a\bmod n\times b\bmod n)\bmod n&=(a\times b)\bmod n
+\end{empheq}
+
+\paragraph*{乘法逆}假设$gcd(n,k)=1$，那么存在$k^{-1}$，有$k\times k^{-1}\equiv 1  \pmod n$。这里是对互素的情况，如果不互素，一般好像定义乘法逆为0。
+
+\paragraph*{重复序列}使用模运算$x \mod n$可以生成$0,1,\cdots,n-1,0,1,\cdots,n-1,\cdots$的重复序列。使用$((x-1)\mod n) +1$可以生成$1,\cdots,n,1,\cdots,n,\cdots$的重复序列，在数组循环的时候很有用。
+\subsection{Euler定理}
+定义欧拉函数$\varphi(n)$，其含义是不超过$n$且与$n$互素的元素个数，也相当于简化剩余系的个数。
+\begin{empheq}{align*}
+\varphi(1)&=1\\
+\varphi(p)&=p-1,\ p\text{为素数}\\
+\varphi(p^k)&=p^{k-1}(p-1)=p^k-p^{k-1}=p^k\left(1-\inv{p}\right),\ \text{如果}p\text{为素数}\\
+\varphi(n_1n_2)&=\varphi(n_1)\varphi(n_2),\ \text{如果}\gcd(n_1,n_2)=1\\
+\varphi(n)&=n\prod_{i=1}^{n}\left(1-\inv{p_i}\right),\ \text{如果}n=\prod_{i=1}^{n}p_i^{a_i},p_i\text{为素数}
+\end{empheq}

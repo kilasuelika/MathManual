@@ -1,0 +1,331 @@
+\chapter{线性规划}
+\section{基本概念}
+\subsection{标准模型}
+线性规划的标准模型是
+\begin{empheq}{align}\label{lp-noninteger-standard}
+\min\ & \bm{c}^T\bx\\
+\text{s.t. }&A\bx=\bm{b}\\
+&\bx\geq \bm{0}
+\end{empheq}
+
+对于非标准模型，可以通过松弛变量、取反等方法转换为标准模型。
+\begin{enumerate}
+\item 极大化$\max\ \bm{c}^T\bx$转换为$\min\ -\bm{c}^T\bx$。
+\item 小于等于约束条件$\bm{a}^T\bx\leq b$，转换为$$\bm{a}^T\bx+x_k=b,x_k\geq 0$$
+意为一个数如果小于另一个数，则前者要加上一个正数才会等于后一个数。
+
+类似地，大于等于约束条件$\bm{a}^T\bx\geq b$转换为$-\bm{a}^T\bx\leq -b$，然后改写为
+$$-\bm{a}^T\bx+x_k=-b,x_k\geq 0$$
+或者
+$$\bm{a}^T\bx-x_k=b,x_k\geq 0$$
+\item $\bx$无界条件可以引入新的变量
+$$\by=\begin{bmatrix}
+\by_1\\\by_2
+\end{bmatrix}\geq\bm{0}$$
+令$\bx=\by_1-\by_2$，于是约束条件$A\bx=\bm{b}$可以改写为
+$$\begin{bmatrix}
+A & -A
+\end{bmatrix}\begin{bmatrix}
+\by_1 \\\by_2
+\end{bmatrix}\implies\bm{b}=B\by=\bm{b}$$
+目标函数现在是
+$$\begin{bmatrix}
+\bm{c}^T & -\bm{c}^T
+\end{bmatrix}\by$$
+此时变量数会加倍。
+\item 为了容易得到初始基可行解，一般需要保证$\bm{b}\geq 0$，需要使用上面的技巧进行操作。
+\end{enumerate}
+%\section{存在性定理}
+
+\subsection{对偶原理}
+不等式线性约束问题
+\begin{empheq}{equation}\label{lp-dual-1-standard}
+		\begin{aligned}
+	\min\ & \bm{c}^T\bx\\
+	\text{s.t. }&A\bx\geq\bm{b}\\
+	&\bx\geq \bm{0}
+\end{aligned}
+\end{empheq}
+注意这个问题不是标准模型。其对偶问题是：
+\begin{empheq}{equation}\label{lp-dual-2-standard}
+		\begin{aligned}
+	\max\ & \bm{b}^T\by\\
+	\text{s.t. }&A^T\by\leq\bm{c}\\
+	&\by\geq \bm{0}
+\end{aligned}
+\end{empheq}
+
+带等式、无界约束线性规划问题：
+\begin{empheq}{equation}\label{glp-dual-1-standard}
+		\begin{aligned}
+	\min\ & \bm{c}_1^T\bx_1+\bm{c}_2^T\bx_2\\
+	\text{s.t. }&A_{11}\bx_1+A_{12}\bx_2=\bm{b}_2\\
+	& A_{21}\bx_1+A_{22}\bx_2\geq\bm{b}_1\\
+	&\bx_1\geq \bm{0}
+		\end{aligned}
+\end{empheq}
+注意$\bx_2$没有有界约束。它的对偶问题是：
+\begin{empheq}{equation}\label{glp-dual-2-standard}
+	\begin{aligned}
+	\max\ & \bm{b}_1^T\bm{w}_1+\bm{b}_2^T\bm{w}_2\\
+	\text{s.t. }&A_{11}^T\bm{w}_1+A_{12}^T\bm{w}_2\geq \bm{c}_1\\
+	& A_{21}\bm{w}_1+A_{22}^T\bm{w}_2=\bm{c}_1\\
+	&\bm{w}_2\geq \bm{0}
+		\end{aligned}
+\end{empheq}
+可以看出$=$与$\geq$互换，目标函数系数$\bm{c}$与$\bm{b}$互换，$\min$与$\max$互换。根据对偶原理：
+\begin{enumerate}
+\item \ref{glp-dual-1-standard}无界$\implies$\ref{glp-dual-2-standard}无可行解。
+\item \ref{glp-dual-1-standard}无可行解$\implies$\ref{glp-dual-2-standard}无界或者无可行解。
+\end{enumerate}
+\section{单纯形法}
+\subsection{基本算法}
+\subsubsection{计算步骤}
+确实一个初始基本可行解，记初始基为$B$。执行以下过程：
+\begin{enumerate}
+\item 解$B\bx_B=\bm{b}$，求得$\bx_B=B^{-1}\bm{b}=\bar{\bm{b}}$，取$\bx_N=\bm{0}$，计算目标函数值$\bm{c}_B^T\bx_B$。
+\item 求单纯形乘子$\bm{w}$，解$\bm{w}B=\bm{c}_B$，有$\bm{w}=\bm{c}_BB^{-1}$，对于所有非基变量，计算判别数$z_j-c_j=\bm{w}^T\bm{p}_j=c_j$，令
+$$z_k-c_k=\max \{z_j-c_j\}$$
+如果全部判别数小于等于0，则停止。否则，进入下一步
+\item 解$B\bm{y}_k=\bm{p}_k$，有$\by_k=B^{-1}\bm{p}_k$，假如$\by_k\leq \bm{0}$，即分量全为非正数，则停止，{\heiti 不存在}有限最优解，或者无界。否则进行下一步：
+\item 确定下标$r$，使
+$$\frac{\bar{b_r}}{y_{rk}}=\min\left\{\frac{\bar{b_i}}{y_{ik}}\rvert y_{ik}>0\right\}$$
+$x_{B_r}$为离基变量，$x_k$为进基变量，用$\bm{p}_k$替换$\bm{p}_{B_r}$，得到新的基矩阵，再重复以上迭代。
+\end{enumerate}
+
+单纯形法的实质是每次求一个改进的解，使得函数值下降，且满足约束条件。由于约束条件的个数通常少于变量个数（否则可行解可能只有一个，直接求方程组即可），因此可以分为基变量与非基变量。判别数就指明了下降的量。比如
+\begin{empheq}{align*}
+f&=\bm{c}^T\bx=\begin{bmatrix}
+	\bm{c}_B^T&\bm{c}_N^T
+\end{bmatrix}\begin{bmatrix}
+\bx_B\\\bx_N
+\end{bmatrix}\\
+&=\bm{c}_B^T\bm{x}_B+\bm{c}_N\bm{x}_N\\
+&=\bm{c}_B(B^{-1}\bm{b}-B^{-1}N\bx_N)+\bm{c}_N\bx_N\\
+&=\bm{c}_BB^{-1}\bm{b}-(\bm{c}_BB^{-1}N-\bm{c}_N)\bx_N\\
+&=f_0-\sum (\bm{c}_BB^{-1}\bm{p}_j-c_j)x_j\\
+&=f_0-\sum (z_j-c_j)x_j
+\end{empheq}
+$z_j-c_j$就是判别数，由于$x_j$大于0，那么取正判别数对应的变量进行调整，就可以使函数值下降。
+
+一般情况下，基变量是新增加的变量（人工变量），约束矩阵中人工变量的系数为1，初始的基解是就是$\bm{b}$，非基变量为目标函数中的变量，此时判别数为负目标函数系数。但在有的情况下，是不一样的。但也可以取人工变量的系数为-1，主要希望保证$\bm{b}\geq \bm{0}$。
+
+
+此外，即使保证了$\bm{b}\geq \bm{0}$，基变量也不一定就是人工变量。可以参考问题\ref{base-non-new}。
+
+所以初始的基解有可能需要手动计算，不能直接得到。建立初表这样建立：
+\begin{enumerate}
+\item 基变量的约束矩阵是单位阵。
+\item $\bm{b}\geq 0$。
+\end{enumerate}
+
+假设$\bm{b}$中存在0分量，则可能出现矩阵$B$不可逆的情况，称为退化。如果不存在，则一定不会出现不可逆。
+
+\subsubsection{性质}
+\begin{enumerate}
+\item 假如某个非基变量的检验数为0，则有无穷多个解。
+\item 假如进基变量的约束矩阵列全为负，则无下界。
+\end{enumerate}
+\subsection{单纯形表}
+基本算法不便于手动操作，可以将它用表格表示出来，便于手动操作。
+
+\subsubsection{基变量为人工变量}
+\begin{example}
+求解线性规划标准模型\eqref{lp-noninteger-standard}的单纯形表法如下。假设问题是：
+\begin{empheq}{align}
+	\min\ & \begin{bmatrix}
+		1 & -2 &1 
+	\end{bmatrix}\bx\\
+	\text{s.t. }&\begin{bmatrix}
+		1& 1&-2&1 & & \\
+		2&-1&4& & 1& \\
+		-1&2&-4& & & 1
+	\end{bmatrix}\bx=\begin{bmatrix}
+		10\\8\\4
+	\end{bmatrix}\\
+	&x_j\geq 0
+\end{empheq}
+\end{example}
+
+\begin{solution}
+
+构造初始单纯形表为
+\begin{longtable}{c|cccccc|c}
+	      & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ &   \\ \hline
+	& 1 & -2 & 1 & 0& 0 & 0&      \\ \hline
+	$x_4$ &   1   &  1     &   -2    &  1    &   0    &  0     & 10  \\
+	$x_5$ &   2   &   -1    &  4    &    0   &   1    &   0    &  8 \\
+	$x_6$ &  -1   &     2  &   -4   &    0   &   0    &   1   & 4 \\ \hline
+	   判别数   &  -1   &   2   &  -1   &   0   &   0   &   0   & 0
+\end{longtable}
+第一列的$x_4,x_5,x_6$称为基变量。第二大行就是目标函数中的系数。第三大行就是$A,\bm{b}$。第四大行为判别数$z_j-c_j=\bm{c}_B^TB^{-1}\bm{p}_j-c_j$，$B$是基变量$x_4,x_5,x_6$，$\bm{c}_B$是目标函数中基变量对应的系数，初始时为$\bm{0}$，$B$就是约束条件中基变量对应的系数矩阵，初始时就是单位阵$I$，$\bm{p}_j$是非基变量对应的约束矩阵列。容易看出，初始时，非基变量的判别数就是$-c_j$，基变量的判别数是0。
+
+此外，初始解就是$[0,0,0,10,8,4]$，也就是非基变量是0，基变量就是$\bm{b}$，所以表中最后一个元素表示函数值0。
+
+单纯形法的思路就是每次选一个基变量进行调整，直到达到最优。建表如下：
+\begin{longtable}{c|c|cccccc|c}
+&	& $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ &   \\ \hline
+&& 1 & -2 & 1 & 0& 0 & 0&      \\ \hline
+10/1=10&	$x_4$ &   1   &  1     &   -2    &  1    &   0    &  0     & 10  \\
+&	$x_5$ &   2   &   -1    &  4    &    0   &   1    &   0    &  8 \\
+4/2=2&	$x_6$ &  -1   &     \fbox{2}  &   -4   &    0   &   0    &   1   & 4 \\ \hline
+&	判别数   &  -1   &   \circled{2}   &  -1   &   0   &   0   &   0   & 0
+\end{longtable}
+首先判别数中最大的是2，于是取第2列作为主列，再计算$b_i/a_{2i},a_{2i}>0$中的最小值，于是取第3行2列中的元素作为主元，进行RREF，使得该列中这个元素变成1，其它元素变成0。建表如下：
+\begin{longtable}{c|c|cccccc|c}
+	 &       & $x_1$ &    $x_2$    & $x_3$ & $x_4$ & $x_5$ & $x_6$ &    \\ \hline
+	 && 1 & -2 & 1 & 0& 0 & 0&      \\ \hline
+	 & $x_4$ &   3/2   &      0      &  0   &   1   &   0   &   -1/2   & 8 \\
+	 & $x_5$ &   3/2   &     0      &   2   &   0   &   1   &   1/2   & 10  \\
+	 & \circled{$x_2$} &  -1/2   &  \circled{1}   &  -2   &   0   &   0   &   1/2   & 2  \\ \hline
+	 &  判别数  &     & 0 &     &   0   &   0   &      & 
+\end{longtable}
+现在基变量是$x_4,x_5,x_2$，注意到$A_{32}$从2变成1，该列其它元素是0.现在计算判别数，基变量的判别数是0，所以只需要计算非基变量$x_1,x_3,x_6$的：
+\begin{empheq}{align*}
+\bz_N-\bm{c}_N&=\bm{c}_BB^{-1}N-\bm{c}_N\\
+&=
+\begin{blockarray}{ccc}
+x_4& x_5& x_2\\
+\begin{block}{[ccc]}
+0 & 0 & -2\\
+\end{block}
+\end{blockarray}
+\begin{blockarray}{ccc}
+	x_4& x_5& x_2\\
+	\begin{block}{[ccc]}
+		1 & 0 & 0\\
+		0 & 1& 0\\
+		0& 0& 1\\
+	\end{block}
+\end{blockarray}
+\begin{blockarray}{ccc}
+	x_1& x_3& x_6\\
+	\begin{block}{[ccc]}
+		3/2 & 0 & -1/2\\
+		3/2& 2 & 1/2\\
+		-1/2& -2 &1/2\\
+	\end{block}
+\end{blockarray}-\begin{blockarray}{ccc}
+x_1& x_3& x_6\\
+\begin{block}{[ccc]}
+	1 & 1 & 0\\
+\end{block}
+\end{blockarray}\\
+&=\begin{blockarray}{ccc}
+	x_1& x_3& x_6\\
+	\begin{block}{[ccc]}
+		0 & 3 & -1\\
+	\end{block}
+\end{blockarray}
+\end{empheq}
+此处$N$表示非基变量的约束系数矩阵，$\bm{c}_N$就是非基变量的目标函数系数。实际计算过程中，$B$矩阵一般是1，所以不需要算矩阵逆。于是第一轮迭代后的完整表是
+\begin{longtable}{c|c|cccccc|c}
+	&       & $x_1$ &    $x_2$    & $x_3$ & $x_4$ & $x_5$ & $x_6$ &    \\ \hline
+	&& 1 & -2 & 1 & 0& 0 & 0&      \\ \hline
+	& $x_4$ &   3/2   &      0      &  0   &   1   &   0   &   -1/2   & 8 \\
+10/2=5	& $x_5$ &   3/2   &     0      &   \fbox{2}   &   0   &   1   &   1/2   & 10  \\
+	& \circled{$x_2$} &  -1/2   &  1   &  -2   &   0   &   0   &   1/2   & 2  \\ \hline
+	&  判别数  &  0   & 0 &  3   &   0   &   0   &   -1   &  -4
+\end{longtable}
+最后一个-4就是表示目标函数值，此时的解是$[x_4,x_5,x_2]=[8,10,2]$，目标函数值是$-2\times x_2=-4$。现在主元是$A_{23}$。再进行一步迭代后：
+\begin{longtable}{c|c|cccccc|c}
+	 &       & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ &    \\ \hline
+	 &       &   1   &  -2   &   1   &   0   &   0   &   0   &    \\ \hline
+	 & $x_4$ &  3/2  &   0   &   0   &   1   &   0   & -1/2  & 8  \\
+	 & $x_3$ &  3/4  &   0   &   1   &   0   &   1/2   &  1/4  & 5 \\
+	 & $x_2$ &   1   &   1   &   0   &   0   &   1   &  1  & 12  \\ \hline
+	 &  判别数  &   -9/4   &   0   &   0   &   0   &   -3/2   &  -7/4   & -19
+\end{longtable}
+判别数全为负数，停止，现在解是$[0, 12, 5, 8, 0, 0]$，目标函数值-19。
+
+在单纯型表中，停止条件有两类：
+\begin{enumerate}
+\item 判别数全负，正常停止，有最优解。
+\item 最大的判别数大于0，但系数矩阵中该列全小于0，原问题无界。因为是要选择系数矩阵中大于0的系数行，那么无法进行下一步。
+\end{enumerate}
+
+\end{solution}
+
+\subsubsection{基变量为非人工变量}\label{base-non-new}
+\begin{example}
+\begin{empheq}{align}
+	\min\ & \begin{bmatrix}
+		4 & 6 &18 
+	\end{bmatrix}\bx\\
+	\text{s.t. }&x_1+3x_3\geq 3\\
+	& x_2+2x_3\geq 5\\
+	x_1,x_2,x_3\geq 0
+\end{empheq}
+\end{example}
+\begin{solution}
+如果按上一题的方法直接构造表：
+\begin{longtable}{c|ccccc|c}
+	& $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$  &   \\ \hline
+	& 4 & 6 & 18 & 0& 0    &   \\ \hline
+	$x_4$ &   -1   &  0     &   -3    &  1    &   0      & -3  \\
+	$x_5$ &   0   &   -1    &  -2    &    0   &   1      &  -5 \\ \hline
+	判别数   &  -4   &   -6   &  -18   &   0   &   0    & 0
+\end{longtable}
+这个表对应基解$(0,0,0,-3,-5)$，显然是错的，$x_4,x_5<0$，不满足条件。
+
+正解是可以取$x_1,x_2$作为初始基变量，建表：
+\begin{longtable}{c|ccccc|c}
+	& $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$  &   \\ \hline
+	& 4 & 6 & 18 & 0& 0    &   \\ \hline
+	$x_4$ &   1   &  0     &   3    &  -1    &   0      & 3  \\
+	$x_5$ &   0   &   1    &  2    &    0   &   -1      &  5 \\ \hline
+	判别数   &  0   &   0   &  -6   &   -4   &   -6    & 42
+\end{longtable}
+判别数中，基变量的是0，而非基变量的计算如下：
+\begin{empheq}{align*}
+\begin{bmatrix}
+	4& 6
+\end{bmatrix}I^{-1}\begin{bmatrix}
+3 & -1 & 0\\2 & 0 & -1
+\end{bmatrix}-\begin{bmatrix}
+18 & 0& 0
+\end{bmatrix}=\begin{bmatrix}
+-6 & -4 & -6
+\end{bmatrix}
+\end{empheq}
+表对应的解是$(3,5,0,0,0)$，所以$f=42$。
+
+\begin{example}
+\begin{empheq}{align}
+		\min\ & \begin{bmatrix}
+			1 & 1 &11 
+		\end{bmatrix}\bx\\
+		\text{s.t. }&x_1+2x_2-2x_3\leq 0\\
+		& -x_1+x_3\leq -1\\
+		x_1,x_2,x_3\geq 0
+\end{empheq}
+\end{example}
+\begin{solution}
+\paragraph*{初次尝试}
+建立初表：
+\begin{longtable}{c|ccccc|c}
+	& $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$  &   \\ \hline
+	& 1 & 1 & 1 & 0& 0    &   \\ \hline
+	$x_1$ &   1   &  2     &   -2    &  1   &   0      & 0  \\
+	$x_2$ &   1   &   0    &  -1    &    0   &   -1      &  1 \\ \hline
+	判别数   &  0   &   0   &  $-\frac{5}{2}$   &   $\inv{2}$   &   $-\inv{2}$    & 
+\end{longtable}
+取$x_1,x_2$为基变量，基解为$(0,1,0,0,0)$。如果选择$x_4$换$x_1$，则约束系数矩阵是
+$$\begin{bmatrix}
+2&0\\
+0& 0
+\end{bmatrix}$$
+不可逆。问题在于基解是错的，不满足要求。
+
+\paragraph*{第二次尝试}
+取$x_1,x_3$为基变量，建立初表：
+\begin{longtable}{c|ccccc|c}
+	& $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$  &   \\ \hline
+	& 1 & 1 & 1 & 0& 0    &   \\ \hline
+	$x_1$ &   1   &  -2     &   0    &  -1   &   -2      & 2  \\
+	$x_2$ &   0   &   -2    &  1    &    -1   &   -1      &  1 \\ \hline
+	判别数   &  0   &   -5   &  0   &   -2  &   -3    & 
+\end{longtable}
+这里为了方便，已经把基变量的约束矩阵化成单位阵了。可以看出已经得到最优解$(2,0,1,0,0)$了。
+\end{solution}
+\end{solution}

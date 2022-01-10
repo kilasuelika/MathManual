@@ -1,0 +1,12 @@
+\chapter{函数估计理论}
+此估计非统计学中的参数估计，而是估计函数值的上下界一类的问题.
+
+\section{常微分方程估计}
+\subsection{将函数值表示为导数}
+\begin{example}
+	$f(1)=1$,且$\forall x\geq 1, f'(x)=\frac{1}{x^2+f^2(x)}$，试估计函数在无穷大时的取值.
+\end{example}
+
+\begin{solution}
+	可以看出$f$是递增的，且$f(x)\geq 1$，那么$f'(x)\leq \frac{1}{1+x^2}$，同时$f(x)=1+\int_{1}^{x}f'(t)\dif t$，据此很容易算出来.
+\end{solution}

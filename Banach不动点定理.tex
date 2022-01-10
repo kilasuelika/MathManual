@@ -1,0 +1,37 @@
+\subsection{Banach不动点定理}
+核心是压缩映射：压缩映射有且仅有一个不动点.
+
+\begin{theorem}{Banach不动点定理}{}
+设$(X,d)$为完备的距离空间.则任何压缩映射$f:X\rightarrow X$有且仅有一个不动点$x\in X$.
+
+此外，任意给定点$x_0\in X$，由
+$$x_{n+1}=f(x_n),\ n\geq 0$$
+
+定义的序列$\{x_n\}_{n=0}^\infty $当$n\rightarrow 0$时，收敛于$x$，且成立以下估计：
+$$\parallel x_n-x\parallel \leq Ck^n,\ n\geq 0,\ C\coloneqq \frac{d(f(x_0),x_0)}{1-k}$$
+
+\end{theorem}
+
+证明过程依赖于Cauchy列.
+
+\begin{proof}
+（柯西列）对任何$p\geq 1$，
+$$d(x_{p+1},x_p)\leq kd(x_p,x_{p+1})\leq\cdots\leq k^pd(x_1,x_0)$$
+因此对任意$m>n\geq 0$，
+\begin{empheq}{align*}
+d(x_m,x_n)&leq\sum_{p=n}^{m-1}d(x_{p+1},x_p)\leq\left(\sum_{p=n}^{m-1}k^p\right)d(x_1,x_0)\\
+&\leq k^n\left(\sum_{p=0}^{m-n-1}k^p\right)d(x_1,x_0)\leq \frac{k^n}{1-k}d(x_1,x_0)
+\end{empheq}
+
+(存在不动点)空间$(X,d)$是完备的，所以存在$x\in X$，使得$\lim_{n\rightarrow \infty}x_{n+1}=x$.因为压缩映射显然是连续的，所以
+$$f(x)=\lim_{n\rightarrow \infty}f(x_{n})=\lim_{n\rightarrow \infty}x_{n+1}=x$$
+因此$x$是不动点.
+
+(不动点惟一)假设$y\in X$也是不动点，则
+$$d(x,y)=d(f(x),f(y))\leq kd(x,y)$$
+
+所以$y=x$，因此不动点惟一.
+	
+\end{proof}
+
+利用序列$\{x_n\}_{n=0}^\infty $逼近不动点的办法也叫逐次逼近或者Picard方法.

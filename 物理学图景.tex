@@ -1,0 +1,74 @@
+\chapter{物理学图景}
+\section{物理学基本思想}
+\subsection{最小作用量原理}
+
+\subsection{守恒律}
+
+\subsection{对称性}
+
+\subsection{近似}
+
+\section{物理学基本定义}
+\subsection{物理量的单位}
+\subsubsection{国际单位制}
+\paragraph*{基本定义}
+共有7个国际基本单位，其它单位可以从基本单位导出：
+
+\begin{longtable}{ccc}
+	\toprule
+	含义 &   英文名   &      单位       \\ 
+	\midrule
+	时间 &         &    \si{\s}    \\
+	长度 &         &    \si{\m}    \\
+	质量 &         &   \si{\kg}    \\
+	电流 &         &    \si{\A}    \\
+	温度 & kelvin  &    \si{\K}    \\
+	数量 &  mole   &   \si{\mol}   \\
+	光强 luminous intensity& candela & \si{\candela} \\ 
+	\bottomrule
+\end{longtable}
+\paragraph*{由基本单位导出的单位}
+\begin{longtable}{cccc}
+\toprule
+名称 & 含义 &   英文名   &      单位       \\ 
+\midrule
+功 & & & \si{\J}=\si{\N\m} \\
+电压 & 移动1单位电荷所做的功恰为1\si{\J}& & \si{\V}=\si{\J\per\coulomb}\\
+电阻 & & & \si{\O}=\si{\V\per\A}\\
+\bottomrule
+\end{longtable}
+
+\subsubsection{自然单位制}
+国际单位制下的公式写起来比较繁琐，可以用自然单位制。在自然单位制下，某些物理量被标准化为1。最常见的就是光速标准化为$1$，即以$c$为单位。以下列出一些自然单位制。
+
+\paragraph*{普朗克单位制}\label{planck-natural-unit}
+\begin{empheq}{align}
+c=G=\hbar=\inv{4\pi\varepsilon_0}=k_B&=1\\
+e=\sqrt{\alpha}&\approx 0.08542
+\end{empheq}
+
+\subsection{物理学常数}
+\begin{longtable}{cccc}
+\toprule
+名称 & 含义 &   英文名    &说明  \\ 
+\midrule
+光速 &$c=\frac{1}{\mu_0\varepsilon_0}$ & &这里包含了三个常数。\\
+万有引力常数 & $G$& &\\
+玻尔兹曼常数 & $k_B$& &\\
+\bottomrule
+\end{longtable}
+
+\subsection{物理量的定义}
+有些物理量是定义出来的，但具体的计算可能是通过一些近似得到，不同的近似会有不同的结果。
+
+\begin{note}
+\begin{enumerate}
+	\item 速度可以是矢量（velocity）或者标量（speed），作为标量的速度就是矢量的$L_2$范数。比如对于圆周运动，$\bx=[r\cos\theta,r\sin\theta]^T$，则矢量速度
+$$\bm{v}=\frac{\dif \bm{x}}{\dif t}=\begin{bmatrix}
+	-r\sin\theta\frac{\dif \theta}{\dif t}\\
+	r\cos\theta\frac{\dif \theta}{\dif t}
+\end{bmatrix}$$
+取绝对值就是$v=\omega r$，$\omega$为角速度。
+\end{enumerate}
+
+\end{note}

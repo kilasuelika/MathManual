@@ -1,0 +1,190 @@
+\chapter{状态空间模型}
+
+\section{Kalman滤波——最优线性滤波}
+\subsection{高斯线性模型}
+\subsubsection{模型结构}
+\begin{empheq}[left=\empheqlbrace]{align*}
+	\bm{x}_t&=A_t\bm{x}_{t-1}+\bm{u}_t \mtag{状态方程}\\
+	\bm{y}_t&=B_t\bm{x}_t+\bm{v}_t \mtag{量测方程}\\
+	E(\bm{u}_t)& =0,\ E(\bm{v}_t)=0\\
+	E(\bm{u}_t\bm{u}_t^T)&=Q_t,\  E(\bm{v}_t\bm{v}_t^T)=R_t\\
+	E(\bm{u}_t\bm{u}_{t_1}^T)&=O,\  E(\bm{v}_t\bm{v}_{t_1}^T)=O,\ t\neq t_1\\
+	E(\bm{u}_t\bm{v}_{t_1}^T)& =O,\ \forall t
+\end{empheq}
+
+\subsubsection{Kalman滤波算法}
+
+\begin{algorithm}
+\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+
+\KwIn{$A_t,\ B_t,\ Q_t,\ R_t,\ t=1,\cdots,n$,$\Gamma_0$(guess)}
+\KwOut{$\hat{x}_{t|t},\ \hat{x}_{t+1|t}$}
+\BlankLine
+Initialization:\\
+\quad$\hat{x}_{1|0}=E(\bm{x}_1)$\\
+\quad$P_{1|0}=\Gamma_0$
+\BlankLine
+\For{$t=1$ \KwTo $n$}{
+	$K_t=P_{t|t-1}B_t^TS_t^{-1}=P_{t|t-1}B_t^T(R_t+B_tP_{t|t-1}B_t^T)^{-1}$\\
+	$\hat{\bm{x}}_{t|t}=\hat{\bm{x}}_{t|t-1}+K_t(\bm{y}_t-B_t\hat{\bm{x}}_{t|t-1})$($=\hat{\bm{x}}_{t|t-1}+K_te_t$)\\
+	$P_{t|t}=(I-K_tB_t)P_{t|t-1}$\\
+	$\hat{\bm{x}}_{t+1|t}=A_{t+1}\hat{\bm{x}}_{t|t}$\\
+	$P_{t+1|t}=A_{t+1}P_{t|t}A_{t+1}^T+Q_{t+1}$\\
+}
+\caption{Kalman滤波I}
+\end{algorithm}
+
+首先来考查一下算法的结构。构造一个计算图：
+\begin{center}
+	\begin{tikzcd}
+		  &  \hat{\bm{x}}_{t|t} & & \\
+		  \hat{\bm{x}}_{t|t-1}\arrow[ur] &B\arrow[u] \arrow[r] &  K_t\arrow[ul] & \by_t\arrow[ull]\\
+		\hat{\bm{x}}_{t-1|t-1}\arrow[u] &A\arrow[ul] \arrow[r]& P_{t|t-1}\arrow[u] & R \arrow[ul]\\
+		& & P_{t-1|t-1}\arrow[u]& Q \arrow[ul]
+	\end{tikzcd}
+\end{center}
+从图中可以看出， 要得到$P,K$并不需要计算$\hat{\bm{x}}$，计算它也不需要$\by$的数据。事实上$P_{t|t}$由$P_{0|0},A,Q$完全决定，而$K$又由$P,B,R$完全决定。$P_{t|t}$只在更新$P_{t+1|t}$时才用到，所以可以直接代换到$P_{t+1|t}$中，或者把$P_{t|t-1}$代换到$P_{t|t}$中。类似地还有$\hat{\bx}_{t|t},\hat{\bx}_{t+1|t}$，这样只需要存储3个量：$K_t, \hat{\bm{x}}_{t|t},P_{t|t}$。
+
+对迭代过程进行一些变换可得：
+\begin{empheq}{align*}
+P_{t+1|t}&=AP_{t|t-1}A^T+Q-AK_tB_tP_{t|t-1}A^T
+\end{empheq}
+\subsubsection{推导}
+\paragraph*{MSE角度}Kalman滤波是最优线性估计.即
+
+\begin{empheq}{align*}
+\min_{K_t}E(\bm{e}_{t|t}^T\bm{e}_{t|t})&
+	=E((\bm{x}_t-\hat{\bm{x}}_{t|t})^T(\bm{x}_t-\hat{\bm{x}}_{t|t}))\\
+    &=\trace(\E(\bm{e}_{t|t}\bm{e}_{t|t}^T))\\
+    &=\trace(P_{t|t})\\
+\text{subject to }\hat{\bm{x}}_{t|t}&=\hat{\bm{x}}_{t|t-1}+K_t\bm{e}_t
+\end{empheq}
+
+我们通过对$\hat{\bm{x}}_{t|t-1}$进行线性校正得到$\hat{\bm{x}}_{t|t}$，因此是“线性估计”。
+
+在上式中中：
+
+$$\bm{e}_t=\bm{y}_t-B_t\hat{\bm{x}}_{t|t-1}$$
+
+是预测$\bm{y}_t$的残差.$P_{t|t}$实际上是残差的协方差阵.就思路上而言，我们假定利用线性变换$K_n$更新残差，然后看什么情况下残差的协方差阵最小.
+
+现在来进行推导：
+\begin{empheq}{align}
+\bm{e}_{t|t}&=\bm{x}_t-\hat{\bm{x}}_{t|t}\nonumber\\
+&=\bm{x}_t-(\hat{\bx}_{t|t-1}+K_t\bm{e}_t)\nonumber\\
+&=\bm{e}_{t|t-1}+K_t\bm{e}_t\nonumber\\
+&=\bm{e}_{t|t-1}+K_t(\by_t-B_t\hat{\bm{x}}_{t|t-1})\nonumber\\
+&=\bm{e}_{t|t-1}+K_t(B_t\bx_t+\bm{v}_t-B_t\hat{\bm{x}}_{t|t-1})\nonumber\\
+&=(I-K_tB_t)\bm{e}_{t|t-1}+K_t\bm{v}_t  \nonumber
+\end{empheq}
+
+于是：
+\begin{empheq}{align}
+P_{t|t}=\E(\bm{e}_{t|t}\bm{e}_{t|t}^T)&=(I-K_tB_t)\E(\bm{e}_{t|t-1}\bm{e}_{t|t-1}^T)(I-K_tB_t)^T+K_t\E(\bm{v}_t\bm{v}_t^T)K_t^T\nonumber\\
+&=(I-K_tB_t)P_{t|t-1}(I-K_tB_t)^T+K_tR_tK_t^T\label{kalman-filter-core-deriv}
+\end{empheq}
+
+根据$\trace$的求导即可得：
+\begin{equation}\label{kalman-filter-normal-eq}
+\odv{L}{K_t}=-2(I-K_tB_t)P_{t|t-1}B_t^T+2K_tR_t=0
+\end{equation}
+
+解得到：
+$$K_t=P_{t|t-1}B_t^T(R_t+B_tP_{t|t-1}B_t^T)^{-1}$$
+
+同时根据式\eqref{kalman-filter-normal-eq}，有
+$$K_tR_tK_t^T=(I-K_tB_t)P_{t|t-1}(K_tB_t)^T$$
+
+代回式\eqref{kalman-filter-core-deriv}：
+\begin{empheq}{align*}
+P_{t|t}&=K_tR_tB_t^{-T}(I-K_tB_t)^T+(I-K_tB_t)P_{t|t-1}(K_tB_t)^T\\
+&=(I-K_tB_t)P_{t|t-1}
+\end{empheq}
+这里已经导出了$P_{t|t}$的递推式，再考虑$P_{t|t-1}$：
+\begin{empheq}{align*}
+\bm{e}_{t|t-1}&=\bx_t-\hat{\bx}_{t|t-1}\\
+&=A_t\bx_{t-1}+\bm{u}_t-A_t\hat{\bx}_{t-1|t-1}\\
+&=A_t\bm{e}_{t-1|t-1}+\bm{u}_t
+\end{empheq}
+
+于是
+\begin{empheq}{align*}
+P_{t|t-1}&=\E(\bm{e}_{t|t-1}\bm{e}_{t|t-1}^T)\\
+&=A_tP_{t|t}A_t^T+Q_t
+\end{empheq}
+\paragraph*{贝叶斯滤波角度}根据贝叶斯定理
+\begin{empheq}{align}\label{bayesian-filter-kalman-core-deriv}
+p(\bx_t|\by_{1:t})&=\frac{p(\by_t|\bx_t)p(\bx_t|\by_{1:t-1})}{\int p(\by_t|\bx_t)p(\bx_t|\by_{1:t-1})\dif \bx_t}
+\end{empheq}
+
+如果取
+\begin{empheq}{align}
+p(\by_t|\bx_t)&\sim\Normal(A\bx_{t},R_t)\\
+p(\bx_t|\by_{1:t-1})&\sim\Normal(\bx_t;\hat{\bx}_{t|t-1},P_{t|t-1})\\
+p(\by_t|\by_{1:t-1})&\sim \Normal(B\hat{\bx}_{t|t-1},BP_{t|t-1}B^T+R_t)\\
+p(\bx_t|\by_{1:t})&\sim\Normal(\hat{\bx}_{t|t},P_{t|t})
+\end{empheq}
+
+这实际上就相当于高斯线性回归的后验概率，根据\eqref{linear-gauss-posterior}，如果令
+$$\bmu_{\btheta}=\bx_{t|t-1}\quad \Sigma_{\btheta}=P_{t|t-1}$$
+则
+\begin{empheq}{align}
+\hat{\bx}_{t|t}&=\bx_{t|t-1}+(P_{t|t-1}^{-1}+B_t^TR_t^{-1}B_t)^{-1}B_t^TR_t^{-1}(\by_t-B_t\bx_{t|t-1})\\
+P_{t|t}&=(P_{t|t-1}^{-1}+B_t^TR_t^{-1}B_t)^{-1}\label{kalman-filter-bayesian-cov}
+\end{empheq}
+在式\eqref{kalman-filter-bayesian-cov}，根据矩阵逆\eqref{Woodbury}有
+\begin{empheq}{align*}
+P_{t|t}&=P_{t|t-1}-P_{t|t-1}B_t(R_t+B_tP_{t|t-1}B_t^T)^{-1}B_tP_{t|t-1}\\
+&=(I-K_tB_t)P_{t|t-1}\\
+\hat{\bx}_{t|t}&=\bx_{t|t-1}+K_t(\by_t-B_t\bx_{t|t-1})
+\end{empheq}
+同样可以得到Kalman滤波。
+
+\subsubsection{性质}
+\paragraph*{观测变量的预测误差矩阵}也可以说是重建误差。
+\begin{empheq}{align*}
+\E((\by_t-\hat{\by}_{t|t-1})(\by_t-\hat{\by}_{t|t-1})^T)&=\E((B\bx_t+\bm{v}_t-B\hat{\bx}_{t|t-1})(B\bx_t+\bm{v}_t-B\hat{\bx}_{t|t-1})^T)\\
+&=BP_{t|t-1}B^T+R
+\end{empheq}
+
+\subsubsection{Rauch-Tung-Striebel Smoothing}
+给定一个时间序列，我们可以从之前的数据推后面的，也可以用后面的数据推过去的。上面的Kalman滤波中，主要是通过前面的数据推后面的，而RTS Smoother结合了Kalman滤波与反推，可以提高效率：
+\begin{enumerate}
+\item 正向迭代，首先通过卡尔曼波波估计$P_{t|t},\hat{\bx}_t^f,t=1,\cdots T$。这些值是全部要存储下来的。
+\item 反向迭代：$T=N,\cdots,1$：
+\begin{empheq}{align}
+\hat{\bx}_{T}'&=\hat{\bx}_{T|T},\quad P_{T}'=P_{t|t}\mtag{初始条件}\\
+P_{t}'&=P_{t|t}-G_t(P_{t+1|t}-P_{t+1}')G_t^T\\
+\hat{\bx}_t'&=\hat{\bx}_{t|t}+G_t(\hat{\bx}_{t+1}'-\hat{\bx}_{t+1|t})\\
+G_t&=P_{t|t}A_tP_{t+1|t}^{-1}
+\end{empheq}
+反向迭代时只用到了参数$A$，其它几个参数矩阵是没有用到的。
+
+
+\end{enumerate}
+这个过程与神经网络的Forward与Backward有点相似。以上过程作为在线算法也是可以的，先进行单步前向迭代，再反向迭代。
+\section{粒子滤波——非线性滤波}
+\subsection{模型结构}
+考虑一个一般化的模型：
+\begin{empheq}{align}
+\bx_n&=\bm{f}_n(\bx_{n-1},\bmeta_n) \mtag{状态方程}\\
+\by_n&=\bm{h}_n(\bx_n,\bm{v}_n) \mtag{量测方程}
+\end{empheq}
+
+\subsection{原始粒子滤波}
+推导与\eqref{bayesian-filter-kalman-core-deriv}相似，仍然是基于贝叶斯滤波角度。
+\begin{empheq}{align*}
+p(\bx_{1:t}|\by_{1:t})&=\frac{p(\bx_{1:t},\by_{1:t})}{\int p(\bx_{1:t},\by_{1:t})\dif \bx_{1:t}}=\frac{p(\bx_{1:t},\by_{1:t})}{Z_n}\\
+p(\bx_{1:t},\by_{1:t})&=p(\by_t|\bx_t)p(\bx_t|\bx_{t-1})p(p(\bx_{1:t-1},\by_{1:t-1}))
+\end{empheq}
+\section{参数估计}
+\subsubsection{EM框架}
+可以在EM框架下估计，循环：
+
+\begin{enumerate}
+\item 假定参数已知，估计潜变量$\hat{\bm{x}}_{t|t}$.
+\item 根据潜变量的值，利用极大似然对两个方程分别估计参数.
+\end{enumerate}
+
+\subsubsection{直接迭代}
+

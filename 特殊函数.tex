@@ -1,0 +1,102 @@
+\chapter{特殊函数}
+\section{Gamma族函数}
+\begin{empheq}{align*}
+	\Gamma(x) & =\int_{0}^{\infty} t^{x-1}e^{-t} \dif t=(x-1)! \\
+	\text{Beta}(x,y) & =\int_{0}^{1} t^{x-1}(1-t)^{y-1} \dif x=\frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}\\
+	\Gamma_p(x)&=\pi^{\frac{p(p-1)}{4}}\prod_{k=1}^{p}\Gamma\left(x-\frac{k-1}{2}\right)\mtag{Multivariate Gamma}\\
+	\Gamma_1(x)&=\Gamma(x)\\
+	\Gamma_2(x)&=\pi^{\frac{1}{2}}\Gamma(x)\Gamma\left(x-\frac{1}{2}\right)\\
+	\psi(x)&=\frac{\partial \ln \Gamma(x)}{\partial x}=\frac{\Gamma'(x)}{\Gamma(x)} \mtag{digamma}\label{digamma}\\
+	\psi_1(x)&=\psi'(x)=\frac{\partial^2 \ln\Gamma(x)}{\partial^2 x} \mtag{Trigamma}
+\end{empheq}
+在Mathematica中Digamma函数用\texttt{PolyGamma[z]}计算，Trigamma函数用\texttt{PolyGamma[1,z]}表示。
+\section{Bessel}
+常微分方程：
+
+$$y''+\frac{1}{z}y'+(1-\frac{v^2}{z^2})y=0$$
+
+它的解为：
+
+\begin{empheq}{align*}
+	J_v(z) &=\sum_{k=0}^{\infty}(-1)^k\frac{1}{k!\Gamma(v+k+1)}\left(\frac{z}{2}\right)^{2k+v} \\
+	I_v(z) &=\sum_{k=0}^{\infty}\frac{1}{k!\Gamma(v+k+1)}\left(\frac{z}{2}\right)^{2k+v} \\
+	K_v(z) &=\frac{\pi}{2\sin v\pi}(I_{-v}(z)-I_v(z))
+\end{empheq}
+
+\section{超几何函数}
+
+\begin{empheq}{align*}
+	F(\alpha,\beta,\gamma,x) &=\sum_{k=0}^{\infty} \frac{(\alpha)_k(\beta)_k}{(\gamma)_k k!}z^n\\
+	&=\sum_{k=0}^{\infty}\frac{\Gamma(\alpha+k)\Gamma(\beta+k)\Gamma{\gamma}}{\Gamma(\alpha)\Gamma(\beta)\Gamma(\gamma+k)\Gamma(k+1)}z^k
+\end{empheq}
+
+其中$(\alpha)_0=1,(\alpha)_n=\alpha(\alpha+1)\cdots(\alpha+n+1)=\frac{\Gamma(\alpha+n)}{\Gamma(\alpha)}$.
+
+\section{椭圆函数}
+\begin{empheq}{align*}
+t=\sn(u,k) &\Longleftrightarrow u=\int_{0}^{t}\frac{\dif t}{\sqrt{(1-t^2)(1-k^2t^2)}}\\
+\varphi=\am (u,k) &\Longleftrightarrow u=\int_{0}^{\varphi}\frac{\dif \varphi}{\sqrt{1-k^2\sin^2 \varphi}}
+\end{empheq}
+
+有以下关系：
+
+\begin{empheq}{align*}
+\sn u&=\sin \am u\\
+\cn u&=\cos \am u\\
+\dn u&=\sqrt{1-k^2\sn^2u}\\
+\sn^2 u+\cn^2 u&=1\\
+\dn^2u+k^2\sn^2u&=1
+\end{empheq}
+
+\section{Polylogarithm函数$\Li_s(z)$}
+Polylogarithm函数：
+$$\Li_s(z)=\sum_{k=1}^{\infty}\frac{z^k}{k^s}$$
+
+其积分表示为：
+$$\Li_{s+1}(z)=\int_{0}^{\infty}\frac{\Li_s(t)}{t}\dif t$$
+
+又叫费米-狄拉克积分或玻色-爱因斯坦积分.
+
+特殊值：
+\begin{empheq}{align*}
+\Li_1(z)&=-\ln(1-z)
+\end{empheq}
+
+\section{三角积分、对数与指数积分}
+\begin{empheq}{align*}
+\li(x)&=\int_{0}^{x}\frac{\dif t}{\ln x}=\Ei(\ln x)\mtag{对数积分}\\
+\Li(x)&=\li(x)-\li(2) \mtag{欧拉对数积分}\\
+\Ei(x)&=\int_{-\infty}^{x}\frac{e^t}{t}\dif t \mtag{指数积分}\\
+\E_1(z)&=\int_{1}^{\infty}\frac{e^{-zt}}{t}\dif t\\
+\Si(x)&=\int_{0}^{x}\frac{\sin t}{t}\dif t\mtag{正弦积分}\\
+\isi(x)&=-\int_{x}^{\infty}\frac{\sin t}{t}\dif t\mtag{正弦积分}\\
+\ci(x)&=-\int_{x}^{\infty}\frac{\cos t}{t}\dif t\mtag{余弦积分}\\
+\end{empheq}
+
+$\li(x)=0$的唯一正值解叫拉马努金-索德纳常数，值$\gamma\approx 1.45$.
+
+特殊值：
+\begin{empheq}{align*}
+\E_1(ix)&=i\si x-\ci x\\
+\end{empheq}
+
+\section{正交多项式}
+\subsection{勒让德多项式}
+微分方程
+$$\left[(1-x^2)y'\right]'+l(l+1)y=0$$
+的解称为勒让得多项式：
+$$y=P_l(x)=\frac{1}{2^ll!}\odv[order={l}]{}{x}(x^2-1)^l$$
+
+另外有\textbf{连带勒让德多项式}：
+$$P_l^m(x)=(-1)^m(1-x^2)^{m/2}\odv[order={m}]{P_l(x)}{x}$$
+
+\section{球谐函数}
+来自球坐标系下的拉普拉斯方程。
+
+$$Y_{l,m}(\theta,\phi)=\sqrt{\frac{2l+1}{4\pi}\frac{(l-m)!}{(l+m)!}}P_l^m(\cos\theta)e^{im\phi}$$
+
+一些特殊值：
+\begin{enumerate}
+\item $Y_{0,0}=\sqrt{\frac{1}{4\pi}}$
+\item $Y_{1,0}=\sqrt{\frac{3}{4\pi}}\cos\theta$。
+\end{enumerate}

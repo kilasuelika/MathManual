@@ -1,0 +1,21 @@
+\section{极值理论}
+主要考查诸如局部极值、最大与最小值的分布一类的问题。
+\subsection{局部极值的分布}
+
+\subsubsection{图上随机函数的局部极值数量分布}
+\cite{distribution-of-local-minima-of-graph}指出：
+\begin{theorem}{图上随机函数的局部极值数量分布}
+给定一个$d$图$G(V,E)$，即每个节点有$d$个相邻节点，又令$F$是一个$G$上的随机函数，且在每个节点处的值是独立分布的（只限定连续，不限定分布的具体类型）。取$W$为$F$的局部极值数量，又取$\E(W)=\mu,\Var (W)=\sigma^2$，则
+$$\E (W)=\frac{|V|}{d+1}$$
+且对于任意正数$w$，有
+$$\left|\Prob(W\leq w)l-\Phi\left(\frac{w-\mu}{\sigma}\right)\right|\leq\frac{C}{\sqrt{\sigma}}$$
+\end{theorem}
+
+这个定理是在说，局部极值的分布接近正态分布。但文章作者也认为这个上界不是紧的，最优的界（收敛速度）可能与$\inv{\sigma}$成正比，而不是$\frac{1}{\sqrt{\sigma}}$。
+
+以下给出一些应用的例子：
+\begin{enumerate}
+	\item 对于一个$n\times n$的二维网格，假设边界是周期性的，则每个点有4个相邻节点，$d=4$，那么$|V_n|=n^2$，
+	$$\E(W_n)=\frac{n^2}{5}$$
+	
+\end{enumerate}

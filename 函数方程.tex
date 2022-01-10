@@ -1,0 +1,117 @@
+\chapter{函数方程}
+函数方程就是以函数为未知变量的方程，积分方程、微分方程、变分法都可以视为函数方程。
+
+\section{分析方法}
+\subsection{改写函数方程的技巧}
+\begin{empheq}{align}
+&f(x)=\inv{1+x}\implies \inv{x}=\inv{f(x)}-1\\
+\implies& f(3x)=\frac{3}{\inv{x}+3}=\frac{3f(x)}{1+2f(x)}\\
+\implies & \inv{f(3x)}=\inv{3}\inv{f(x)}+\frac{2}{3}
+\end{empheq}
+
+\section{求解方法}
+\subsection{离散法}
+把函数用一个特定输入、输出构成的限表来逼近。
+\subsubsection{一维函数方程}
+给定一个函数方程：
+$$F(y(x),x)=0,\quad x\in[a,b]$$
+把定义域分割为$n$份，则有$n+1$个未知数待求解，有$n+1$个方程组：
+\begin{empheq}{align*}
+F(y_0, x_0)&=0\\
+\cdots&\\
+F(y_n, x_n)&=0
+\end{empheq}
+可以用数值方法求解。对于一个不在节点上的值$x$，可以用插值法求解$y(x)$。
+
+\subsection{半数值方法}
+\subsubsection{待定系数法}
+结合函数逼近理论，取一系列有限的基函数$f_i(x)$，令$\tilde{y}=\sum_{i=1}^{n}a_if_i(x)$。然后优化参数$a_i$，这可以有多种选择，一是像离散法一样选择有限数量的点当成回归做。也可以用积分的方式：
+\begin{empheq}{equation}
+\min\quad \mathcal{L}=\inv{2}\int_{a}^{b}F(\tilde{y}(x),x)^2\dif x
+\end{empheq}
+距离函数也可以取绝对值。导数为：
+\begin{empheq}{equation}
+\pdv{\mathcal{L}}{a_k}=\int_{a}^{b}F(\tilde{y}(x),x)\left.\pdv{F}{a}\right|_x\dif x
+\end{empheq}
+实际应用时，发现优化非常困难，可能是问题本身高度非线性。不过可以用来检验优化算法的能力。
+
+还有一个问题是，假如区间比较大，则可能需要非常高阶的级数。
+
+\subsubsection{DJM方法}
+一种半数值方法，结合了级数展开与不动点迭代。
+
+对于方程
+\begin{empheq}{equation}\label{functional-eq-djm-prob}
+y(x)=f(x)+N(y(x))
+\end{empheq}
+假设一个解：
+\begin{empheq}{equation}
+y=\sum_{i=1}^{\infty}y_i(x)
+\end{empheq}
+则
+\begin{empheq}{equation}
+N(y)=N(\sum_{i=1}^{\infty}y_i(x))=N(y_0)+\sum_{i=1}^{\infty}\left[N\left(\sum_{j=0}^{i}y_j(x)\right)-N\left(\sum_{j=0}^{i-1}y_j(x)\right)\right]
+\end{empheq}
+代入原问题\cref{functional-eq-djm-prob}有：
+$$\sum_{i=1}^{\infty}y_i(x)=f(x)+N(y_0)+\sum_{i=1}^{\infty}\left[N\left(\sum_{j=0}^{i}y_j(x)\right)-N\left(\sum_{j=0}^{i-1}y_j(x)\right)\right]
+$$
+对比系数，可以得到一个迭代算法：
+\begin{empheq}{align}
+y_0&=f(x)\\
+y_1&=N(y_0)\\
+y_2&=N(y_0+y_1)-N(y_0)\\
+\cdots&\\
+y_{n+1}&=N(y_0+\cdots+y_n)-N(y_0+\cdots+y_{n-1})
+\end{empheq}
+实际计算时可以选择一个特定的迭代次数。$y_0$也可以根据具体情况，取$f$的一部分，比如假设$f=f_0+f_1$，则有：
+$$\sum_{i=1}^{\infty}y_i(x)=f_0+f_1+N(y_0)+\sum_{i=1}^{\infty}\left[N\left(\sum_{j=0}^{i}y_j(x)\right)-N\left(\sum_{j=0}^{i-1}y_j(x)\right)\right]
+$$
+也可以有迭代算法：
+\begin{empheq}{align}\label{functional-eq-djm-rec2}
+y_0&=f_0\\
+y_1&=f_1+N(y_0)\\
+y_2&=N(y_0+y_1)-N(y_0)\\
+\cdots&\\
+y_{n+1}&=N(y_0+\cdots+y_n)-N(y_0+\cdots+y_{n-1})
+\end{empheq}
+当然$y_1=f_1,y_2=N(y_0)$也是可以的。
+
+\subsection{求解实例}
+\subsubsection{积分方程}
+\paragraph*{问题}
+\begin{example}
+给定一非线性沃尔泰拉方程：
+$$y(x)=e^x-\frac{xe^{3x}}{3}+\frac{x}{3}+\int_0^x xy^3(t)\dif t,\quad x\in [-1,3]$$
+\end{example}
+积分方程用离散法不太好解，假设取$x_0,\cdots, x_n$，假设积分用梯形法则逼近，则需要0在参数中才好用，具体计算的时候，还要判断应该用哪些块加入计算，不太方便。积分方程适合用半数值方法。
+
+\paragraph*{级数逼近法}用一个5次多项式逼近，外层有积分，内层也有积分：
+\begin{empheq}{equation}
+\min\quad \mathcal{L}=\int_{-1}^{3} \left(\tilde{y}(x)-\left(e^x-\frac{xe^{3x}}{3}+\frac{x}{3}+\int_0^x x\tilde{y}^3(t)\dif t\right)\right)^2\dif x
+\end{empheq}
+强调上式不等于：
+\begin{empheq}{equation}
+\min\quad \mathcal{L}'=\int_{-1}^{3}\dif x\int_0^x \left(\tilde{y}(x)-\left(e^x-\frac{xe^{3x}}{3}+\frac{x}{3}+ x\tilde{y}^3(t)\dif t\right)\right)^2\dif t
+\end{empheq}
+注意积分的范围，这个积分可以是负值，虽然被积函数是正的。但原来的积分必然是正值。
+
+现在计算导数：
+\begin{empheq}{align*}
+\pdv{\mathcal{L}}{a_k}&=\int_{-1}^{3} \left(\tilde{y}(x)-\left(e^x-\frac{xe^{3x}}{3}+\frac{x}{3}+\int_0^x x\tilde{y}^3(t)\dif t\right)\right)\left(x^k-\int_0^x3x\tilde{y}^2(t)t^k\dif t\right)\dif x\\
+\pdv{\mathcal{L}}{a_k,a_j}&=\int_{-1}^{3} \left[\left(x^j-\int_0^x 3x\tilde{y}^2(t)t^j\dif t\right)\left(x^k-\int_0^x3x\tilde{y}^2(t)t^k\dif t\right)\right.\\
+&\quad \left.-\left(\tilde{y}(x)-\left(e^x-\frac{xe^{3x}}{3}+\frac{x}{3}+\int_0^x x\tilde{y}^3(t)\dif t\right)\right)\int_0^x 6x\tilde{y}(t)t^{k+j}\dif t\right]\dif x
+\end{empheq}
+
+
+\paragraph*{DJM方法}按\cref{functional-eq-djm-rec2}的迭代过程如下：
+\begin{empheq}{align*}
+y_0&=e^x\\
+y_1&=-\frac{xe^{3x}}{3}+\frac{x}{3}+N(y_0)=-\frac{xe^{3x}}{3}+\frac{x}{3}+\int_0^x xe^{3t}\dif t=0\\
+y_2&=N(y_0+y_1)-N(y_0)=0
+\cdots&\\
+y_n&=0,\quad n\geq 1
+\end{empheq}
+因此$y=e^x$，恰为精确解。
+
+
+\section{积分方程}

@@ -1,0 +1,37 @@
+\chapter{形式化系统}
+
+\section{EBNF}
+EBNF(Extended Backus–Naur form)可以用来描述上下文无关语法。
+\subsection{语法元素}
+一个语法需要两类元素，第一是terminal，即最小的元素，第二是规则，描述了元素间的转换关系。定义terminal与规则可以使用以下一些基本操作：
+\begin{longtable}{cc}
+	\toprule
+	含义&	符号\\
+	\midrule
+	definition	&$=$\\
+	concatenation&	$,$\\
+	termination	&$;$\\
+	alternation	&$|$\\
+	optional	&$[\ \cdots\ ]$\\
+	repetition	&$\{\ \cdots\ \}$\\
+	grouping &	$(\ \cdots\ )$\\
+	terminal string	&$"\ \cdots\ "$\\
+	terminal string	&$'\ \cdots\ '$\\
+	comment	&$(*\ \cdots\ *)$\\
+	special sequence	&$?\ \cdots\ ?$\\
+	exception&	$-$\\
+	\bottomrule
+\end{longtable}
+
+\subsection{案例}
+
+\section{CCS}
+
+\subsection{基本技巧}
+\begin{enumerate}
+  \item 描述一个单元需要多种输入才能进入下一个状态.由于原版的CCS的交互只涉及2个个体，没有3个个体同时交互，那么就需要引入多个状态.比如需要2种资源，就用4个状态：空、等待资源1、等待资源2、准备完成.空状态得到资源1就进入等待资源2，再得到资源2则准备完成.
+
+      但有时如果很明确就是三个个体交互，那么应该也可以让一个个体接受多个输入，其它个体输出，一次完成多个个体交互.
+  \item
+\end{enumerate} 
+

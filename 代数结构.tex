@@ -1,0 +1,106 @@
+\chapter{代数结构}
+
+\input{代数结构一览}
+
+\section{群}
+\subsection{群的一般概念}
+\subsubsection{群作用}
+群作用是指群$G$作用于集合$\mathcal{S}$。假如对于$G$中任意元素$g$，存在$\alpha\in\mathcal{S}$，有$g\cdot \alpha \in \mathcal{S}$。则称群$G$作用于$S$。可以看出群作用其实相当于将集合$\mathcal{S}$映射为自身（或子集），即群$G$到$\mathcal{S}$的变换群内有一个同态映射$\eta$：
+$$g^{\eta}\colon \alpha \rightarrow g\cdot \alpha$$
+$\eta$称为群$G$在$\mathcal{S}$中的作用。
+
+由于$\eta$是一个映射，自然地有不动点，在群论中称为核。对于$G$中某些元素，它们将$\mathcal{S}$中的元素$\alpha$映射成自身，称$G$中的这些元素为$\eta$的核。
+
+\subsubsection{子群}
+子群就是满足群性质的子集。
+
+\paragraph{正规子群}正规子群是在共轭变换下不变的子群，即
+\begin{definition}[正规子群]\label{normal-subgroup}
+取$N$为一子群，若满足
+$$\forall n\in N,g\in G,gng^{-1}\in N$$
+则$N$是正规子群。
+\end{definition}
+
+\paragraph*{陪集}子群的完备扩张。
+\begin{definition}[陪集]
+	子群$H$关于$a$的左陪集为
+	$$aH\coloneqq\{ax\mid x\in H\}$$
+	类似地有右陪集。
+\end{definition}
+对于任意两个陪集$aH,bH$，它们要么相交，要么相等，因此一个群可分解为左陪集的交，或者右陪集的交，称为陪集分解。
+
+\subsection{置换群与循环群}
+\subsubsection{置换群的表示}通常用$\sigma,\pi$表示置换群（permutation），循环群是置换群表示的简化，本质上是一回事。
+
+置换群用矩阵表示，比如
+$$P=\begin{pmatrix}
+1 & 2 & 3 & 4\\
+1 & 3 & 2& 4
+\end{pmatrix}=(1)(23)(4)$$
+
+置换群矩阵的列表示，将第一行中的元素换成第二行中的元素，注意第一行的元素不是单纯地表示位置，而是表示特定的元素，所以交换列的顺序时，置换群是一样的。而循环群中的每个节是将前面的元素换成后面的，最后一个元素换成第一个。
+
+\subsubsection{置换群的乘法}
+注意置换群相乘时，是从右到左看的，按函数表示就是$\sigma(\pi(x))$，可以看出，内部的先算。举一个例子：
+$$\begin{pmatrix}
+1 & 2 & 3 &4\\
+1 & 3 & 2 & 4
+\end{pmatrix}\begin{pmatrix}
+1 & 2 & 3 &4\\
+2 & 1 & 3 &4
+\end{pmatrix}=\begin{pmatrix}
+1 & 2 & 3 &4\\
+3 & 1 & 2 & 4
+\end{pmatrix}$$
+
+首先看第二个矩阵的第1列，表示将元素1换成2，而在第一个矩阵中，第二列将2换成3，所以1最终换成3。
+
+\subsubsection{置换群的性质}
+\paragraph*{阶数}首先转换成循环表示法， 会有若干个节，每节元素个数的最小公倍数，就是阶数。对于每个节来说，重复作用$n_i$次，会回到原来的状态，因此取最小公倍数，就表示所有节回到原来的状态。
+\paragraph*{Cayley定理}每个群都与某个$\Sym(G)$的子群同构。$\Sym$是对称群，它由群$G$的所有permutation组成。也相当于说，每个群与某个置换群同构。
+
+\subsection{商群}
+商群这个概念很重要、基本，但也有点难以理解。 它相当于一个群配上等价关系：
+\begin{definition}[商群]
+给定群$G$和它的正规子群$N$，定义商群$G/N$为$N$在$G$中的所有左陪集，或者：
+$$G/N\coloneqq \{aN\in G  \}$$
+商群中的乘法定义为
+$$(aN)(bN)\coloneqq (ab)N$$
+由于$N$是正规子群，所以取$aN$或者$Na$是一回事。
+\end{definition}
+
+\subsection{群的例子}
+\subsubsection{线性群}
+\begin{longtable}{ccc}
+	\toprule
+	表示& 含义 &维数\\
+	\midrule
+	$\GL(n,F)$ &$F$上全体可逆矩阵& $n^2$\\
+	$\SL(n,F)$ &$F$上全体行列式为1的可逆矩阵&$n^2-1$\\
+	$\text{O}(n,F)$ & $\GL(n,F)$中的正交矩阵&\\
+	$\text{SO}(n,F)$ & $\SL(n,F)$中的正交矩阵&\\
+	\bottomrule
+\end{longtable}
+
+\section{环}
+
+\section{域}
+
+\section{特殊代数结构的例子}
+
+\subsection{Tropical Geometry}
+属于代数几何的一种.
+\begin{definition}{Tropical Geometry}{}
+\begin{empheq}{align*}
+x\oplus y&=\max (x,y)\\
+x\odot y&=x+y\\
+x^a&=ax\\
+\bx^{\bm{a}}&=c\odot x_1^{a_1}\odot\cdots\odot x_d^{a_d}\mtag{Tropical monomial}\\
+f(\bx)&=c_1\bx^{\bm{\alpha}_1}\oplus\cdots\oplus\bx^{\bm{\alpha_r}}\mtag{Tropical Polynomial}\\
+f(x)\oslash g(x)&=f(x)-g(x)\mtag{Rational Function}
+\end{empheq}
+
+\end{definition}
+
+
+前两个算子可以构成半环$\mathbb{T}\coloneqq (\mathbb{R}\cup\{-\infty\},\oplus,\odot)$.这里的$\max$也可以换成$\min$，两者等价.

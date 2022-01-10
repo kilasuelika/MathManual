@@ -1,0 +1,43 @@
+\chapter{范畴结构}\label{category}
+一个范畴由对象及对象之间的联系（态射）构成，所以它本身也属于一种结构，但又不同于一般的代数结构，范畴可以视为结构的结构，描述了不同具体结构（集合结构、群结构等等）的共性。所以本章冠以“结构”的名字。
+
+也有人认为，集合是从元素的角度来理解世界，而范畴论是从关系的角度来理解世界。
+
+范畴论中经常使用交换图的描述方式，交换图的含义是说，对于图中给定的起点与终点，任意一条从起点到终点的路径都是成立的，即经过不同的计算可以从起点到达相同的终点。
+
+\section{基本定义}
+\subsection{范畴}
+\begin{definition}[范畴]
+范畴由如下组成：
+\begin{enumerate}
+\item 对象$A,B,C,\cdots$组成的类$\obj(\mathcal{C})$。
+\item 任意两个对象$A,B$，存在从$A$到$B$的态射$\mathcal{C}(A,B)$（也morphism，可记为$\Hom_{\mathcal{C}}(A,B)$），元素记为$f\colon A\rightarrow B$。
+\item （复合）对任意三个对象$A,B,C$，存在映射$\mathcal{C}(A,B)\times \mathcal{C}(B,C)\rightarrow \mathcal{C}(A,C),(f,g)\mapsto gf$，并且满足：
+\begin{enumerate}
+	\item （惟一性）集合$\mathcal{C}(A_1,B_1)$与$\mathcal{C}(A_2,B_2)$相同当且仅当$A_1=A_2,B_1=B_2$。
+	\item （结合律）对态射$f\colon A\rightarrow B,g\colon B\rightarrow C,h:C\rightarrow D$，有$h(fg)=(hg)f$。
+	\item （单位元）对每个对象$A$，有态射$1_A\colon A\rightarrow A$，使得对任意$f\colon A\rightarrow B,g\colon C\rightarrow A$有$f1_A=f,1_Ag=g$。
+\end{enumerate}
+\end{enumerate}
+\end{definition}
+
+在以上的定义中，注意，“态射”可以理解为一般的“映射”。
+\subsection[函子]
+简单地说，函子是从一个范畴到另一个范畴的映射，通常分为共变函子与反变函子。
+
+\begin{definition}[共变与反变函子]
+给定两个范畴$\mathcal{C,D}$与范畴间的函子$F\colon \mathcal{C}\rightarrow\mathcal{D}$，如果$\mathcal{C}$中每一个对象$A$，对应$\mathcal{D}$中的$F(A)$，$\mathcal{C}$中每一个态射$f\colon A\rightarrow B$对应$F(f)\colon F(A)\rightarrow F(B)$，且
+\begin{enumerate}
+	\item $F(1_A)=1_{F(A)}$。
+	\item $F(gf)=F(g)F(f)$。
+\end{enumerate}
+则称$F$为从$\mathcal{C}$到$\mathcal{D}$的共变函子。以上条件如果变成$F(f)\colon F(B)\rightarrow F(A),F(gf)=F(f)F(g)$，则称之为反变函子。
+\end{definition}
+
+从形式上看，“共变”与“反变”像是在说分配律的顺序。
+\subsection{范畴的例子}
+
+\section{高阶范畴}
+
+
+\section{范畴论的应用}

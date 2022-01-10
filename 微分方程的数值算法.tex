@@ -1,0 +1,152 @@
+\chapter{微分方程的数值算法}\label{ode-numeric}
+
+\section{常微分方程}
+\subsection{常微分方程的一般形式}
+\subsubsection{主方程}
+$n$阶线性常微分方程的一般形式为
+\begin{empheq}{equation}
+\sum_{k=1}^n a_(t,\bx)\odv[order=k]{\bx}{t}=f(t,\bx,\bx',\cdots)
+\end{empheq}
+
+线性是指为左边为导数的线性组合（系数可以是常系数，也可以是函数）。对于高阶的方程，可以通过引入额外变量的方式降阶。比如对于一元二阶线性常微分方程
+$$\ddot{x}+a\dot{x}+by=f(t,x)$$
+引入$x_1=x,x_2=\dot{x_1}$，则原方程可化为二元一阶线性常微分方程：
+\begin{empheq}[left=\empheqlbrace]{align}
+\dot{x_1}&=\dot{x}=x_2\\
+\dot{x_2}&=\dot{x_1}=-ax_2-bx_1+f(t,x)
+\end{empheq}
+
+又比如非常系数的线性常微分方程也可以降阶：
+$$\ddot{x}+(\sin t) \dot{x}=\cos x\implies \begin{cases}
+\dot{x_1}&=\dot{x}=x_2\\
+\dot{x_2}&=\dot{x_1}=-\sin t x_2+\cos x
+\end{cases}$$
+
+所以$n$阶线性常微分方程的一般形式可以表述为：
+\begin{empheq}{equation}\label{1st-order-1-ode}
+\dot{\bx}=\pdv{\bx}{t}=f(t,\bx) \quad \by\in\Rns
+\end{empheq}
+即对应一个$n$元一阶线性常微分方程组。
+\subsubsection{边界条件}
+\paragraph*{初值条件}给定初始时刻的值：
+$$\bx(0)=\bx_0$$
+对应的问题叫初值问题。初值问题适合用积分法，从初始时刻一步一步往后推。高阶方程，需要给定低阶初始导数值，比如二阶问题，要给出$\bx(0),\dot{\bx}(0)$。
+
+初值问题适合积分法。
+\paragraph*{边值问题}给定两个边界点的值
+$$\bx(0)=\bx_0,\bx(T)=\bx_T$$
+对应边值问题。注意，一元一阶常微分方程只有边值问题。初值问题至少需要二阶才有。
+
+一个二阶一元方程，给定边值$x(0),x(T)$。
+
+边值问题适合差分法。
+\subsection{一元一阶线性常微分方程}
+\subsubsection{积分法原理}
+对于问题\eqref{1st-order-1-ode}，并且假定为初值问题。按照积分的法则：
+$$x_{n+1}=x_n+\int_{t_n}^{t_{n+1}} f(t,x(t))\dif t$$
+右边可以用多种方法逼近。
+
+\subsubsection{简单均值逼近}
+\paragraph*{一阶时间差分}
+原方程左边可以用最简单的差分逼近：
+\begin{empheq}{align}
+\dot{x}_n&\approx \frac{x_{n+1}-x_{n}}{h}
+\end{empheq}
+高阶差分格式可以参考\ref{diff-int-finite-difference}。
+\paragraph*{显式Euler方法}原方程右边可以用$f(t_n,x_n)$或者$f(t_{n+1},x_{n+1})$。
+就是用前一时刻的导数来逼近增量：
+$$\frac{x_{n+1}-x_n}{h}=f(t_n,x_n)\implies x_{n+1}=x_n+hf(t_n,x_n)$$
+可以递推计算。对应于用$t_n$处的函数值代替被积函数平均值。
+
+\paragraph*{隐式Euler方法}用下一点处的导数逼近右边：
+$$\frac{x_{n+1}-x_n}{h}=f(t_{n+1},x_{n+1})\implies x_{n+1}=x_n+hf(t_{n+1},x_{n+1})$$
+显然需要解方程。性能比显式方法好。对应于用$t_{n+1}$处的函数值代替被积函数平均值。
+
+\paragraph*{Crank-Nicolson格式}用前一时间与后一时刻的加权的方式逼近原方程右边：
+\begin{empheq}{align}
+&\frac{x_{n+1}-x_n}{h}=\theta f(t_{n},x_{n})+(1-\theta)f(t_{n+1},x_{n+1})\\
+\implies &x_{n+1}=x_n+h(\theta f(t_{n},x_{n})+(1-\theta)f(t_{n+1},x_{n+1}))
+\end{empheq}
+取$\theta=\inv{2}$时，叫Crank-Nicolson格式，它是隐式方法，对应于积分的梯形法则。
+
+\paragraph*{Predictor-Corrector校正}\label{ode-predictor-corrector}以显式Euler方法为例，先得到预测值$x_{n+1}^0=x_n+hf_n=x_n+hf(t_n,x_n)$，然后得到$f_{n+1}^0=f(t_{n+1},x_{n+1}^0)$，则根据梯形规则，预测值为
+$$x_{n+1}^1=x_n+\frac{h}{2}(f_n+f_{n+1}^0)$$
+这个过程可以执行多次：
+\begin{empheq}{align}
+x_{n+1}^0&=x_n+hf(t_n,x_n)\\
+f_{n+1}^k&=f(t_{n+1},x_{n+1}^{k-1})\\
+x_{n+1}^k&=x_n+\frac{h}{2}(f_n+f_{n+1}^k)
+\end{empheq}
+如果迭代到收敛，它可以与隐式方法具有一样的性能。以上这个过程，相当于通过不动点迭代求解
+$$x_{n+1}=x_n+\frac{h}{2}(f(t_n,x_n)+f(t_{n+1},x_{n+1}))$$
+相当于隐式积分法了。
+
+\subsection{二阶一元常线性微分方程}
+\subsubsection{差分法}
+对于二阶一元常线性微分方程
+$$a\ddot{x}+b\dot{x}=f(t,x)$$
+假定为边值问题，即将时间段分成$N+1$个区间，给定$x_0,x_{N+1}$，待求解的是$[x_1,\cdots,x_N]'$，即有$N$个变量。
+
+\paragraph*{差分格式}二阶导数取中心差分：
+$$\ddot{x}=\frac{x_{t+1}-2x_t+x_{t-1}}{h^2}$$
+一阶导数取前向差分。
+\paragraph*{方程组}采用隐式Euler方法，则可得到$N$个方程组：
+\begin{empheq}{align}
+a\frac{x_{2}-2x_1+x_{0}}{h^2}+b\frac{x_1-x_0}{h}&=f(t_1,x_1)\\
+a\frac{x_{3}-2x_2+x_{1}}{h^2}+b\frac{x_2-x_1}{h}&=f(t_2,x_2)\\
+a\frac{x_{4}-2x_3+x_{2}}{h^2}+b\frac{x_3-x_2}{h}&=f(t_3,x_3)\\
+\cdots &\cdots\\
+a\frac{x_{N+1}-2x_N+x_{N-1}}{h^2}+b\frac{x_N-x_{N-1}}{h}&=f(t_{N},x_N)
+\end{empheq}
+这是一个非线性方程组。如果$f$与$\bx$无关，即只与$t$有关，则上面的方程组对应一个线性方程组：
+\begin{empheq}{align}
+\begin{bmatrix}
+-2+\frac{b}{a}h & 1 & & & &  \\
+1-\frac{b}{a}h & -2+\frac{b}{a}h&1 & \cdots & & \\
+ & 1-\frac{b}{a}h & -2+\frac{b}{a}h&1 & & \\
+&  & & \cdots& & \\
+ &  & & & 1-\frac{b}{a}h&-2+\frac{b}{a}h 
+\end{bmatrix}
+\begin{bmatrix}
+x_1\\
+x_2\\
+x_3\\
+\cdots\\
+x_N
+\end{bmatrix}=\frac{h^2}{a}\begin{bmatrix}
+f(t_1)\\
+f(t_2)\\
+f(t_3)\\
+\cdots\\
+f(t_N)
+\end{bmatrix}+\begin{bmatrix}
+1+\frac{b}{a}hx_0\\
+0\\
+0\\
+\cdots\\
+-x_{N+1}
+\end{bmatrix}
+\end{empheq}
+对应
+$$A\bx=F$$
+可以看出系数矩阵为三对角矩阵，对角线上元素相同，上对角线全为1，下对角线也相同。
+
+\subsection{其它常微分方程}
+\subsubsection{多元一阶常微分方程}
+
+\section{偏微分方程}
+\subsection{差分法}
+
+\subsection{有限元方法}
+\subsubsection{弱形式}
+\paragraph*{弱形式的导出}
+有限元方法的起点是PDE的弱形式，也叫变分形式。考虑一个泊松方程：
+$$-\Delta u(x,y)=f(x,y)$$
+给两边乘上一个测试函数$v$，再在全区域上积分，即可得到弱形式：
+\begin{empheq}{align}
+\iint_{\Omega}(-\Delta u-f)v\dif S=\iint_{\Omega} \nabla u\cdot \nabla v - fv\dif S=0
+\end{empheq}
+这里用到了格林公式\ref{green-formula}。这个方程应该对所有$v$成立。说它是弱形式，是因为原方程是在每点成立，而这个方程是在全区域的积分下成立，因此强形式的解必然满足弱形式，但弱形式的解不一定满足强形式。
+\subsection{有限体积法}
+
+\subsection{同伦分析法}

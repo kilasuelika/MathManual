@@ -1,0 +1,79 @@
+\chapter{不等式与估计}
+本章中的估计与参数估计的估计不是一回事，而是取近似一类的意思。
+
+\section{常数不等式}
+\subsection{常数列表}
+
+\subsection{常数逼近}
+$$\sqrt{7} \approx 2.6458 \leq e\approx 2.7183\leq\sqrt{8}\approx 2.828 $$
+
+\section{基本不等式}
+\begin{empheq}{align*}
+    \mid |\bm{z}|-|\bm{w}|\mid \leq \mid \bm{z}-\bm{w} \mid &\leq |\bm{z}|+|\bm{w}| \mtag{三角} \\
+ |\bm{x}\cdot \bm{y}|&\leq | \bm{x} | \cdot | \bm{y} |  \mtag{施瓦茨}\\
+ |\bm{x}\cdot \bm{y}|&\leq \parallel \bm{x} \parallel_p \cdot \parallel \bm{y} \parallel_q \left(\frac{1}{p}+\frac{1}{q}=1\right) \mtag{Holder} \\
+ \parallel \bm{x}+\bm{g} \parallel_r &\leq \parallel \bm{x}\parallel_r+\parallel \bm{y}\parallel_r\mtag{闵可夫斯基} \\
+ \E(f(X))&\geq f(\E(X)),\ f\text{ convex} \label{jensen's-in-eq}\mtag{Jensen}\\
+ \bm{\lambda}\cdot f(\bx)&\geq f(\bm{\lambda}\cdot \bx),\sum \lambda_i=1,\lambda_i\in[0,1],f\text{ convex}  \mtag{Jensen}
+\end{empheq}
+可以看出Cauchy-Schwarz不等式是Holder不等式的特例。
+
+\section{均值不等式系列}
+\subsection{基本均值不等式}
+\subsubsection{公式一览}
+\begin{empheq}{align}
+H_n&=\frac{n}{\sum \inv{x_i}}\mtag{调和平均}\\
+G_n&=\sqrt[n]{\prod x_i}\mtag{几何平均}\\
+A_n&=\frac{\sum x_i}{n}\mtag{算术平均}\\
+Q_n&=\sqrt{\frac{\sum x_i^2}{n}}\mtag{平方平均}\\
+H_n\leq G_n&\leq A_n\leq Q_n \mtag{均值不等式}\\
+G_n&\leq A_n \mtag{AM-GM不等式}
+\end{empheq}
+\subsubsection{应用}
+\subsection{Holder不等式}
+\subsubsection{公式一览}
+\begin{theorem}[Holder不等式]
+对于$m$个正数序列$(a_{11},a_{12},\cdots,a_{1n}),\cdots,(a_{m1},a_{m2},\cdots,a_{mn})$，有
+$$\prod_i\underbrace{\sum_j a_{ij}}_{\text{列和}}\geq \left(\sum_j \underbrace{\sqrt[\uproot{18}m]{\prod_i a_{ij}}}_{\text{行几何平均}}\right)^m$$
+\end{theorem}
+如果取$m=2$就是柯西不等式。
+\subsection{Chebyshev不等式}
+\subsubsection{公式一览}
+\begin{empheq}{align}
+a_i,b_i\text{分别递增}, \text{则}\sum a_ib_i&\geq \inv{n}\sum a_i\sum b_i
+\end{empheq}
+注意不要与柯西不等式混淆。这个公式是说$\sum a_ib_i\leq \sqrt{\sum a_i^2}\sqrt{\sum b_i^2}$。
+
+\section{积分不等式}
+\subsection{基本公式}
+由基本不等式可以诱导积分不等式，只要把范数运算用积分替代即可。
+
+以下$p,q>1,\frac{1}{p}+\frac{1}{q}=1$。
+
+\begin{empheq}{align}
+	\sdet{\int_G f \dif x}&\leq \int_G\sdet{f}\dif x \mtag{三角}\\
+	\sdet{\int_G fg\dif x}&\leq \sbra{\int_G\sdet{f}^p\dif x}^{1/p}\sbra{\int_G\sdet{g}^q\dif x}^{1/q} \mtag{Holder}\\
+	\sdet{\int_G fg\dif x}^2&\leq \sbra{\int_G\sdet{f}^2\dif x}\sbra{\int_G\sdet{g}^2\dif x} \mtag{Schwarz}\label{int-Schwarz}\\
+	\sbra{\int_G \sdet{f+g}^r\dif x}^{1/r}&\leq \sbra{\int_G\sdet{f}^r\dif x}^{1/r}+\sbra{\int_G\sdet{g}^r\dif x}^{1/r}\mtag{闵可夫斯基}\\
+	\sbra{\int_G \sdet{f}^p\dif x}^{1/p}&\leq \sbra{\int_G\sdet{f}^r\dif x}^{1/r}, 0<p<r<\infty \mtag{Jensen}
+\end{empheq}
+
+\subsection{中值定理}
+\subsubsection{定理}
+
+\subsubsection{应用}
+\begin{empheq}{align*}
+\exists \theta\in[0,1],P(X>x)&=P(X>0)+\int_{0}^{x}\frac{1}{\sqrt{2\pi}}e^{-\frac{t^2}{2}}\dif t\\
+&=\inv{2}+x\frac{1}{\sqrt{2\pi}}e^{-\frac{(\theta x)^2}{2}}
+\end{empheq}
+
+\section{函数不等式}
+\subsection{基本函数}
+\begin{longtable}{c}
+$\forall x,y>0, xy\leq x\max(1,y^2)\leq x+xy^2 $
+\end{longtable}
+\section{估计技巧}
+\begin{enumerate}
+\item 假如两个函数在某一点处相等$f(x_0)=g(x_0)$，且当$x>x_0$时$f'(x)>g'(x)$，利用积分可知，$f(x)>g(x)$。
+\end{enumerate}
+

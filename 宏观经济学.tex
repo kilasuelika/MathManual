@@ -1,0 +1,588 @@
+\chapter{宏观经济学}
+本章主要以罗默的《高级宏观经济学》为基础，结合《Recursive Macroeconomic Theory》、曼昆的《宏观经济学》编写。
+\section{消费}
+\subsection{确定性条件下的消费：永久收入假说及其改进}
+\subsubsection{永久收入假说}
+\paragraph*{永久收入}
+考虑寿命为T的消费者的终生效用：
+\begin{empheq}{align}
+\max\quad U=\sum_{t=1}^{T}u(C_t),\quad u'>0,\quad u''<0
+\end{empheq}
+假设各期的劳动收入为$Y_1,\cdots,Y_T$。允许消费者借债，不考虑折现和利率，假设\emph{所有债务需要在生命完结前清偿}，则有
+\begin{empheq}{equation}
+\sum_{t=1}^{T}C_t\leq A_0+\sum_{t=1}^{T}Y_t
+\end{empheq}
+利用拉格朗日乘数法可得：
+$$u'(C_t)=\lambda$$
+因此消费的边际效用不变，则消费也不变：$C_1=\cdots=C_T$，代入预算约束有：
+\begin{empheq}{equation}
+C_t=\inv{T}\left(A_0+\sum_{t=1}^{T}Y_t\right)
+\end{empheq}
+上式的右边称为\emph{永久收入}。整个式子的含义就是{\kaishu 消费由永久收入决定}，消费者不仅要考虑当期收入，也要考虑终生收入。由于永久收入要除以一个因子$T$，因此假设一个人得了一笔意外之财，则除以$T$后变得很小，因此对消费影响很小。推论{\kaishu 暂时性的减税对消费影响较小}。
+
+\paragraph*{储蓄}
+定义为$$S_t=Y_t-C_t=\left(Y_t-\inv{T}\sum_{t=1}^{T}Y_t\right)-\inv{T}A_0$$
+由此式可以看出，暂时收入较高时，储蓄也较高；暂时收入低时，储蓄为负。因此消费者会利用储蓄与借债来\emph{平滑消费路径}。从这个意义上说，{\kaishu 储蓄是未来的消费}。
+
+\subsubsection{永久收入假说的改进}
+\paragraph*{永久收入假说的缺陷}
+
+\paragraph*{预防性储蓄}
+
+\paragraph*{流动性约束}永久收入假说假定消费者可以按储蓄利率贷款，但在实际中贷款利率一般要远高于储蓄利率。存在流动性约束时，消费者会为了避险而进行储蓄，从而预防收入下降带来的影响。
+
+考虑一个三期的模型，且忽略利率与折现率，$A_t$为$t$期末的资产，则按动态规划的原理，第三期$C_3=A_2+Y_3=A_1+Y_2+Y_3-C_2$。在第2期时，总效用为
+$$U=\left(C_2-\inv{2}aC_2^2\right)+\E_2\left[(A_1+Y_2+Y_3-C_2)-\inv{2}a(A_1+Y_2+Y_3-C_2)^2\right]$$
+一阶条件：
+$$\pdv{U}{C_2}=1-aC_2-(1-a\E_2(A_1+Y_2+Y_3-C_2))=a(A_1+Y_2+\E_2(Y_3)-2C_2)$$
+当$C_2<(A_1+Y_2+\E_2(Y_3))/2$时，上式为正值，否则为负。假如流动性约束不紧，则可以取=。当约束为紧时，消费为最大可得水平：
+$$C_2=\min \left\{\frac{A_1+Y_2+\E_2(Y_3)}{2},A_1+Y_2\right\}$$
+
+\paragraph*{不完全的最优化}最优化是有成本的，消费者可能很难进行长期分析，导致决策的非最优化。一种典型的不完全最优化是\emph{时间不一致性}，即{\kaishu 经济个体在短期内缺乏耐心，而在长期中比较有耐心。}比如消费者要进行2周的消费优化，假如这两周位于1年后，则消费者对第1周与第2周通常没有偏好。但当临近这2周时，消费者更愿意违背之前的计划，选择在每1周消费更多（缺乏耐心）。
+
+
+
+\subsection{不确定条件下的消费}
+\subsubsection{含风险资产下的消费}
+\paragraph*{风险资产收益与消费的替代}引入风险资产后必定涉及预期。那么预期什么呢？显然会对资产的收益进行预期，这是比较自然的。在现代宏观经济学，理性预期也涉及对消费的预期。这里就有一个问题：
+
+对未来的消费预期，为什么会影响当前的消费呢？
+
+设想，假如预期收益率高，那么消费者可能增加储蓄，以便在未来得到更多收益，所以行为发生了改变。但假如预期未来消费是100，对当前有何影响吗？如果影响了决策，那么必定有一个比较的过程，预期未来的消费，是跟谁进行比较呢？
+
+答案就是消费的\emph{跨期替代}，假如预期未来的消费高，那么消费者可能更愿意放弃当前的消费来为以后做准备。在效果上就实现了消费的平滑。用数学来刻画就是当期与未来的边际效用相等，这也是通过拉格朗日乘子法优化得到的结论。
+
+假设有一系列风险资产，价格分别为$P_t^i$，第$i$种资产在未来产生的一系列收益是$D_{t+k}^i,k>0$。购买资产$P_t^i$，就需要在消费为$C_t$时放弃$P_t^i$的消费，对应的总边际效用为$P_t^iu'(C_t)$。下一期得到收益$D_{t+1}^i$，对应的总边际效用为$\inv{1+\rho}u'(C_{t+1})D_{t+1}^i$，对若干期求和，即可得到等式：
+\begin{empheq}{equation}\label{macro-econ-consume-exp}
+P_t^iu'(C_t)=\E_t\left[\sum_{k=1}^{\infty}\inv{(1+\rho)^k}u'(C_{t+k})D_{t+k}^i\right]
+\end{empheq}
+
+
+假设资产只持有一期。且定义收益率为$r_{t+1}^i=\frac{D_{t+1}^i}{P_t^i}-1$，则上式可以写成
+\begin{empheq}{align}
+u'(C_t)&=\inv{1+\rho}\E_t[(1+r_{t+1}^i)u'(C_{t+1})]\\
+&=\inv{1+\rho}\left(E_t[1+r_{t+1}^i]E_t[u'(C_{t+1})]+\Cov_t(1+r_{t+1}^i,u'(C_{t+1}))\right)
+\end{empheq}
+假如效用为二次函数：$U(C)=C-a\frac{C^2}{2}$，代入可得:
+\begin{empheq}{align}
+u'(C_t)&=\inv{1+\rho}\inv{1+\rho}\E_t[(1+r_{t+1}^i)u'(C_{t+1})]\label{macro-econ-consume-u-2poly-1}\\
+&=\inv{1+\rho}\left(E_t[1+r_{t+1}^i]E_t[u'(C_{t+1})]-a\Cov_t(1+r_{t+1}^i,C_{t+1})\right)\label{macro-econ-consume-u-2poly-2}
+\end{empheq}
+
+这个式子有以下含义：
+\begin{enumerate}
+\item 个体不关注资产的风险程度，因为收益率的方差没有出现。
+\item 影响决策的是收益率与消费之间的关系。                                                                                                           
+\item 【存疑问】消费者应该避免持有收益率与消费的风险来源正相关的资产，比如不应该持有国内股票。但在现实中，消费者往往具有\emph{本地偏向}，即偏好本国公司。同时也意味着套期保值是重要的。
+\end{enumerate}
+
+\paragraph*{消费的资本资产定价模型}由\cref{macro-econ-consume-exp}解出：
+\begin{empheq}{equation}
+P_t^i=\E_t\left[\inv{(1+\rho)^k}\frac{u'(C_{t+k})}{u'(C_t)}D_{t+k}^i\right]
+\end{empheq}
+$\inv{(1+\rho)^k}\frac{u'(C_{t+k})}{u'(C_t)}$这一项称为\emph{定价核心}，反应了愿意为不同资产支付多少。
+
+现在考虑\cref{macro-econ-consume-u-2poly-2}，解出：
+\begin{empheq}{equation}\label{macro-econ-consume-u-2poly-Er}
+\E_t(1+r_{t+1}^i)=\inv{\E_t(u'(C_{t+1}))}((1+\rho)u'(C_t)+a\Cov_t(1+r_{t+1}^i,C_{t+1}))
+\end{empheq}
+此式表明：资产收益与消费的协方差越大，则期望收益率越高。对于无风险资产，协方差为0，其收益率$\bar{r}_{t+1}$满足：
+\begin{empheq}{equation}\label{macro-econ-consume-u-2poly-E-free}
+1+\bar{r}_{t+1}=\frac{(1+\rho)u'(C_t)}{E_t(u'(C_{t+1}))}
+\end{empheq}
+\cref{macro-econ-consume-u-2poly-Er}减去\cref{macro-econ-consume-u-2poly-E-free}得：
+\begin{empheq}{equation}\label{macro-econ-consume-u-2poly-capm}
+\E_t(r_{t+1}^i)-\bar{r}_{t+1}=\frac{a\Cov_t(1+r_{t+1}^i,C_{t+1})}{E_t(u'(C_{t+1}))}
+\end{empheq}
+含义是{\kaishu 期望收益的升水，同资产的收益率与消费的协方差成正比。}此式就称为消费的CAPM。
+
+\paragraph*{未解问题——股权溢价之迹}之前使用的是二次效用函数，现在回到\cref{macro-econ-consume-u-2poly-1}，考虑常相对风险规避效用函数，则现在\cref{macro-econ-consume-u-2poly-1}变成：
+\begin{empheq}{equation}
+C_t^{1-\theta}=\inv{1+\rho}\E_t[(1+r_{t+1}^i)C_{t+1}^{-\theta}]\implies 1+\rho=\E_t\left[(1+r_{t+1}^i)\frac{C_{t+1}^{-\theta}}{C_t^{-\theta}}\right]
+\end{empheq}
+令$g_{t+1}^c=\frac{C_{t+1}}{C_t}-1$表示消费的增长率，则有
+\begin{empheq}{align*}
+1+\rho&=\E[(1+r^i)(1+g^c)^{-\theta}]\\
+&\approx \E(1+r^i-\theta g^c-\theta g^cr^i+\inv{2}\theta(\theta+1)(g^c)^2)\\
+&=1+\E(r^i)-\theta\E(g^c)\\
+&\quad -\theta\left(\E(r^i)\E(g^c)+\Cov(r^i,g^c)+\inv{2}\theta(\theta+1)(\E^2(g^c)+\Var(g^c))\right)\\
+\xRightarrow{\text{省去高阶项}}\E(r^i)&\approx \rho+\theta\E(g^c)+\theta\Cov(r^i,g^c)-\inv{2}\theta(\theta+1)\Var(g^c)
+\end{empheq}
+那么给定两种资产$r^i,r^j$，它们的期望收益满足
+$$\E(r^i)-\E(r^j)=\theta\Cov(r^i,g^c)-\theta\Cov(r^i,g^c)=\theta\Cov(r^i-r^j,g^c)$$
+但根据以往的数据，这一方程在实际中很难成立。比如某一时间，美国股票市场的平均收益率与政府短期债券（无风险资产）的收益率之差，约为0.06。而市场超额收益率与消费（用非耐用品和服务的实际 购买衡量）增长的协方差为0.0024，则表明相对风险规避系数为$0.06/0.0024=25$，这个水平非常高。对应了股权溢价过高，就称为\emph{股权溢价之谜}。
+
+
+\section{经济增长理论}
+本章主要讨论的问题是经济是如何增长的，主要涉及劳动力、知识、资本、消费、产出几个变量。
+
+索罗模型\ref{macro-econ-solow}是最基本的模型，除储蓄率外，劳动力增长、知识增长都是外生的。
+
+拉姆齐模型\ref{macro-econ-ramsey}把储蓄率内生了，储蓄由优化家庭效用得到。拉姆齐模型是现代高级宏观经济学模型的基础。
+
+戴蒙德模型\ref{macro-econ-diamond}引入了消费者的有限寿命，分两期进行优化，其主要特征是可以存在动态无效率。
+
+萨缪尔森的重叠世代模型\ref{macro-econ-smu}引入了父母与子女间的利他性，具体地说是允许一个人的效用来自于一生的消费和子女的未来效用（父母与子女相互让予）。则一个年轻人的消费可以来自工资收入与父母的给予，而父母年老时也有两种消费来源：消费与子女的给予。毫无疑问这个模型是最接近实际的。
+
+内生增长模型引入了研发部门，使得知识增长也内生了。
+
+\subsection{索罗增长模型}\label{macro-econ-solow}
+\subsubsection{模型假设}
+\paragraph*{生产函数}索罗的生产函数为
+$$Y(t)=F(K(t),A(t)L(t))$$
+$Y$为总产出，$K$为资本，$A$为知识，$L$为劳动力。需要注意索罗模型忽略了土地和其它自然资源的作用。$AL$通过乘法进入模型，称为有效劳动。
+
+给模型附加一个额外的\emph{规模报酬不变}假设：
+$$F(cK,cAL)=cY$$
+在这个假设下，生产函数可以写成：
+$$F\left(\frac{K}{AL},1\right)=\inv{AL}F(K,AL)=\frac{Y}{AL}$$
+令$y=\frac{Y}{AL},f(k)=F\left(\frac{K}{AL},1\right),k=\frac{K}{AL}$。$k$为单位有效劳动的平均资本量，$y$为单位有效劳动的产出。于是
+$$y=f(k)$$
+同时有
+\begin{empheq}{equation}\label{macro-econ-solow-F-f}
+F(K,AL)=ALf(k)
+\end{empheq}
+
+强调规模报酬不变，并不意味着$f(ck)=cy$，因$f(ck)=F\left(\frac{cY}{AL},1\right)\neq F\left(\frac{cY}{AL},c\right)=cF\left(\frac{Y}{AL},1\right)=cy$。
+
+对函数$f$还要增加额外的约束：
+\begin{enumerate}
+\item $f(0)=0$。没有投入就没有产出。
+\item $f'(k)>0$。资本的边际产出为正。
+\item $f''(k)<0$。资本的边际产出下降，或者说资本的边际收益递减。对应$f'(k)$为单调递减函数。
+\item 稻田条件：$\lim_{k\rightarrow 0}f'(k)=\infty,\lim_{k\rightarrow \infty}f'(k)=0$。从数学的角度很好理解后者是为了避免$f$发散到无穷大。
+%，前者是说0投入时产出0，增加一点投入后，产出为$\Delta >0$，显然增长率$\frac{\Delta -0}{0}\rightarrow \infty$。
+\end{enumerate}
+以上几个假定隐含了$f$为一严格单调递增函数，因此存在反函数$f^{-1}$。且反函数的一阶导数为：
+$$\odv{k}{y}=\odv{f^{-1}(y)}{y}=\inv{f'(k)}>0$$
+因此反函数也是严格单调递增函数。
+
+以下列出一些常见的满足以上条件的生产函数：
+\begin{description}
+\item[道格拉斯生产函数] 形如：
+\begin{empheq}{align}
+F(K,AL)&=K^{\alpha}(AL)^{1-\alpha},\quad 0<\alpha<1\\
+f(k)&=k^{\alpha}
+\end{empheq}
+\end{description}
+
+\paragraph*{投入要素的变动}劳动力与知识为指数级增长，或者说增长率固定：
+\begin{empheq}{align}
+\dot{L}=nL& \implies L=L(0)e^{nt}\\
+\dot{A}=gA&\implies A=A(0)e^{nt}
+\end{empheq}
+$n,g$为常量，为增长率。同时有有效劳动的增长率：
+$$\odv{AL}{t}=\dot{A}L+A\dot{L}=(n+g)AL$$
+为$n+k$。
+
+总产出分为消费与投资，投资的比率固定为$s$。同时现有资本有折旧率$\delta$。则资本的增长为投资减去折旧：
+$$\dot{K}=sY-\delta K$$
+
+\subsubsection{模型的求解}
+\paragraph*{要素收入}\label{macro-econ-solow-return}可以求出劳动的边际产出为：
+\begin{empheq}{align}
+W(t)=\pdv{F(K,AL)}{L}=A(f(k)-kf'(k))
+\end{empheq}
+假设资本与劳动均按边际产出支付报酬。资本收益为：
+\begin{empheq}{equation}
+R(t)=\pdv{F(K,AL)}{K}-\delta=f'(k)-\delta
+\end{empheq}
+第一项就是资本的边际产出。而资本收益率就是那么有
+\begin{empheq}{align*}
+WL+RK&=A(f(k)-kf'(k))L+(f'(k)-\delta)K\\
+&=ALf(k)-\delta K\\
+&=F(K,AL)-\delta K
+\end{empheq}
+注意最后一个式子是净产出。整个等式的含义是说：如果按边际产出支付报酬，则劳动与资本的总报酬为净产出。
+
+\paragraph*{$k$的增长}根据基本微分法则可知:
+\begin{empheq}{align}
+\dot{k}=\odv{K/AL}{t}&=\frac{\dot{K}AL-K(\dot{A}L+A\dot{L})}{(AL)^2}\nonumber\\
+&=sy-\delta k-(n+g)k\nonumber\\
+&=sf(k(t))-(n+g+\delta)k \mtag{索罗模型的核心方程}
+\end{empheq}
+
+$n+g+k$称为持平投资，即使$k$不变时所需的必要投资量。此方程的含义是说，由于折旧和有效劳动的增长，需要一定量的追加投资$sf(k)$，才能使$k$不减少。
+
+由于持平投资与$k$成正比，而$s(f(k))$在$k$增大时$f'(k)=0$，因此两条线有一个大于0的交点，且由于$f''(k)<0$，交点只有一个。因此最终$k$会收敛于$k^{*}$。
+
+%我们也可以用Lyapunov稳定性理论\ref{ode-lyapunov}来分析。
+
+\paragraph*{平衡增长路径与黄金率}在收敛时$k=k^*,\dot{k}=0$。此时$\dot{K}AL-K(\dot{A}L+A\dot{L})=0$，则
+\begin{empheq}{align*}
+\dot{K}=(n+g)K
+\end{empheq}
+
+在平衡增长时，由于$k$不变，则人均产出不变，为$f(k^*)$，但有效劳动是保持固定增长的，则总产出必定也是增长的，其增长率与有效劳动的增长率相同，为$n+g$。从数学角度也可以看出来：
+$$Y(t)=A(t)L(t)f(k^*)$$
+$f(k^*)$为常量，因此总产出的增长率与劳动效率的增长率相同。所以在索罗模型中{\kaishu 劳动效率的增长是工人平均产出增长的唯一源泉}。另一种说法是，{\kaishu 储蓄率的增长只对产出具有水平效应，而没有增长效应}。“水平效应”是指储蓄率的增长会提高平衡时的平均产出水平，“没有增长效应”是指平均产出的增长率不变，它等于劳动效率的增长率。
+
+{\kaishu 黄金率的资本存量$k_{\text{GR}}$是使得平衡增长路径上单位有效劳动的平均消费最高的资本存量。}在索罗模型中，$k_{\text{GR}}=k^*$。
+
+\paragraph*{储蓄率对黄金律的影响}$s\uparrow$时，利用图示可知，平衡时$k^*\uparrow$。
+
+\begin{center}
+	\begin{tikzpicture}[>=stealth,
+		every node/.style={rounded corners},]
+		
+	\begin{axis}[	width=8cm, height=8cm,
+			xlabel={$k$}, ylabel=单位有效劳动投资,
+			samples=100,
+			xlabel style={at={(1,0)}, anchor=west},
+			ylabel style={at={(0,0.5)}, anchor=south west},
+			%手动指定x坐标轴的标签
+			xtick={0.32653, 0.73469},
+			xticklabels={$k^*_{\text{old}}$,$k^*_{\text{new}}$},				ytick style={draw=none},
+			yticklabels={,,},
+			axis y line*=left,
+			axis x line*=bottom,
+			legend style={draw=none, fill=none},
+			xmin=0, xmax=1,
+			ymin=0, ymax=1,
+			%xtick style={draw=none}, 
+			axis lines=middle, 
+			clip=false
+			]
+		\addplot[smooth, very thick, domain=0:1] {0.4*pow(x,0.5)};
+		\addplot[smooth, very thick, domain=0:1, dashed] {0.6*pow(x,0.5)};
+		\addplot[smooth, very thick, domain=0:1] {0.7*x};
+		%竖直线
+		\addplot[mark=none, dashed, thick] coordinates {(0.32653, 0) (0.32653, 0.9)};
+		\addplot[mark=none, dashed, thick] coordinates {(0.73469, 0) (0.73469, 0.9)};
+		%箭头
+		\addplot[->, thick] coordinates {(0.9,0.41) (0.9,0.53)};
+		%注释, west似乎是说锚是在左边（west），那么数据在右边
+		\node at (axis cs:1.01,0.7) [anchor=west] {$(n+g+\delta)k$};
+		\node at (axis cs:1.01,0.4) [anchor=west] {$s_{\text{old}}f(k)$};
+		\node at (axis cs:1.01,0.6) [anchor=west] {$s_{\text{new}}f(k)$};
+	\end{axis}
+	\end{tikzpicture}
+\end{center}
+由图示还可以看出，$sf'(k^*)<a$。
+
+能否通过数学分析得到相同的结论呢，这就需要敏感性分析的技巧了。假设$s$增加$\Delta s$，相应地，平衡时$k^*$变动$\Delta k^*$。记$n+g+\delta=a$则有
+\begin{empheq}{align}
+sf(k)-ak&=0\nonumber\\
+(s+\Delta s)f(k^*+\Delta k^*)-a(k^*+\Delta k^*)&=0 \label{solow-k-analysis-2}
+\end{empheq}
+根据式\eqref{solow-k-analysis-2}有:
+\begin{empheq}{align}
+&(s+\Delta s)\left(f(k^*)+\int_{k^*}^{k^*+\Delta k^*}f'(x)\dif x\right)-ak^*-a\Delta k^*=0\\
+\xRightarrow{\text{中值定理}} & f(k^*)\Delta s+(s+\Delta s)f'(\xi)\Delta k^*-a\Delta k^*=0\\
+\implies & \Delta k^*=\frac{f(k^*)\Delta s}{a-(s+\Delta s)f'(\xi)}
+\end{empheq}
+上面用了中值定理，$\xi(k,\Delta k)$位于$k^*,k^*+\Delta  k^*$之间（但不确定$k^*,k^*+\Delta k^*$哪个更大），$f'(\xi)=\frac{f(k^*+\Delta k^*)-f(k^*)}{\Delta k^*}$。当$\Delta s >0$时，分子显然是正的，问题在于上式中分母的正负。
+
+以下首先说明一种错误解法：如果不加思索，我们可能会认为，
+\begin{caja}[title=错误解法]
+对式\eqref{solow-k-analysis-2}两边对$k^*$求导有：
+$$(s+\Delta s)f'(k^*+\Delta k^*)-a=0$$
+由于$\xi<k^*+\Delta k^*$，且由假设$f'(k^*)>0,f''(k^*)<0$，有$f'(\xi)>f'(k^*+\Delta k^*)$，于是
+$$(s+\Delta s)f'(\xi)-a>(s+\Delta s)f'(k^*+\Delta k^*)-a=0$$
+
+则分母小于0。
+
+这种做法的错误在于，$k^*,s$都是变量，如果一个变了，另外 一个也会改变，因此上面的求导是错误的。比如$s=1,f(k^*)=\sqrt{k^*},a=1$，于是$\sqrt{k^*}-k^*=0,k^*=1$，如果求导，则有$\inv{2}\sqrt{k^*}-1=0$，显然代入$k^*=1$并不满足。
+\end{caja}
+
+首先我们证明：
+\begin{empheq}{equation}
+sf'(k^*)<a
+\end{empheq}
+
+记$F(k;s)=sf(k)-ak$，则$F'(k)=sf'(k)-a$。由于$f'(k)$是一个单调递减函数，因此$sf'(k)-a$也是一个单调递减函数，$\lim_{k\rightarrow 0}sf'(k)-a=+\infty,\lim_{k\rightarrow 0}sf'(k)-a=-a$。则$F'(k)$恰有一个零点$k_1$，在$k<k_1$时，$F'(k)>0$，$k>k_1$时，$F'(k)<0$。因此$F(k)$在$[0,k_1]$区间上单调递增，在$[k_1,\infty)$区间上单调递减。则$F(k_1)>0$，若有$F(k^*)=0$，那么必然有$k^*>k_1$，则$F'(k^*)<0$，对应$sf'(k^*<)<a$。同时可知在$(0,k^*)$区间上有$F(k)>0$，因$F(k)$在$(0,k_1)$上单调递增，而在$(k_1,k^*)$上单调递减到0。
+
+如果不利用单调性，可以这么考虑：当$k\in(0,k_1),F'(x)>0,F(k)=\int_0^k F'(x)\dif x>0$。当$k\in(k_1,k^*), F'(x)<0, F(k)=F(k_1)+\int_{k_1}^k F'(x)\dif x>F(k_1)+\int_{k_1}^{k^*} F'(x)\dif x=F(k^*)=0$。同样可知$k\in(0,k^*)$时，有$F(k)>0$。
+
+当$\Delta s>0$时，$(s+\Delta s)f(k^*)-ak^*>sf(k^*)-ak^*=0$。即$F(k^*;s+\Delta s)>0$。注意到$k^*+\Delta k^*$就是$F(k;s+\Delta s)$的零点，则要求$k^*$在$(0,k^*+\Delta k^*)$区间中，即$k^*+\Delta k^*>k^*$，即$\Delta k^*>0$。
+
+这里的证明并没有用到之前中值定理导出的$\Delta k^*$表达式。
+
+\paragraph*{产出对储蓄率的弹性}弹性定义为：
+\begin{empheq}{align}\label{macro-solow-y-s-elas}
+\pdv{y^*}{s}\frac{s}{y^*}=f'(k^*)\pdv{k^*}{s}\frac{s}{y^*}
+\end{empheq}
+对$sf(k^*)-(n+g+\delta)k^*=0$使用隐函数微分可以得到
+\begin{empheq}{equation}
+\pdv{k^*}{s}=\frac{f(k^*)}{(n+g+\delta)-sf'(k^*)}
+\end{empheq}
+回代进\eqref{macro-solow-y-s-elas}得到：
+\begin{empheq}{equation}
+\pdv{y^*}{s}\frac{s}{y^*}=\frac{k^*f'(k^*)/f(k^*)}{1-k^*f'(k^*)/f(k^*)}=\frac{\alpha_k(k^*)}{1-\alpha_k(k^*)}
+\end{empheq}
+假设$E_{y^*,s}=\frac{\alpha_k(k^*)}{1-\alpha_k(k^*)}$已知，那么可以求得：
+\begin{empheq}{equation}\label{macro-econ-solow-y-s-from-elas}
+y^*=cs^E\iff \ln y^*=\ln c+E\ln s
+\end{empheq}
+
+如果按边际产出支付报酬，则\emph{资本总收入}为$k^*f'(k^*)$，那么$\alpha_K(k^*)=k^*f'(k^*)/f(k^*)$为\emph{资本收入占总收入的比例}，同时$\alpha_K(k^*)=\frac{k^*}{y^*}y'(k^*)$，它就是\emph{平均产出对平均资本的弹性}，因此可以用资本收入比例来估计平均产出对平均资本的弹性664。大多数国家的这一比例约为$1/3$，对应弹性$E_{y^*,s}=1/2$。这意味着储蓄率的大幅变化对平衡路径上产出水平只有中等程度的影响。比如当储蓄率从0.2上升到0.3时，上升50\%，但产出变动只有
+$$\frac{\sqrt{0.3}-\sqrt{0.2}}{\sqrt{0.2}}\approx 0.22$$
+
+
+\subsubsection{现实意义}
+\paragraph*{资本积累差异不能解释收入差距}假定两国工人的平均产出分别为$y_1,y_0$，前者是后者的$X$倍，即$\ln y_1-\ln y_0=\ln X$。利用\eqref{macro-econ-solow-y-s-from-elas}的结果有：
+$$\ln y_1-\ln y_0=\alpha_k (\ln k_1-\ln k_0)\implies \ln k_1-\ln k_0=\frac{\ln X}{\alpha_K}\implies k_1/k_0=X^{1/\alpha_K}$$
+假设$\alpha_K=1/3,X=10$，即平均产出为10倍，则平均资本应该为1000倍；即使$\alpha_K=1/2$，资本也需要达到100倍。这么大的差距缺乏现实依据，在现实中，工业国家的工人平均资本大致比100年前高出10倍，没有达到1000倍。因此说{\kaishu 资本积累差异不能解释收入差距}。
+
+也可以从资本边际产出的角度来考虑。假设生产函数为柯布——道格拉斯生产函数，则$f(k)=h^{\alpha}$，那么$f'(k)=\alpha y^{(\alpha-1)/\alpha}$，于是资本的边际产出对资本的弹性是$-(1-\alpha)/\alpha$，$\alpha=1/3$时，这一弹性为$-2$。于是10位平均产出对应了100倍资本边际产出（注意高产出对应低边际产出，若前者的平均产出为后者的10倍，则后者的边际产出为前者的100倍）。资本收益率为$f'(k)-\delta$，差距还会更大。但现实中资本收益率在各个国家是差不多的。而且假如穷国的边际产出是富国的100倍，那么资本应当更愿意流向穷国，显然这没有发生。
+\subsubsection{改进}
+
+\subsection{拉姆齐的无限期模型}\label{macro-econ-ramsey}
+\subsubsection{模型假设}
+\paragraph*{生产者}市场中有若干个相同的厂商，每个厂商都是同质的，生产函数为$Y=F(K,AL)$，皆全部由家庭持有。$A$的增长为$g$，外生。假设不存在折旧。
+
+资本与劳动，按边际收入得到报酬。在索罗模型中已经指出过要素收入\ref{macro-econ-solow-return}：
+\begin{empheq}{align}\label{macro-econ-ramsey-labor-capital-return}
+r(t)&=f'(k(t))\mtag{实际利率}\\
+W(t)&=A(t)(f(k(t))-k(t)f'(k(t))) \mtag{实际工资}\\
+w(t)&=f(k(t))-k(t)f'(k(t))\mtag{有效劳动的工资}
+\end{empheq}
+
+
+\paragraph*{家庭}经济中存在$H$个家庭，\emph{总人口}为$L(t)$，每个家庭的人口增长率为$n$，每个成员供给1单位劳动力。成员寿命无限长，这就是“无限期”的含义。每个家庭初始拥有资本$K(0)/H$。
+
+家庭效用函数为：
+\begin{empheq}{equation}\label{macro-econ-ramsey-home-target}
+U=\int_{0}^{\infty} e^{-\rho t}u(C(t))\frac{L(t)}{H}\dif t
+\end{empheq}
+$u(C(t))$取CRRA瞬时效用函数，定义为：
+\begin{empheq}{equation}
+u(C(t))=\frac{C(t)^{1-\theta}}{1-\theta},\ \theta>0,\ \rho-n-(1-\theta)g>0
+\end{empheq}
+$C(t)=A(t)c(t)$为工人平均消费，$A(t)$就是人均知识。那么有
+\begin{empheq}{equation}
+u(C(t))=A(0)^{1-\theta}e^{(1-\theta)gt}\frac{c(t)}{1-\theta}
+\end{empheq}
+取$B=A(0)^{1-\theta}L(0)/H,\beta=\rho-n-(1-\theta)g$，则效应函数为：
+\begin{empheq}{equation}\label{macro-econ-ramsey-home-target-transform}
+U=B\int_{0}^{\infty} e^{-\beta t}\frac{c(t)^{1-\theta}}{1-\theta}\dif t
+\end{empheq}
+
+\paragraph*{家庭预算约束}{\kaishu 终身消费的现值，不能超过初始财富加上终生劳动收入的现值}，表示为：
+\begin{empheq}{equation}\label{macro-econ-ramsey-home-budget-cond}
+\int_{0}^{\infty} e^{-R(t)}C(t)\frac{L(t)}{H}\dif t\leq \frac{K(0)}{H}+\int_{0}^{\infty}e^{-R(t)}W(t)\frac{L(t)}{H}\dif t
+\end{empheq}
+$R(t)=\int_{\tau=0}^t r(\tau)\dif \tau$为累积收益。预算约束相当于：
+\begin{empheq}{equation}\label{macro-econ-ramsey-cond}
+\lim_{t\rightarrow \infty}\frac{K(0)}{H}+\int_{0}^{\infty} e^{-R(t)}(W(t)-C(t))\frac{L(t)}{H}\dif t \geq 0
+\end{empheq}
+$(W(t)-C(t))\frac{L(t)}{H}$就是家庭在$t$时刻的\emph{储蓄}，上式相当于说家庭初始财富加上储蓄的贴现值大于0。
+
+同时每个\emph{家庭在$s$时刻的资本持有量为}：
+\begin{empheq}{equation}\label{macro-econ-ramsey-home-capital}
+\frac{K(s)}{H}=e^{R(s)}\frac{K(0)}{H}+\int_0^s e^{R(s)-R(t)}(W(t)-C(t))\frac{L(t)}{H}\dif t
+\end{empheq}
+
+结合\cref{macro-econ-ramsey-cond,macro-econ-ramsey-home-capital}可得\emph{禁止庞氏博弈条件}：
+\begin{empheq}{equation}\label{macro-econ-ramsey-no-poniz-1}
+\lim_{s\rightarrow \infty}e^{-R(s)}\frac{K(s)}{H}\geq 0
+\end{empheq}
+考虑到有效劳动的平均资本$k(s)=\frac{K(s)}{A(s)L(s)}$。这里$\frac{K(s)}{L(s)}$为人均资本，再除以$A$就是有效劳动的平均资本。禁止庞氏博弈条件也可以写成：
+\begin{empheq}{equation}
+\lim_{s\rightarrow \infty}e^{-R(s)}e^{(n+g)s}k(s)\geq 0
+\end{empheq}
+
+\cref{macro-econ-ramsey-cond}式现在变成：
+\begin{empheq}{equation}\label{macro-econ-ramsey-cond-transform}
+k(0)+\int_0^{\infty}e^{-R(t)}(w(t)-c(t))e^{(n+g)t}\dif t\geq 0
+\end{empheq}
+
+\subsubsection{求解}
+\paragraph*{消费路径}根据优化目标\cref{macro-econ-ramsey-home-target-transform}与约束条件\cref{macro-econ-ramsey-cond-transform}式构造拉格朗日函数为：
+\begin{empheq}{equation}
+\mathcal{L}=B\int_{0}^{\infty}e^{-\beta t}\frac{c(t)}{1-\theta}\dif t+\lambda \left[k(0)+\int_0^{\infty}e^{-R(t)}(w(t)-c(t))e^{(n+g)t}\dif t\right]
+\end{empheq}
+依据变分法原理，在任意时刻$t$的一阶条件为：
+\begin{empheq}{equation}
+Be^{-\beta t}c(t)^{-\theta}=\lambda e^{-R(t)}e^{(n+g)t}
+\end{empheq}
+两边取对数为
+$$\ln B-\beta t-\theta \ln c(t)=\ln\lambda -\int_{\tau=0}^{t}r(\tau)\dif\tau+(n+g)t$$
+再对$t$求导有：
+\begin{empheq}{equation}
+-\beta-\theta\frac{\dot{c}(t)}{c(t)}=-r(t)+(n+g)
+\end{empheq}
+整理可得消费路径：
+\begin{empheq}{equation}\label{macro-econ-ramsey-consume-path}
+\frac{\dot{c}(t)}{c(t)}=\frac{r(t)-n-g-\beta}{\theta}=\frac{r(t)-\rho-\theta g}{\theta}
+\end{empheq}
+则$C$的增长率为：
+$$\frac{\dot{C}(t)}{C(t)}=\frac{\dot{A}(t)}{A}+\frac{\dot{c}(t)}{c(t)}=\frac{r(t)-\rho}{\theta}$$
+上式的含义是说，假如实际收益率超过折现率，就会增加消费，否则减少消费。
+
+\paragraph*{平衡路径}消费路径有一个稳定点，令\cref{macro-econ-ramsey-consume-path}为0，可得：
+\begin{empheq}{equation}\label{macro-econ-ramsey-stable}
+f'(k^*)=\rho+\theta g
+\end{empheq}
+即为平衡路径。
+
+\paragraph*{$k$的增长黄金率}与索罗模型中相同，$\dot{k}$为实际投资减去持平投资。实际投资为产出减去消费，持平投资为$(n+g)k$，这里没有考虑折旧。于是
+\begin{empheq}{equation}
+\dot{k}=f(k)-c-(n+g)k
+\end{empheq}
+使得$\dot{k}=0$的消费应该为$c=f(k)-(n+g)k$。如果要使消费最大化，从而得到黄金率，那么应该让$\pdv{c}{k}=f'(k)-(n+g)=0$，即黄金率满足
+\begin{empheq}{equation}\label{macro-econ-ramsey-gold-rule}
+f'(k_{\text{GR}})=n+g
+\end{empheq}
+
+\subsubsection{引入政府}
+\paragraph*{政府购买下$k$的增长}记$G(t)$为单位有效劳动的平均政府购买，政府购买通过税收支付，因此在预算平衡的情况下，有效劳动的平均税额为$G(t)$ 。假定政府购买不影响产出，只用于公共消费；也不影响私人消费的效用（可能是由于政府购买提供的效用补偿了损失），则$k$的运动方程为：
+\begin{empheq}{equation}
+\dot{k}=f(k)-c-G(t)-(n+g)k
+\end{empheq}
+显然政府购买越多，$k$越向下。这是因为用于私人购买的资本变少了。
+
+由于需要支付税收，家庭预算约束式\cref{macro-econ-ramsey-cond-transform}现在变成
+\begin{empheq}{equation}\label{macro-econ-ramsey-cond-transform-G}
+k(0)+\int_0^{\infty}e^{-R(t)}(w(t)-c(t)-G(t))e^{(n+g)t}\dif t\geq 0
+\end{empheq}
+
+\paragraph*{政府购买永久变化的影响}假设初始时政府购买量$G_L$，在某一时刻增加为$G_H$，则$\dot{k}=0$线向下移动。由于政府购买不影响消费，因此$\dot{c}=0$线不变。在政府购买永久性增加的情况下，$c$会下降，下降量就等于$G$增加的量。由于消费下降等额以支付税收，则资本存量与实际利率$r=f'(k)$不变。
+
+\paragraph*{政府购买暂时变化的影响}假如政府购买只是暂时性发生变化，则消费的下降量小于$G_H-G_L$。这是因为增加是可预料的，如果消费下降量等于$G_H-G_L$，则当政府购买回到原来的值时，消费会跳跃式上升，对应边际效用的下降。但这种下降是可以预料的，因此不符合效用最大化原理。
+
+由于消费的下降量要少于$G_H-G_L$，那么必然资本存量会减少，用以支付税收。由于$r=f'(k)$，资本边际收益递减，因此实际利率会上升。这意味着{\kaishu 政府购买的暂时性增加会引起实际利率上上升，但永久性增加不会。}从另一个角度来看，政府购买暂时性增加时，家庭会预期未来的消费增加，则实际利率需要提高，来使家庭接受这种差别。但永久性增加了，消费会永久性下降，不需要实际利率变动也能使家庭接受。
+
+
+\subsection{戴蒙德的重叠世代模型}\label{macro-econ-diamond}
+\subsubsection{模型假设}
+\paragraph*{家庭效用函数}与拉姆齐模型相比，重叠世代模型的最大区别是考虑了人口更替。假定每个人只生存2期，在第一期提供1单位劳动，将劳动收入用于消费与储蓄，在第二期只消费储蓄和利息。效用函数为：
+\begin{empheq}{equation}\label{macro-econ-diamond-utility}
+U_t=\frac{C_{1,t}^{1-\theta}}{1-\theta}+\frac{1}{1+\rho}\frac{C_{2,t+1}^{1-\theta}}{1-\theta}
+\end{empheq}
+上式中第二项为未来效用贴现。
+
+假设人口增长率为$n$，在$t$时刻有$L_t=(1+n)L_{t-1}$个人出生。上一期有$L_{t-1}=\frac{L_t}{1+n}$人，他们在$t$期变老。
+
+\paragraph*{预算约束}
+假设$w_t$为有效劳动的平均工资，则$w_tA_t$为$t$期年轻人的人均实际工资，第1期的储蓄率为$w_tA_t-C_{1,t}$，它们在第二期变成$(1+r_{t+1})(w_tA_t-C_{1,t})$，显然这些应该被全部消费掉才能最大化效用，因此
+$$C_{2,t}=(1+r_{t+1})(w_tA_t-C_{1,t})$$
+可得\emph{预算约束}：
+\begin{empheq}{equation}\label{macro-econ-diamond-cond}
+C_{1,t}+\frac{1}{1+r_{t+1}}C_{2,t+1}=w_tA_t
+\end{empheq}
+
+$r$下标为$t+1$，可以这样考虑：$t$时刻的储蓄，需要在$t+1$时刻才能观测到收益，因此用$t+1$下标。
+\subsubsection{求解}
+\paragraph*{消费路径}结合优化目标\cref{macro-econ-diamond-utility}与预算约束\cref{macro-econ-diamond-cond}，构造拉格朗日函数为:
+\begin{empheq}{equation}
+\mathcal{L}=\frac{C_{1,t}^{1-\theta}}{1-\theta}+\frac{1}{1+\rho}\frac{C_{2,t+1}^{1-\theta}}{1-\theta}+\lambda \left[w_tA_t-\left(C_{1,t}+\frac{1}{1+r_{t+1}}C_{2,t+1}\right)\right]
+\end{empheq}
+一阶条件为：
+\begin{empheq}{align}
+C_{1,t}^{-\theta}&=\lambda\\
+\frac{1}{1+\rho}C_{2,t+1}^{-\theta}&=\inv{1+r_{t+1}}\lambda
+\end{empheq}
+消去$\lambda$有：
+\begin{empheq}{equation}\label{macro-econ-diamond-consume}
+\frac{C_{2,t+1}}{C_{1,t}}=\left(\frac{1+r_{t+1}}{1+\rho}\right)^{1/\theta}
+\end{empheq}
+代入预算约束，消去$C_{2,t+1}$，可得 
+\begin{empheq}{align}
+C_{1,t}&=\frac{(1+\rho)^{1/\theta}}{(1+\rho)^{1/\theta}+(1+r_{t+1})^{1/\theta-1}}A_tw_t=(1-s(r_{t+1}))A_tw_t\\
+s(r)&=\frac{(1+r)^{1/\theta-1}}{(1+r)^{1/\theta}+(1+r)^{1/\theta-1}}
+\end{empheq}
+$s(r)$是收入中用于储蓄的比例。
+
+\paragraph*{$k$的增长}$t+1$时刻的资本存量为年轻人在$t$期的储蓄：
+\begin{empheq}{equation}
+K_{t+1}=s(r_{t+1})A_tw_t
+\end{empheq}
+左右两边除以$L_{t+1}A_{t+1}$即可得到单位有效劳动的平均工资：
+\begin{empheq}{equation}
+k_{t+1}=\inv{(1+n)(1+g)}s(r_{t+1})w_t
+\end{empheq}
+根据要素收入\cref{macro-econ-ramsey-labor-capital-return}，可得：
+\begin{empheq}{equation}
+k_{t+1}=\inv{(1+n)(1+g)}s'(f(k_{t+1}))(f(k_t)-k_tf'(k_t))
+\end{empheq}
+这是一个关于$k$的差分方程。上式也可以改写成：
+\begin{empheq}{equation}
+k_{t+1}=\inv{(1+n)(1+g)}s'(f(k_{t+1}))\frac{(f(k_t)-k_tf'(k_t))}{f(k_t)}f(k_t)
+\end{empheq}
+这4项分别：$t+1$期有效劳动与$t$期有效劳动之比$\inv{(1+n)(1+g)}$、储蓄比例$s(f'(k_{t+1}))$、产出中用于支付劳动报酬的比例$\frac{(f(k_t)-k_tf'(k_t))}{f(k_t)}$、$t$期单位有效劳动的平均产出$f(k_t)$。
+
+根据$f$的特性，运动方程可以有多个平衡点。
+
+假设生产函数为道格拉斯生产函数$f(k)=k^{\alpha}$，且$\theta=1$，则有
+$$k_{t+1}=\inv{(1+n)(1+g)}\inv{2+\rho}(1-\alpha)k_t^{\alpha}$$
+令$k_{t+1}=k_t$，求得唯一的稳定点：
+\begin{empheq}{equation}\label{macro-econ-diamond-k-stable-when-dob}
+k^*=\left[\frac{1-\alpha}{(1+n)(1+g)(2+\rho)}\right]^{1/(1-\alpha)}
+\end{empheq}
+
+\paragraph*{动态无效率}假设$g=0$，则依据式\cref{macro-econ-diamond-k-stable-when-dob}有：
+$$k^*=\left[\frac{1-\alpha}{(1+n)(2+\rho)}\right]^{1/(1-\alpha)}$$
+则平衡路径上资本边际产出为：
+$$f'(k^*)=\frac{\alpha}{1-\alpha}(1+n)(2+\rho)$$
+但依据拉姆齐模型中的黄金率式\cref{macro-econ-ramsey-gold-rule}，在$g=0$时有：
+$$f'(k_{\text{GR}})=n$$
+对比可知$f'(k^*),f'(k_{\text{GR}})$的关系是不确定的，黄金率不一定等于平衡点。当$\alpha$足够小时，有$f'(k^*)<f'(k_{\text{GR}})$，根据资本边际收益递减原理，此时$k^*>k_{\text{GR}}$，即{\kaishu 平衡增长路径上的资本存量大于黄金率水平。}
+
+由于这一情形的存在，可以通过调整资源分配来提高所有人在所有时期的消费。假设处于平衡路径且$k^*>k_{\text{GR}}$，引入一个计划者。在平衡路径上有$c=f(k^*)-nk^*$，假设计划者在初期分配更多的资源用于消费，以恰好使得下一期的资本存量为黄金率，则本期消费为$c=f(k^*)+(k^*-k_{\text{GR}})-nk^*>f(k^*)-nk^*$，下一期的消费为$f(k_{\text{GR}})-nk_{\text{GR}}$。由于$k_{\text{GR}}$最大化消费，于是$f(k_{\text{GR}})-nk_{\text{GR}}>f(k^*)-nk^*$，于是每一期的消费都增加了。
+
+以上说明{\kaishu 戴蒙德模型可以不是帕累托最优的}。在市场经济下，老人持有的资本由资本存量与资本收益率决定来决定，但计划者没有这个限制，因此无限世代使得计划者能提供一条市场经济不能提供的路径。具体地来说，计划者可以从年轻人的的劳动收入中提取一部分给老人，而年轻人变老时又可以从其它年轻人得到一部分，这样就避免让任何人受损。这种无效率与传统的无效率不同，称为动态无效率。
+
+\subsection{萨缪尔森的重叠世代模型}\label{macro-econ-smu}
+
+\subsection{内生增长理论}
+
+\subsection{跨国收入差距}
+
+\section{货币、通货膨胀与货币政策}
+\subsection{货币数量理论}
+
+\subsection{铸币税}
+
+\subsection{稳定政策}
+
+
+\section{经济周期}
+\subsection{总需求-总供给模型}
+\subsubsection{基本AS-AD模型}
+
+\subsubsection{IS-LM-BP模型}
+
+\subsection{基准RBC实际经济周期模型}
+\subsubsection{模型假设}
+\paragraph*{厂商}
+
+\paragraph*{家庭}
+
+\paragraph*{技术冲击}
+
+\paragraph*{政府购买冲击}
+
+\subsubsection{求解}
+
+\subsection{引入刚性的RBC模型}
+
+
+\section{投资}
+
+\section{失业}
+\subsection{失业的类型}
+\subsubsection{自然失业率}
+
+\subsubsection{摩擦性失业}
+
+\subsubsection{结构性失业}
+
+
+\section{预算赤字与财政政策}
+\subsection{政府债务约束}
+
+\subsection{税收}
+
+\subsection{债务危机}
+
+\section{DSGE}
+DSGE模型的基本思路是把经济系统划分为不同的部门，每个部门有自己的效用函数，他们各自优化自己的效用函数，得到一阶条件，同时求解这些一阶条件得到稳态的结果，因此部门的效用函数就是最基本的概念。在之前的内容中已经包含了DSGE的一些分析方法，这里单独用一节说明一些完整的DSGE模型。
+
+使用DSGE模型需要大量使用变分法\ref{variant-of-calculus}的内容。
+
+\subsection{简单例子}
+
+\section{CGE}
+
+\section{宏观经济学流派}
